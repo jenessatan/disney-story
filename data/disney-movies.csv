@@ -1,74 +1,74 @@
 movie_title,release_date,rating,runtime,director,box_office
-Snow White and the Seven Dwarfs,21-Dec-37,7.6,83,David Hand,58380000
-Pinocchio,7-Feb-40,7.4,88,Ben Sharpsteen,27830000
-Fantasia,13-Nov-40,7.8,126,Ben Sharpsteen,21310000
-Dumbo,23-Oct-41,7.2,64,Ben Sharpsteen,1300000
-Bambi,13-Aug-42,7.3,70,David Hand,23130000
-Saludos Amigos,6-Feb-43,6.2,42,Jack Kinney,1135000
-The Three Caballeros,3-Feb-45,6.5,71,Norman Ferguson,3355000
-Make Mine Music,20-Apr-46,6.3,75,Jack Kinney,3275000
-Fun and Fancy Free,27-Sep-47,6.6,73,Jack Kinney,3165000
-Melody Time,27-May-48,6.4,75,Clyde Geronimi,2560000
-The Adventures of Ichabod and Mr Toad,5-Oct-49,7,68,Jack Kinney,1625000
-Cinderella,15-Feb-50,7.3,75,Wilfred Jackson,26460000
-Alice in Wonderland,28-Jul-51,7.4,75,Clyde Geronimi,5600000
-Peter Pan,5-Feb-53,7.3,76,Hamilton Luske,21750000
-Lady and the Tramp,22-Jun-55,7.3,76,Hamilton Luske,15640000
-Sleeping Beauty,29-Jan-59,7.2,75,Clyde Geronimi,7300000
-One Hundred and One Dalmatians,25-Jan-61,7.2,79,Wolfgang Reitherman,34260000
-The Sword in the Stone,25-Dec-63,7.2,79,Wolfgang Reitherman,6350000
-The Jungle Book,18-Oct-67,7.6,78,Wolfgang Reitherman,23750000
-The Aristocats,24-Dec-70,7.1,79,Wolfgang Reitherman,10000000
-Robin Hood,8-Nov-73,7.6,83,Wolfgang Reitherman,32000000
-The Many Adventures of Winnie the Pooh,11-Mar-77,7.6,74,Wolfgang Reitherman,0
-The Rescuers,22-Jun-77,6.9,77,Wolfgang Reitherman,22510000
-The Fox and the Hound,10-Jul-81,7.3,83,Art Stevens,14150000
-The Black Cauldron,24-Jul-85,6.4,80,Ted Berman,10020000
-The Great Mouse Detective,2-Jul-86,7.2,74,Ron Clements,38700000
-Oliver & Company,18-Nov-88,6.7,74,George Scribner,74200000
-The Little Mermaid,17-Nov-89,7.6,83,Ron Clements,75250000
-The Rescuers Down Under,16-Nov-90,6.9,77,Mike Gabriel,18880000
-Beauty and the Beast,22-Nov-91,8,84,Gary Trousdale,115610000
-Aladdin,25-Nov-92,8,90,Ron Clements,137840000
-The Lion King,24-Jun-94,8.5,88,Roger Allers,93960000
-Pocahontas,23-Jun-95,6.7,81,Mike Gabriel,82940000
-Toy Story,22-Nov-95,8.3,91,John Lasseter,189460000
-The Hunchback of Notre Dame,21-Jun-96,6.9,93,Gary Trousdale,57500000
-Hercules,27-Jun-97,7.3,87,Ron Clements,54600000
-Mulan,19-Jun-98,7.6,88,Barry Cook,70370000
-A Bug's Life,25-Nov-98,7.2,74,John Lasseter,161330000
-Tarzan,18-Jun-99,7.3,82,Chris Buck,105630000
-Toy Story 2,24-Nov-99,7.9,78,John Lasseter,244890000
-Fantasia 2000,1-Jan-00,7.2,96,James Algar,38920000
-Dinosaur,19-May-00,6.5,85,Ralph Zondag,106660000
-The Emperor's New Groove,15-Dec-00,7.3,95,Mark Dindal,48600000
-Atlantis: The Lost Empire,15-Jun-01,6.9,85,Gary Trousdale,69200000
-"Monsters, Inc.",2-Nov-01,8,76,Pete Docter,254270000
-Lilo & Stitch,21-Jun-02,7.2,81,Chris Sanders,144570000
-Treasure Planet,27-Nov-02,7.2,94,Ron Clements,37820000
-Finding Nemo,30-May-03,8.1,96,Andrew Stanton,338550000
-Brother Bear,1-Nov-03,6.8,97,Robert Walker,84890000
-Home on the Range,2-Apr-04,5.3,100,Will Finn,145500000
-The Incredibles,5-Nov-04,8,63,Brad Bird,260270000
-Chicken Little,4-Nov-05,5.7,101,Mark Dindal,134630000
-Cars,9-Jun-06,7.1,102,John Lasseter,243700000
-Meet the Robinsons,30-Mar-07,6.8,102,Stephen J. Anderson,96850000
-Ratatouille,29-Jun-07,8,108,Brad Bird,205350000
-WALL-E,27-Jun-08,8.4,107,Andrew Stanton,222830000
-Bolt,21-Nov-08,6.8,81,Chris Williams,112800000
-Up,29-May-09,8.2,95,Pete Docter,291310000
-The Princess and the Frog,11-Dec-09,7.1,92,Ron Clements,102430000
-Toy Story 3,18-Jun-10,8.3,92,Lee Unkrich,413790000
-Tangled,24-Nov-10,7.7,100,Nathan Greno,1988560000
-Cars 2,24-Jun-11,6.1,115,John Lasseter,190680000
-Winnie the Pooh,15-Jul-11,7.2,116,Stephen J. Anderson,25900000
-Brave,22-Jun-12,7.1,111,Mark Andrews,236310000
-Wreck-It Ralph,2-Nov-12,7.7,97,Rich Moore,188680000
-Monsters University,21-Jun-13,7.3,96,Dan Scanlon,267250000
-Frozen,27-Nov-13,7.5,103,Chris Buck,400560000
-Big Hero 6,7-Nov-14,7.8,106,Don Hall,220730000
-Inside Out,19-Jun-15,8.2,93,Pete Docter,355690000
-The Good Dinosaur,25-Nov-15,6.7,104,Peter Sohn,120620000
-Zootopia,4-Mar-16,8,94,Byron Howard,341270000
-Finding Dory,17-Jun-16,7.3,94,Andrew Stanton,486290000
-Moana,23-Nov-16,7.6,97,Ron Clements,248760000
+Snow White and the Seven Dwarfs,21-Dec-1937,7.6,83,David Hand,58380000
+Pinocchio,7-Feb-1940,7.4,88,Ben Sharpsteen,27830000
+Fantasia,13-Nov-1940,7.8,126,Ben Sharpsteen,21310000
+Dumbo,23-Oct-1941,7.2,64,Ben Sharpsteen,1300000
+Bambi,13-Aug-1942,7.3,70,David Hand,23130000
+Saludos Amigos,6-Feb-1943,6.2,42,Jack Kinney,1135000
+The Three Caballeros,3-Feb-1945,6.5,71,Norman Ferguson,3355000
+Make Mine Music,20-Apr-1946,6.3,75,Jack Kinney,3275000
+Fun and Fancy Free,27-Sep-1947,6.6,73,Jack Kinney,3165000
+Melody Time,27-May-1948,6.4,75,Clyde Geronimi,2560000
+The Adventures of Ichabod and Mr Toad,5-Oct-1949,7,68,Jack Kinney,1625000
+Cinderella,15-Feb-1950,7.3,75,Wilfred Jackson,26460000
+Alice in Wonderland,28-Jul-1951,7.4,75,Clyde Geronimi,5600000
+Peter Pan,5-Feb-1953,7.3,76,Hamilton Luske,21750000
+Lady and the Tramp,22-Jun-1955,7.3,76,Hamilton Luske,15640000
+Sleeping Beauty,29-Jan-1959,7.2,75,Clyde Geronimi,7300000
+One Hundred and One Dalmatians,25-Jan-1961,7.2,79,Wolfgang Reitherman,34260000
+The Sword in the Stone,25-Dec-1963,7.2,79,Wolfgang Reitherman,6350000
+The Jungle Book,18-Oct-1967,7.6,78,Wolfgang Reitherman,23750000
+The Aristocats,24-Dec-1970,7.1,79,Wolfgang Reitherman,10000000
+Robin Hood,8-Nov-1973,7.6,83,Wolfgang Reitherman,32000000
+The Many Adventures of Winnie the Pooh,11-Mar-1977,7.6,74,Wolfgang Reitherman,0
+The Rescuers,22-Jun-1977,6.9,77,Wolfgang Reitherman,22510000
+The Fox and the Hound,10-Jul-1981,7.3,83,Art Stevens,14150000
+The Black Cauldron,24-Jul-1985,6.4,80,Ted Berman,10020000
+The Great Mouse Detective,2-Jul-1986,7.2,74,Ron Clements,38700000
+Oliver & Company,18-Nov-1988,6.7,74,George Scribner,74200000
+The Little Mermaid,17-Nov-1989,7.6,83,Ron Clements,75250000
+The Rescuers Down Under,16-Nov-1990,6.9,77,Mike Gabriel,18880000
+Beauty and the Beast,22-Nov-1991,8,84,Gary Trousdale,115610000
+Aladdin,25-Nov-1992,8,90,Ron Clements,137840000
+The Lion King,24-Jun-1994,8.5,88,Roger Allers,93960000
+Pocahontas,23-Jun-1995,6.7,81,Mike Gabriel,82940000
+Toy Story,22-Nov-1995,8.3,91,John Lasseter,189460000
+The Hunchback of Notre Dame,21-Jun-1996,6.9,93,Gary Trousdale,57500000
+Hercules,27-Jun-1997,7.3,87,Ron Clements,54600000
+Mulan,19-Jun-1998,7.6,88,Barry Cook,70370000
+A Bug's Life,25-Nov-1998,7.2,74,John Lasseter,161330000
+Tarzan,18-Jun-1999,7.3,82,Chris Buck,105630000
+Toy Story 2,24-Nov-1999,7.9,78,John Lasseter,244890000
+Fantasia 2000,1-Jan-2000,7.2,96,James Algar,38920000
+Dinosaur,19-May-2000,6.5,85,Ralph Zondag,106660000
+The Emperor's New Groove,15-Dec-2000,7.3,95,Mark Dindal,48600000
+Atlantis: The Lost Empire,15-Jun-2001,6.9,85,Gary Trousdale,69200000
+"Monsters, Inc.",2-Nov-2001,8,76,Pete Docter,254270000
+Lilo & Stitch,21-Jun-2002,7.2,81,Chris Sanders,144570000
+Treasure Planet,27-Nov-2002,7.2,94,Ron Clements,37820000
+Finding Nemo,30-May-2003,8.1,96,Andrew Stanton,338550000
+Brother Bear,1-Nov-2003,6.8,97,Robert Walker,84890000
+Home on the Range,2-Apr-2004,5.3,100,Will Finn,145500000
+The Incredibles,5-Nov-2004,8,63,Brad Bird,260270000
+Chicken Little,4-Nov-2005,5.7,101,Mark Dindal,134630000
+Cars,9-Jun-2006,7.1,102,John Lasseter,243700000
+Meet the Robinsons,30-Mar-2007,6.8,102,Stephen J. Anderson,96850000
+Ratatouille,29-Jun-2007,8,108,Brad Bird,205350000
+WALL-E,27-Jun-2008,8.4,107,Andrew Stanton,222830000
+Bolt,21-Nov-2008,6.8,81,Chris Williams,112800000
+Up,29-May-2009,8.2,95,Pete Docter,291310000
+The Princess and the Frog,11-Dec-2009,7.1,92,Ron Clements,102430000
+Toy Story 3,18-Jun-2010,8.3,92,Lee Unkrich,413790000
+Tangled,24-Nov-2010,7.7,100,Nathan Greno,1988560000
+Cars 2,24-Jun-2011,6.1,115,John Lasseter,190680000
+Winnie the Pooh,15-Jul-2011,7.2,116,Stephen J. Anderson,25900000
+Brave,22-Jun-2012,7.1,111,Mark Andrews,236310000
+Wreck-It Ralph,2-Nov-2012,7.7,97,Rich Moore,188680000
+Monsters University,21-Jun-2013,7.3,96,Dan Scanlon,267250000
+Frozen,27-Nov-2013,7.5,103,Chris Buck,400560000
+Big Hero 6,7-Nov-2014,7.8,106,Don Hall,220730000
+Inside Out,19-Jun-2015,8.2,93,Pete Docter,355690000
+The Good Dinosaur,25-Nov-2015,6.7,104,Peter Sohn,120620000
+Zootopia,4-Mar-2016,8,94,Byron Howard,341270000
+Finding Dory,17-Jun-2016,7.3,94,Andrew Stanton,486290000
+Moana,23-Nov-2016,7.6,97,Ron Clements,248760000
