@@ -9,8 +9,8 @@ class NodeLinkDataProcessor {
                 type: "movie",
                 movie_title: movie["movie_title"],
                 release_date: releaseDate,
-                rating: movie["rating"],
-                box_office: movie["box_office"],
+                rating: +movie["rating"],
+                box_office: +movie["box_office"],
                 era: disneyEra
             };
             nodes.push(movieObj);
@@ -18,7 +18,9 @@ class NodeLinkDataProcessor {
     }
 
     getDisneyEra(year) {
-        if (year >= 1937 && year <= 1942) {
+        if (year >= 1923 && year <=1928 ) {
+            return 'Silent Era';
+        } else if (year >= 1937 && year <= 1942) {
             return 'Golden Age';
         } else if (year >= 1943 && year <= 1949) {
             return 'Wartime Era';
