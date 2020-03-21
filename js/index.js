@@ -32,4 +32,5 @@ Promise.all([
   console.log(links);
 
   area.initVis({data: revenueRaw});
+  nodeLink.initVis({nodeData: nodes, linkData: links});
 });
