@@ -7,7 +7,7 @@ class NodeLinkDataProcessor {
             let disneyEra = this.getDisneyEra(releaseDate.getFullYear());
             let movieObj = {
                 type: "movie",
-                movie_title: movie["movie_title"],
+                id: movie["movie_title"],
                 release_date: releaseDate,
                 rating: +movie["rating"],
                 box_office: +movie["box_office"],
@@ -42,7 +42,7 @@ class NodeLinkDataProcessor {
 
             let vActorNode = {
                 type: "actor",
-                name: vActor['voice-actor']
+                id: vActor['voice-actor']
             };
             nodes.push(vActorNode);
 

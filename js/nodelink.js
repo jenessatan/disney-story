@@ -29,8 +29,8 @@ class NodeLink {
 
     vis.simulation = d3.forceSimulation(vis.nodeData)
         .force("charge", d3.forceManyBody().strength(-20))
-        .force("center", d3.forceCenter(vis.config.width/2, vis.config.height/2));
-        //.force('link', d3.forceLink().id(d => d.id).strength(1));
+        .force("center", d3.forceCenter(vis.config.width/2, vis.config.height/2))
+        .force('link', d3.forceLink().id(d => d.id).strength(0.03));
 
     vis.render();
   }
@@ -41,12 +41,6 @@ class NodeLink {
 
   render() {
     let vis = this;
-    vis.nodes = vis.chart.append('g')
-        .selectAll('circle')
-        .data(vis.nodeData, d => vis.getNodeId(d))
-        .enter().append('circle')
-        .attr('r', 3)
-        .attr('fill', d => vis.getNodeColor(d));
 
     vis.links = vis.chart.append('g')
         .selectAll('line')
@@ -55,9 +49,15 @@ class NodeLink {
         .attr('stroke-width', 1)
         .attr('stroke', '#e5e5e5');
 
-    vis.nodes.attr('transform', `translate(${vis.config.width / 2}, ${vis.config.height / 2})`);
+    vis.nodes = vis.chart.append('g')
+        .selectAll('circle')
+        .data(vis.nodeData, d => d.id)
+        .enter().append('circle')
+        .attr('r', 3)
+        .attr('fill', d => vis.getNodeColor(d));
 
-    vis.simulation.nodes(vis.nodes).on('tick', () => {
+    vis.simulation.force('link').links(vis.linkData);
+    vis.simulation.nodes(vis.nodeData).on('tick', () => {
       vis.nodes
           .attr('cx', node => node.x)
           .attr('cy', node => node.y);
@@ -69,16 +69,6 @@ class NodeLink {
           .attr('y2', link => link.target.y);
     });
 
-    vis.simulation.force('link').links(vis.linkData)
-
-  }
-
-  getNodeId(node) {
-    if (node.type === "movie") {
-      return node.movie_title;
-    } else {
-      return node.name;
-    }
   }
 
   getNodeColor(node) {
