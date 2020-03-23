@@ -34,5 +34,6 @@ Promise.all([
   });
 
   area.initVis({data: revenueRaw});
-  nodeLink.initVis({nodeData: nodes, linkData: links, dataByEra: nodeLinkDataByEra});
+  let startingEra = nodelinkDataProcessor.movieEras[nodelinkDataProcessor.movieEras.length - 1];
+  nodeLink.initVis({dataByEra: nodeLinkDataByEra, initialEra: startingEra});
 });
