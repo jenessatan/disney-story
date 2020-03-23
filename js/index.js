@@ -6,6 +6,7 @@ let nodelinkDataProcessor = new NodeLinkDataProcessor();
 
 let nodes = [];
 let links = [];
+let nodeLinkDataByEra = {};
 
 Promise.all([
   d3.csv('data/disney_revenue.csv'),
@@ -28,9 +29,10 @@ Promise.all([
 
   nodelinkDataProcessor.processMovieData(moviesRaw, nodes);
   nodelinkDataProcessor.processVoiceActorData(actorsRaw, nodes, links);
-  console.log(nodes);
-  console.log(links);
+  nodelinkDataProcessor.movieEras.forEach(era => {
+    nodelinkDataProcessor.groupNodeLinkByEra(nodes, links, nodeLinkDataByEra, era);
+  });
 
   area.initVis({data: revenueRaw});
-  nodeLink.initVis({nodeData: nodes, linkData: links});
+  nodeLink.initVis({nodeData: nodes, linkData: links, dataByEra: nodeLinkDataByEra});
 });

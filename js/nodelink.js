@@ -26,11 +26,7 @@ class NodeLink {
 
     vis.nodeData = props.nodeData;
     vis.linkData = props.linkData;
-
-    vis.simulation = d3.forceSimulation(vis.nodeData)
-        .force("charge", d3.forceManyBody().strength(-20))
-        .force("center", d3.forceCenter(vis.config.width/2, vis.config.height/2))
-        .force('link', d3.forceLink().id(d => d.id).strength(0.03));
+    vis.dataByEra = props.dataByEra;
 
     vis.render();
   }
@@ -41,6 +37,11 @@ class NodeLink {
 
   render() {
     let vis = this;
+
+    vis.simulation = d3.forceSimulation(vis.nodeData)
+        .force("charge", d3.forceManyBody().strength(-5))
+        .force("center", d3.forceCenter(vis.config.width/2, vis.config.height/2))
+        .force('link', d3.forceLink().id(d => d.id).strength(0.03));
 
     vis.links = vis.chart.append('g')
         .selectAll('line')

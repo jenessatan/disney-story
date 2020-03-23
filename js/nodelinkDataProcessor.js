@@ -1,5 +1,8 @@
 class NodeLinkDataProcessor {
-    constructor () {}
+    constructor () {
+        this.movieEras = ['Pre-Golden Age', 'Golden Age', 'Wartime Era', 'Silver Age', 'Dark Age',
+            'Disney Renaissance', 'Post-Renaissance', 'Second Disney Renaissance'];
+    }
 
     processMovieData(moviesRaw, nodes) {
         moviesRaw.forEach(movie => {
@@ -8,6 +11,7 @@ class NodeLinkDataProcessor {
             let movieObj = {
                 type: "movie",
                 id: movie["movie_title"],
+                director: movie["director"],
                 release_date: releaseDate,
                 rating: +movie["rating"],
                 box_office: +movie["box_office"],
@@ -18,22 +22,22 @@ class NodeLinkDataProcessor {
     }
 
     getDisneyEra(year) {
-        if (year >= 1923 && year <=1928 ) {
-            return 'Silent Era';
+        if (year >= 1928 && year <= 1936 ) {
+            return this.movieEras[0];
         } else if (year >= 1937 && year <= 1942) {
-            return 'Golden Age';
+            return this.movieEras[1];
         } else if (year >= 1943 && year <= 1949) {
-            return 'Wartime Era';
+            return this.movieEras[2];
         } else if (year >= 1950 && year <= 1969) {
-            return 'Silver Age';
+            return this.movieEras[3];
         } else if (year >= 1970 && year <= 1988) {
-            return 'Dark Age';
+            return this.movieEras[4];
         } else if (year >= 1989 && year <= 1999) {
-            return 'Disney Renaissance';
+            return this.movieEras[5];
         } else if (year >= 2000 && year <= 2009) {
-            return 'Post-Renaissance';
+            return this.movieEras[6];
         } else if (year >= 2010 && year <= 2019) {
-            return 'Second Disney Renaissance';
+            return this.movieEras[7];
         }
     }
 
@@ -54,5 +58,17 @@ class NodeLinkDataProcessor {
             links.push(link);
 
         });
+    }
+
+    groupNodeLinkByEra(nodes, links, result, era) {
+        let matchingMovieNodes = nodes.filter(node => node.type === "movie" && node.era === era);
+        let movies = matchingMovieNodes.map(node => node.id);
+        let matchingLinks = links.filter(link => movies.includes(link.target));
+        let voiceActors = matchingLinks.map(link => link.source);
+        let matchingVoiceActorNodes = nodes.filter(node => node.type === "actor" && voiceActors.includes(node.id));
+        result[era] = {
+            nodes: matchingMovieNodes.concat(matchingVoiceActorNodes),
+            links: matchingLinks
+        }
     }
 }
