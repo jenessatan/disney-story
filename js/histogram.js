@@ -16,6 +16,7 @@ class Histogram {
         vis.columns = columns;
         vis.labels = labels;
         vis.extra_info_elem = extraInfoElem;
+        vis.getEraFromYear = DataProcessor.getDisneyEra;
         vis.setColours();
         // vis.setDataByYear(year);
         vis.setValues();
@@ -30,9 +31,10 @@ class Histogram {
 
     setColours() {
         const vis = this;
-        vis.normal_colour = "#000000";
-        vis.hover_colour = "#f2bf33";
-        vis.select_colour = "#dea814";
+        vis.colour_normal = "#000000";
+        vis.colour_hover = "#f2bf33";
+        vis.colour_select = "#dea814";
+        vis.colour_era = ['#1b9e77','#d95f02','#7570b3','#e7298a','#66a61e','#e6ab02','#a6761d','#666666'];
     }
 
     // setDataByYear(year) {
@@ -53,7 +55,15 @@ class Histogram {
         vis.value_x = d => d[`${vis.columns.x}`];
         vis.value_y = d => d[`${vis.columns.y}`];
         vis.value_size = d => d[`${vis.columns.size}`];
-        // vis.value_colour = d => d[`${vis.columns.status}`];
+        vis.value_colour_era = d => d[`${vis.columns.era}`];
+    }
+
+    setScales() {
+        const vis = this;
+        vis.setScaleX();
+        vis.setScaleY();
+        vis.setScaleSize();
+        vis.setScaleColourEra();
     }
 
     setScaleX() {
@@ -77,19 +87,11 @@ class Histogram {
         vis.scale_size = vis.getScaleSqrt(domain_size, range_size);
     }
 
-    // setScaleColour() {
-    //     const vis = this;
-    //     const domain_colour = ["Recovered", "Failed"];
-    //     const range_colour = [vis.hover_colour, vis.select_colour];
-    //     vis.scale_colour = vis.getScaleOrdinal(domain_colour, range_colour);
-    // }
-
-    setScales() {
+    setScaleColourEra() {
         const vis = this;
-        vis.setScaleX();
-        vis.setScaleY();
-        vis.setScaleSize();
-        // vis.setScaleColour();
+        const domain_colour = vis.movies.map(vis.value_colour_era);
+        const range_colour = vis.colour_era;
+        vis.scale_colour_era = vis.getScaleOrdinal(domain_colour, range_colour);
     }
 
     // getScaleLinear(domain, range) {
@@ -113,11 +115,11 @@ class Histogram {
             .paddingOuter(paddingOuter);
     }
 
-    // getScaleOrdinal(domain, range) {
-    //     return d3.scaleOrdinal()
-    //         .domain(domain)
-    //         .range(range);
-    // }
+    getScaleOrdinal(domain, range) {
+        return d3.scaleOrdinal()
+            .domain(domain)
+            .range(range);
+    }
 
     // getScaleTime(domain, range) {
     //     return d3.scaleTime()
@@ -216,7 +218,7 @@ class Histogram {
                 .attr("cx", d => vis.scale_x(vis.value_x(d)))
                 .attr("cy", d => vis.scale_y(vis.value_y(d)))
             .merge(circles)
-                // .attr("fill", d => vis.scale_colour(vis.value_colour(d)))
+                .attr("fill", d => vis.scale_colour_era(vis.value_colour_era(d)))
                 .on("mouseover", d => vis.showTooltip(d))
                 .on("mouseout", () => vis.hideTooltip())
             .transition().duration(1000)
@@ -229,6 +231,8 @@ class Histogram {
     tiltTickAxisX(rotation=-45, dx="-0.8em", dy="-0.15em") {
         const vis = this;
         vis.axis_x_g.selectAll("text:not(.x-axis-label)")
+            .attr("fill", d => vis.scale_colour_era(vis.getEraFromYear(d)))
+            .style("font-size", 11)
             .style("text-anchor", "end")
             .attr("dx", `${dx}`)
             .attr("dy", `${dy}`)
@@ -261,7 +265,7 @@ class Histogram {
         
         const era = vis.axis_era_g.selectAll(".era-axis-group").data(vis.moviesCount);
         era.enter().append("text")
-            .attr("fill", "black")
+            .attr("fill", d => vis.scale_colour_era(vis.value_colour_era(d)))
             .attr("class", "era-axis-elements")
             .attr("y", 0)
             .attr("x", (d, i) => (vis.scale_x.bandwidth() * d.cumsum) - (vis.scale_x.bandwidth() * d.count / 2))
@@ -269,7 +273,7 @@ class Histogram {
             .attr("dominant-baseline", "hanging")
             .style("font-size", 11)
             .style("font-weight", "bold")
-            .text((d,i) => d["era"])
+            .text(d => vis.value_colour_era(d))
             .call(vis.wrap, 5);
         era.exit().remove();
 

@@ -1,10 +1,10 @@
-class NodeLinkDataProcessor {
-    constructor () {
-        this.movieEras = ['Pre-Golden Age', 'Golden Age', 'Wartime Era', 'Silver Age', 'Dark Age',
-            'Disney Renaissance', 'Post-Renaissance', 'Second Disney Renaissance'];
-    }
+class DataProcessor {
+    static movieEras = [
+        'Pre-Golden Age', 'Golden Age', 'Wartime Era', 'Silver Age', 'Dark Age',
+        'Disney Renaissance', 'Post-Renaissance', 'Second Disney Renaissance'
+    ];
 
-    processMovieData(moviesRaw, nodes) {
+    static processMovieData(moviesRaw, nodes) {
         let countMap = {};
         moviesRaw.forEach(movie => {
             let releaseDate = new Date(movie["release_date"]);
@@ -16,7 +16,7 @@ class NodeLinkDataProcessor {
             countMap[year] = (!Object.keys(countMap).includes(year.toString())) ? 0 : countMap[year]+1;
             movie["count"] = countMap[year];
             
-            let disneyEra = this.getDisneyEra(year);
+            let disneyEra = DataProcessor.getDisneyEra(year);
             movie["disney_era"] = disneyEra;
 
             movie["rating"] = +movie["rating"];
@@ -35,27 +35,27 @@ class NodeLinkDataProcessor {
         });
     }
 
-    getDisneyEra(year) {
+    static getDisneyEra(year) {
         if (year >= 1928 && year <= 1936 ) {
-            return this.movieEras[0];
+            return DataProcessor.movieEras[0];
         } else if (year >= 1937 && year <= 1942) {
-            return this.movieEras[1];
+            return DataProcessor.movieEras[1];
         } else if (year >= 1943 && year <= 1949) {
-            return this.movieEras[2];
+            return DataProcessor.movieEras[2];
         } else if (year >= 1950 && year <= 1969) {
-            return this.movieEras[3];
+            return DataProcessor.movieEras[3];
         } else if (year >= 1970 && year <= 1988) {
-            return this.movieEras[4];
+            return DataProcessor.movieEras[4];
         } else if (year >= 1989 && year <= 1999) {
-            return this.movieEras[5];
+            return DataProcessor.movieEras[5];
         } else if (year >= 2000 && year <= 2009) {
-            return this.movieEras[6];
+            return DataProcessor.movieEras[6];
         } else if (year >= 2010 && year <= 2019) {
-            return this.movieEras[7];
+            return DataProcessor.movieEras[7];
         }
     }
 
-    processVoiceActorData(actorsRaw, nodes, links) {
+    static processVoiceActorData(actorsRaw, nodes, links) {
         actorsRaw.forEach(vActor => {
 
             let vActorNode = {
@@ -74,7 +74,7 @@ class NodeLinkDataProcessor {
         });
     }
 
-    groupNodeLinkByEra(nodes, links, result, era) {
+    static groupNodeLinkByEra(nodes, links, result, era) {
         let matchingMovieNodes = nodes.filter(node => node.type === "movie" && node.era === era);
         let movies = matchingMovieNodes.map(node => node.id);
         let matchingLinks = links.filter(link => movies.includes(link.target));

@@ -2,8 +2,6 @@ let area = new Area({ parentElement: '#revenue-overall' });
 let nodeLink = new NodeLink({ parentElement: '#movie-actors' });
 let histogram = new Histogram({ parentElement: '#movie-era' });
 
-let nodelinkDataProcessor = new NodeLinkDataProcessor();
-
 let nodes = [];
 let links = [];
 let nodeLinkDataByEra = {};
@@ -27,14 +25,14 @@ Promise.all([
     val.total = +val.total;
   });
 
-  nodelinkDataProcessor.processMovieData(moviesRaw, nodes);
-  nodelinkDataProcessor.processVoiceActorData(actorsRaw, nodes, links);
-  nodelinkDataProcessor.movieEras.forEach(era => {
-    nodelinkDataProcessor.groupNodeLinkByEra(nodes, links, nodeLinkDataByEra, era);
+  DataProcessor.processMovieData(moviesRaw, nodes);
+  DataProcessor.processVoiceActorData(actorsRaw, nodes, links);
+  DataProcessor.movieEras.forEach(era => {
+    DataProcessor.groupNodeLinkByEra(nodes, links, nodeLinkDataByEra, era);
   });
 
   area.initVis({data: revenueRaw});
-  let startingEra = nodelinkDataProcessor.movieEras[nodelinkDataProcessor.movieEras.length - 1];
+  let startingEra = DataProcessor.movieEras[DataProcessor.movieEras.length - 1];
   nodeLink.initVis({dataByEra: nodeLinkDataByEra, initialEra: startingEra});
   
   let moviesCount = d3.nest()
@@ -44,7 +42,7 @@ Promise.all([
 
   moviesCount = moviesCount.map(d => {
     return {
-      era: d.key,
+      disney_era: d.key,
       count: d.values.length
     };
   });
