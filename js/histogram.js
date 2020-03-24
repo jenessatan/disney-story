@@ -3,9 +3,9 @@ class Histogram {
         this.config = {
             parentElement: _config.parentElement,
             containerWidth: _config.containerWidth || 1500,
-            containerHeight: _config.containerHeight || 600,
+            containerHeight: _config.containerHeight || 300,
         };
-        this.config.margin = _config.margin || { top: 20, right: 75, bottom: 150, left: 70 };
+        this.config.margin = _config.margin || { top: 70, right: 50, bottom: 100, left: 50 };
     }
 
     initVis(movies, moviesCount, columns, labels, extraInfoElem) {
@@ -147,7 +147,7 @@ class Histogram {
         const vis = this;
         return d3.axisBottom(scale)
             .tickSizeOuter(0)
-            .tickSize(-vis.height)
+            // .tickSize(-vis.height)
     }
 
     getAxisLeft(scale) {
@@ -242,11 +242,11 @@ class Histogram {
     renderAxisX(x_axis) {
         const vis = this;
         vis.axis_x_g = vis.chart.append("g").call(x_axis)
-            .attr("transform", `translate(0,${vis.height-40})`);
-        vis.axis_x_g.selectAll(".tick line") // Change attr of the minor-axis lines
-            .attr("stroke", "#b89c98")
-            .attr("stroke-width", "1")
-            .attr("opacity", "0.6");
+            .attr("transform", `translate(0,${vis.height})`);
+        // vis.axis_x_g.selectAll(".tick line") // Change attr of the minor-axis lines
+        //     .attr("stroke", "#b89c98")
+        //     .attr("stroke-width", "1")
+        //     .attr("opacity", "0.6");
         vis.axis_x_g.append("text")
             .attr("fill", "black")
             .attr("class", "x-axis-label")
@@ -261,7 +261,7 @@ class Histogram {
         const vis = this;
         vis.axis_era_g = vis.chart.append("g")
             .attr("class", "era-axis-group")
-            .attr("transform", `translate(0,${vis.height})`); // adjust y so that the group-labels are below labels
+            .attr("transform", `translate(0,${vis.height+30})`); // adjust y so that the group-labels are below labels
         
         const era = vis.axis_era_g.selectAll(".era-axis-group").data(vis.moviesCount);
         era.enter().append("text")
