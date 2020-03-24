@@ -2,7 +2,7 @@ let area = new Area({parentElement: '#revenue-overall'});
 let nodeLink = new NodeLink({parentElement: '#movie-actors'});
 let histogram = new Histogram({parentElement: '#movie-era'});
 
-let nodelinkDataProcessor = new NodeLinkDataProcessor();
+let dataProcessor = new DataProcessor();
 
 let nodes = [];
 let links = [];
@@ -27,13 +27,13 @@ Promise.all([
     val.total = +val.total;
   });
 
-  nodelinkDataProcessor.processMovieData(moviesRaw, nodes);
-  nodelinkDataProcessor.processVoiceActorData(actorsRaw, nodes, links);
-  nodelinkDataProcessor.movieEras.forEach(era => {
-    nodelinkDataProcessor.groupNodeLinkByEra(nodes, links, nodeLinkDataByEra, era);
+  dataProcessor.processMovieData(moviesRaw, nodes);
+  dataProcessor.processVoiceActorData(actorsRaw, nodes, links);
+  dataProcessor.movieEras.forEach(era => {
+    dataProcessor.groupNodeLinkByEra(nodes, links, nodeLinkDataByEra, era);
   });
 
   area.initVis({data: revenueRaw});
-  let startingEra = nodelinkDataProcessor.movieEras[nodelinkDataProcessor.movieEras.length - 1];
-  nodeLink.initVis({dataByEra: nodeLinkDataByEra, initialEra: startingEra});
+  let startingEra = dataProcessor.movieEras[dataProcessor.movieEras.length - 1];
+  nodeLink.initVis({dataByEra: nodeLinkDataByEra, initialEra: startingEra, dataProcessor: dataProcessor});
 });

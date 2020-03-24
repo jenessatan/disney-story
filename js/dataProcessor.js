@@ -1,4 +1,4 @@
-class NodeLinkDataProcessor {
+class DataProcessor {
     constructor () {
         this.movieEras = ['Pre-Golden Age', 'Golden Age', 'Wartime Era', 'Silver Age', 'Dark Age',
             'Disney Renaissance', 'Post-Renaissance', 'Second Disney Renaissance'];
@@ -43,12 +43,14 @@ class NodeLinkDataProcessor {
 
     processVoiceActorData(actorsRaw, nodes, links) {
         actorsRaw.forEach(vActor => {
-
-            let vActorNode = {
-                type: "actor",
-                id: vActor['voice-actor']
-            };
-            nodes.push(vActorNode);
+            if (nodes.find(node => node.id === vActor['voice-actor']) === undefined) {
+                // we only want to create an actor node if none exists
+                let vActorNode = {
+                    type: "actor",
+                    id: vActor['voice-actor']
+                };
+                nodes.push(vActorNode);
+            }
 
             let link = {
                 source: vActor['voice-actor'],
@@ -69,6 +71,30 @@ class NodeLinkDataProcessor {
         result[era] = {
             nodes: matchingMovieNodes.concat(matchingVoiceActorNodes),
             links: matchingLinks
+        };
+        console.log(result);
+    }
+
+    getMovieColor(era) {
+        switch(era) {
+            case this.movieEras[0]:
+                return "gray";
+            case this.movieEras[1]:
+                return "red";
+            case this.movieEras[2]:
+                return "orange";
+            case this.movieEras[3]:
+                return "yellow";
+            case this.movieEras[4]:
+                return "green";
+            case this.movieEras[5]:
+                return "blue";
+            case this.movieEras[6]:
+                return "indigo";
+            case this.movieEras[7]:
+                return "violet";
+            default:
+                return "black";
         }
     }
 }

@@ -3,7 +3,7 @@
 <head>
     <title>The Disney Story</title>
     <link rel="stylesheet" type="text/css" href="css/style.css">
-    <link href="https://fonts.googleapis.com/css?family=Rock+Salt&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Raleway|Rock+Salt&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="title">
@@ -13,10 +13,15 @@
     <div id="area">
         <svg id="revenue-overall"  height=420 width=1300></svg>
     </div>
+    <div class="commentary">
+        <h1>The Animation Studio in the Walt Disney Company</h1>
+        <p>Commentary here.</p>
+        <button onclick="document.location = '#node-link-graph'">next ></button>
+    </div>
 
     <div id="node-link">
+        <a id="node-link-graph"><svg id="movie-actors"></svg></a>
         <div id="node-link-tooltip"></div>
-        <svg id="movie-actors"></svg>
     </div>
 
     <div id="dot-histogram">
@@ -27,7 +32,7 @@
     <script src="https://d3js.org/d3.v5.min.js"></script>
     <script src="js/area.js"></script>
     <script src="js/histogram.js"></script>
-    <script src="js/nodelinkDataProcessor.js"></script>
+    <script src="js/dataProcessor.js"></script>
     <script src="js/nodelink.js"></script>
     <script src="js/index.js"></script>
 </body>
