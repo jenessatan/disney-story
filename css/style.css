@@ -48,6 +48,17 @@ h1, h4, p {
     font-family: 'Raleway', sans-serif;
 }
 
+
+#movie-era-info {
+    visibility: hidden;
+    position: absolute;
+    /* font-size: 0.75em; */
+    font-weight: bold;
+    background-color: rgb(83, 19, 95);
+    color: rgb(160, 216, 226);
+    border-radius: 12px;
+}
+
 .movie-data .movie-title {
     margin: 0px;
 }
@@ -75,3 +86,4 @@ h1, h4, p {
     background-color: #fab507;
     color: #333;
 }
+

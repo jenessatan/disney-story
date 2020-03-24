@@ -1,8 +1,6 @@
-let area = new Area({parentElement: '#revenue-overall'});
-let nodeLink = new NodeLink({parentElement: '#movie-actors'});
-let histogram = new Histogram({parentElement: '#movie-era'});
-
-let dataProcessor = new DataProcessor();
+let area = new Area({ parentElement: '#revenue-overall' });
+let nodeLink = new NodeLink({ parentElement: '#movie-actors' });
+let histogram = new Histogram({ parentElement: '#movie-era' });
 
 let nodes = [];
 let links = [];
@@ -27,13 +25,42 @@ Promise.all([
     val.total = +val.total;
   });
 
-  dataProcessor.processMovieData(moviesRaw, nodes);
-  dataProcessor.processVoiceActorData(actorsRaw, nodes, links);
-  dataProcessor.movieEras.forEach(era => {
-    dataProcessor.groupNodeLinkByEra(nodes, links, nodeLinkDataByEra, era);
+  DataProcessor.processMovieData(moviesRaw, nodes);
+  DataProcessor.processVoiceActorData(actorsRaw, nodes, links);
+  DataProcessor.movieEras.forEach(era => {
+    DataProcessor.groupNodeLinkByEra(nodes, links, nodeLinkDataByEra, era);
   });
 
   area.initVis({data: revenueRaw});
-  let startingEra = dataProcessor.movieEras[dataProcessor.movieEras.length - 1];
-  nodeLink.initVis({dataByEra: nodeLinkDataByEra, initialEra: startingEra, dataProcessor: dataProcessor});
+  let startingEra = DataProcessor.movieEras[DataProcessor.movieEras.length - 1];
+  nodeLink.initVis({dataByEra: nodeLinkDataByEra, initialEra: startingEra, dataProcessor: DataProcessor});
+  
+  let moviesCount = d3.nest()
+    .key(d => d["disney_era"])
+    .key(d => d["release_date"].getFullYear())
+    .entries(moviesRaw);
+
+  moviesCount = moviesCount.map(d => {
+    return {
+      disney_era: d.key,
+      count: d.values.length
+    };
+  });
+
+  moviesCount = moviesCount.map((d, i) => {
+    const prev = moviesCount[i-1];
+    const cumsum = prev ? d.count + prev.cumsum : d.count;
+    d.cumsum = cumsum;
+    return d;
+  });
+
+  histogram.initVis(
+    moviesRaw, moviesCount,
+    { x: "year", y: "count", size: "box_office", era: "disney_era" },
+    { x: "Time", y: "None", size: "Gross Revenue", era: "Disney Era" },
+    "#movie-era-info"
+  );
+  histogram.render();
 });
+
+

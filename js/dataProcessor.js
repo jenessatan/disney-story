@@ -1,13 +1,28 @@
 class DataProcessor {
-    constructor () {
-        this.movieEras = ['Pre-Golden Age', 'Golden Age', 'Wartime Era', 'Silver Age', 'Dark Age',
-            'Disney Renaissance', 'Post-Renaissance', 'Second Disney Renaissance'];
-    }
 
-    processMovieData(moviesRaw, nodes) {
+    static movieEras = [
+        'Pre-Golden Age', 'Golden Age', 'Wartime Era', 'Silver Age', 'Dark Age',
+        'Disney Renaissance', 'Post-Renaissance', 'Second Disney Renaissance'
+    ];
+
+    static processMovieData(moviesRaw, nodes) {
+        let countMap = {};
         moviesRaw.forEach(movie => {
             let releaseDate = new Date(movie["release_date"]);
-            let disneyEra = this.getDisneyEra(releaseDate.getFullYear());
+            movie["release_date"] = releaseDate;
+
+            const year = releaseDate.getFullYear();
+            movie["year"] = year;
+            
+            countMap[year] = (!Object.keys(countMap).includes(year.toString())) ? 0 : countMap[year]+1;
+            movie["count"] = countMap[year];
+            
+            let disneyEra = DataProcessor.getDisneyEra(year);
+            movie["disney_era"] = disneyEra;
+
+            movie["rating"] = +movie["rating"];
+            movie["box_office"] = +movie["box_office"];
+
             let movieObj = {
                 type: "movie",
                 id: movie["movie_title"],
@@ -21,36 +36,34 @@ class DataProcessor {
         });
     }
 
-    getDisneyEra(year) {
+    static getDisneyEra(year) {
         if (year >= 1928 && year <= 1936 ) {
-            return this.movieEras[0];
+            return DataProcessor.movieEras[0];
         } else if (year >= 1937 && year <= 1942) {
-            return this.movieEras[1];
+            return DataProcessor.movieEras[1];
         } else if (year >= 1943 && year <= 1949) {
-            return this.movieEras[2];
+            return DataProcessor.movieEras[2];
         } else if (year >= 1950 && year <= 1969) {
-            return this.movieEras[3];
+            return DataProcessor.movieEras[3];
         } else if (year >= 1970 && year <= 1988) {
-            return this.movieEras[4];
+            return DataProcessor.movieEras[4];
         } else if (year >= 1989 && year <= 1999) {
-            return this.movieEras[5];
+            return DataProcessor.movieEras[5];
         } else if (year >= 2000 && year <= 2009) {
-            return this.movieEras[6];
+            return DataProcessor.movieEras[6];
         } else if (year >= 2010 && year <= 2019) {
-            return this.movieEras[7];
+            return DataProcessor.movieEras[7];
         }
     }
 
-    processVoiceActorData(actorsRaw, nodes, links) {
+    static processVoiceActorData(actorsRaw, nodes, links) {
         actorsRaw.forEach(vActor => {
-            if (nodes.find(node => node.id === vActor['voice-actor']) === undefined) {
-                // we only want to create an actor node if none exists
-                let vActorNode = {
-                    type: "actor",
-                    id: vActor['voice-actor']
-                };
-                nodes.push(vActorNode);
-            }
+
+            let vActorNode = {
+                type: "actor",
+                id: vActor['voice-actor']
+            };
+            nodes.push(vActorNode);
 
             let link = {
                 source: vActor['voice-actor'],
@@ -62,7 +75,7 @@ class DataProcessor {
         });
     }
 
-    groupNodeLinkByEra(nodes, links, result, era) {
+    static groupNodeLinkByEra(nodes, links, result, era) {
         let matchingMovieNodes = nodes.filter(node => node.type === "movie" && node.era === era);
         let movies = matchingMovieNodes.map(node => node.id);
         let matchingLinks = links.filter(link => movies.includes(link.target));
@@ -74,23 +87,23 @@ class DataProcessor {
         };
     }
 
-    getMovieColor(era) {
+    static getMovieColor(era) {
         switch(era) {
-            case this.movieEras[0]:
+            case DataProcessor.movieEras[0]:
                 return "gray";
-            case this.movieEras[1]:
+            case DataProcessor.movieEras[1]:
                 return "red";
-            case this.movieEras[2]:
+            case DataProcessor.movieEras[2]:
                 return "orange";
-            case this.movieEras[3]:
+            case DataProcessor.movieEras[3]:
                 return "yellow";
-            case this.movieEras[4]:
+            case DataProcessor.movieEras[4]:
                 return "green";
-            case this.movieEras[5]:
+            case DataProcessor.movieEras[5]:
                 return "blue";
-            case this.movieEras[6]:
+            case DataProcessor.movieEras[6]:
                 return "indigo";
-            case this.movieEras[7]:
+            case DataProcessor.movieEras[7]:
                 return "violet";
             default:
                 return "black";
