@@ -33,9 +33,10 @@ Promise.all([
     nodelinkDataProcessor.groupNodeLinkByEra(nodes, links, nodeLinkDataByEra, era);
   });
 
-  area.initVis({ data: revenueRaw });
-  nodeLink.initVis({ nodeData: nodes, linkData: links, dataByEra: nodeLinkDataByEra });
-
+  area.initVis({data: revenueRaw});
+  let startingEra = nodelinkDataProcessor.movieEras[nodelinkDataProcessor.movieEras.length - 1];
+  nodeLink.initVis({dataByEra: nodeLinkDataByEra, initialEra: startingEra});
+  
   let moviesCount = d3.nest()
     .key(d => d["disney_era"])
     .key(d => d["release_date"].getFullYear())
@@ -62,4 +63,7 @@ Promise.all([
     "#movie-era-info"
   );
   histogram.render();
+
 });
+
+
