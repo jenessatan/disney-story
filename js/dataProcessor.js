@@ -1,4 +1,5 @@
 class DataProcessor {
+
     static movieEras = [
         'Pre-Golden Age', 'Golden Age', 'Wartime Era', 'Silver Age', 'Dark Age',
         'Disney Renaissance', 'Post-Renaissance', 'Second Disney Renaissance'
@@ -83,6 +84,29 @@ class DataProcessor {
         result[era] = {
             nodes: matchingMovieNodes.concat(matchingVoiceActorNodes),
             links: matchingLinks
+        };
+    }
+
+    static getMovieColor(era) {
+        switch(era) {
+            case DataProcessor.movieEras[0]:
+                return "gray";
+            case DataProcessor.movieEras[1]:
+                return "red";
+            case DataProcessor.movieEras[2]:
+                return "orange";
+            case DataProcessor.movieEras[3]:
+                return "yellow";
+            case DataProcessor.movieEras[4]:
+                return "green";
+            case DataProcessor.movieEras[5]:
+                return "blue";
+            case DataProcessor.movieEras[6]:
+                return "indigo";
+            case DataProcessor.movieEras[7]:
+                return "violet";
+            default:
+                return "black";
         }
     }
 }

@@ -33,6 +33,7 @@ class NodeLink {
     vis.dataByEra = props.dataByEra;
     vis.nodeData = props.dataByEra[props.initialEra].nodes;
     vis.linkData = props.dataByEra[props.initialEra].links;
+    vis.dataProcessor = props.dataProcessor;
 
     vis.nodeScale = d3.scaleSqrt()
         .domain([0, 10])
@@ -61,7 +62,9 @@ class NodeLink {
         .data(vis.linkData)
         .enter().append('line')
         .attr('stroke-width', 1)
-        .attr('stroke', '#e5e5e5');
+        .attr('stroke', '#e5e5e5')
+        .on('mouseover.tooltip', d => vis.updateNodeTooltip(d))
+        .on('mouseout.tooltip', d => vis.updateNodeTooltip(null));
 
     vis.nodes = vis.chart.append('g')
         .selectAll('path')
@@ -69,8 +72,8 @@ class NodeLink {
         .enter().append('path')
         .attr('d', d => vis.getPath(d.type))
         .attr('fill', d => vis.getNodeColor(d))
-        .on('mouseover.tooltip', d => vis.updateTooltip(d))
-        .on('mouseout.tooltip', d => vis.updateTooltip(null));
+        .on('mouseover.tooltip', d => vis.updateNodeTooltip(d))
+        .on('mouseout.tooltip', d => vis.updateNodeTooltip(null));
 
     vis.simulation.force('link').links(vis.linkData);
     vis.simulation.nodes(vis.nodeData).on('tick', () => {
@@ -87,8 +90,9 @@ class NodeLink {
   }
 
   getNodeColor(node) {
+    let vis = this;
     if (node.type === "movie") {
-      return 'red';
+      return vis.dataProcessor.getMovieColor(node.era);
     } else {
       return '#fcba03';
     }
@@ -104,7 +108,7 @@ class NodeLink {
     }
   }
 
-  updateTooltip(data) {
+  updateNodeTooltip(data) {
     let vis = this;
     if (data) {
       let newData = document.createElement('div');
@@ -124,8 +128,8 @@ class NodeLink {
         vis.tooltip.appendChild(newData);
       }
       vis.tooltipSelection
-          .style('top', () => d3.event.pageX)
-          .style('left', () => d3.event.pageY)
+          .style('top', () => `${d3.event.pageX}px`)
+          .style('left', () => `${d3.event.pageY}px`)
           .style('opacity', '1');
     } else {
       vis.tooltipSelection

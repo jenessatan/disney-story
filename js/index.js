@@ -33,7 +33,7 @@ Promise.all([
 
   area.initVis({data: revenueRaw});
   let startingEra = DataProcessor.movieEras[DataProcessor.movieEras.length - 1];
-  nodeLink.initVis({dataByEra: nodeLinkDataByEra, initialEra: startingEra});
+  nodeLink.initVis({dataByEra: nodeLinkDataByEra, initialEra: startingEra, dataProcessor: DataProcessor});
   
   let moviesCount = d3.nest()
     .key(d => d["disney_era"])
@@ -61,7 +61,6 @@ Promise.all([
     "#movie-era-info"
   );
   histogram.render();
-
 });
 
 
