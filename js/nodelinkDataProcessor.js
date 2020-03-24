@@ -5,9 +5,23 @@ class NodeLinkDataProcessor {
     }
 
     processMovieData(moviesRaw, nodes) {
+        let countMap = {};
         moviesRaw.forEach(movie => {
             let releaseDate = new Date(movie["release_date"]);
-            let disneyEra = this.getDisneyEra(releaseDate.getFullYear());
+            movie["release_date"] = releaseDate;
+
+            const year = releaseDate.getFullYear();
+            movie["year"] = year;
+            
+            countMap[year] = (!Object.keys(countMap).includes(year.toString())) ? 0 : countMap[year]+1;
+            movie["count"] = countMap[year];
+            
+            let disneyEra = this.getDisneyEra(year);
+            movie["disney_era"] = disneyEra;
+
+            movie["rating"] = +movie["rating"];
+            movie["box_office"] = +movie["box_office"];
+
             let movieObj = {
                 type: "movie",
                 id: movie["movie_title"],

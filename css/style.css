@@ -20,3 +20,13 @@ h1, p {
 .title h1 {
     font-family: 'Caveat', Helvetica, Arial, sans-serif;
 }
+
+#movie-era-info {
+    visibility: hidden;
+    position: absolute;
+    /* font-size: 0.75em; */
+    font-weight: bold;
+    background-color: rgb(83, 19, 95);
+    color: rgb(160, 216, 226);
+    border-radius: 12px;
+  }

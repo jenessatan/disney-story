@@ -1,6 +1,6 @@
-let area = new Area({parentElement: '#revenue-overall'});
-let nodeLink = new NodeLink({parentElement: '#movie-actors'});
-let histogram = new Histogram({parentElement: '#movie-era'});
+let area = new Area({ parentElement: '#revenue-overall' });
+let nodeLink = new NodeLink({ parentElement: '#movie-actors' });
+let histogram = new Histogram({ parentElement: '#movie-era' });
 
 let nodelinkDataProcessor = new NodeLinkDataProcessor();
 
@@ -33,6 +33,33 @@ Promise.all([
     nodelinkDataProcessor.groupNodeLinkByEra(nodes, links, nodeLinkDataByEra, era);
   });
 
-  area.initVis({data: revenueRaw});
-  nodeLink.initVis({nodeData: nodes, linkData: links, dataByEra: nodeLinkDataByEra});
+  area.initVis({ data: revenueRaw });
+  nodeLink.initVis({ nodeData: nodes, linkData: links, dataByEra: nodeLinkDataByEra });
+
+  let moviesCount = d3.nest()
+    .key(d => d["disney_era"])
+    .key(d => d["release_date"].getFullYear())
+    .entries(moviesRaw);
+
+  moviesCount = moviesCount.map(d => {
+    return {
+      era: d.key,
+      count: d.values.length
+    };
+  });
+
+  moviesCount = moviesCount.map((d, i) => {
+    const prev = moviesCount[i-1];
+    const cumsum = prev ? d.count + prev.cumsum : d.count;
+    d.cumsum = cumsum;
+    return d;
+  });
+
+  histogram.initVis(
+    moviesRaw, moviesCount,
+    { x: "year", y: "count", size: "box_office", era: "disney_era" },
+    { x: "Time", y: "None", size: "Gross Revenue", era: "Disney Era" },
+    "#movie-era-info"
+  );
+  histogram.render();
 });
