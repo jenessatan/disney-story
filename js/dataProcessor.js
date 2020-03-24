@@ -72,7 +72,6 @@ class DataProcessor {
             nodes: matchingMovieNodes.concat(matchingVoiceActorNodes),
             links: matchingLinks
         };
-        console.log(result);
     }
 
     getMovieColor(era) {
