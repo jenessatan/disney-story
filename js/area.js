@@ -28,18 +28,20 @@ class Area {
       .attr('transform', `translate(${vis.config.margin.left}, ${vis.config.margin.top})`);
     
     const xAxisLabel = 'Year';
-    const yAxisLabel = 'Annual Gross Revenue (in millions USD)';
+    const yAxisLabel = 'Annual Gross Revenue (in USD)';
     const yValue = d => d.total;
     const xValue = d => d.year;
+    const yearLabels = vis.data.map(d => d.year).filter(d => d % 2 == 0);
+    yearLabels.unshift(1991);
     vis.categories = ['studio' ,'consumer','interactive','parks_resorts','media'];
 
     // initialize and set axes
     vis.xScale = d3.scaleLinear()
-      .domain(d3.extent(data, xValue))
+      .domain(d3.extent(vis.data, xValue))
       .range([0, vis.width]);
     
     vis.yScale = d3.scaleLinear()
-      .domain([0, d3.max(data, yValue)])
+      .domain([0, d3.max(vis.data, yValue)])
       .range([vis.height, 0])
       .nice();
     
@@ -47,26 +49,40 @@ class Area {
       .domain(vis.categories)
       .range(d3.schemeSet2)
     
-      const xAxis = d3.axisBottom(vis.xScale).tickFormat(d3.format("d"));
+    const xAxis = d3.axisBottom(vis.xScale).tickFormat(d3.format("d")).tickValues(yearLabels);
 
-      const yAxis = d3.axisLeft(vis.yScale);
+    const yAxis = d3.axisLeft(vis.yScale).ticks(4).tickFormat(d => (d == 0)? 0 : (d/1000 + 'B'));
   
-      const yAxisG = vis.chart.append('g').call(yAxis);
-      yAxisG.append('text')
-        .attr('fill', 'black')
-        .attr('class', 'axis-label')
-        .attr('y', 10)
-        .attr('x', -5)
-        .attr('transform', 'rotate(-90)')
-        .text(yAxisLabel);
+    const yAxisG = vis.chart.append('g').call(yAxis);
+    yAxisG.selectAll('.domain, .tick line').remove();
+    yAxisG.append('text')
+      .attr('fill', 'black')
+      .attr('class', 'axis-label')
+      .attr('y', -40)
+      .attr('x', -(vis.height / 3) + 10)
+      .attr('transform', 'rotate(-90)')
+      .text(yAxisLabel);
   
-      const xAxisG = vis.chart.append('g').call(xAxis).attr("transform", `translate(0,${vis.height})`);
-      xAxisG.append('text')
-        .attr('class', 'axis-label')
-        .attr('fill', 'black')
-        .attr('x', vis.width)
-        .attr('y', 40)
-        .text(xAxisLabel);
+    const xAxisG = vis.chart.append('g').call(xAxis).attr("transform", `translate(0,${vis.height})`);
+    xAxisG.append('text')
+      .attr('class', 'axis-label')
+      .attr('fill', 'black')
+      .attr('x', vis.width)
+      .attr('y', 40)
+      .text(xAxisLabel);
+
+    const guidelines = vis.chart.selectAll('.guidelines')
+      .data([0, 20000, 40000, 60000]);
+    
+    guidelines.enter().append('line')
+      .attr('class', 'guidelines')
+      .attr('x1', 0)
+      .attr('x2', vis.width)
+      .attr('y1', d => vis.yScale(d))
+      .attr('y2', d => vis.yScale(d))
+      .attr('stroke', 'grey')
+      .attr('stroke-width', 1)
+      .attr('opacity', 0.5);
 
     d3.select('body').append('div')
       .attr('class', 'tooltip')
@@ -149,12 +165,12 @@ class Area {
   renderLegend() {
     let vis = this;
     let size = 10;
-    vis.chart.selectAll("myrect")
+    vis.chart.selectAll('myrect')
       .data(vis.categories.reverse())
       .enter()
-      .append("rect")
-      .attr("x", 25)
-      .attr("y", (d, i) => 10 + i * (size + 15))
+      .append('rect')
+      .attr('x', 25)
+      .attr('y', (d, i) => 15 + i * (size + 10))
       .attr("width", size)
       .attr("height", size)
       .style("fill", d => vis.colour(d))
@@ -162,13 +178,14 @@ class Area {
       .on("mouseleave", vis.noHighlight);
 
     // Add one dot in the legend for each name.
-    vis.chart.selectAll("mylabels")
+    vis.chart.selectAll('mylabels')
       .data(vis.categories)
       .enter()
-      .append("text")
-      .attr("x", 25 + size * 1.2)
-      .attr("y", (d, i) => 10 + i * (size + 15) + (size / 2))
-      .style("fill", d => vis.colour(d))
+      .append('text')
+      .attr('x', 25 + size * 1.2)
+      .attr('y', (d, i) => 15 + i * (size + 10) + (size / 2))
+      .style('fill', d => vis.colour(d))
+      .style('font-size', 13)
       .text(d => vis.label(d))
       .attr("text-anchor", "left")
       .style("alignment-baseline", "middle")
