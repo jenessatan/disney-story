@@ -82,14 +82,11 @@ class Area {
     vis.stackedData = d3.stack()
       .keys(vis.categories)(vis.data)
 
-  
     vis.render();
   }
 
   render() {
     let vis = this;
-
-    // console.log(vis.stackedData);
 
     let area = d3.area()
       .x((d,i) => vis.xScale(d.data.year))
@@ -100,36 +97,83 @@ class Area {
       .data(vis.stackedData)
       .enter()
       .append('path')
-      .attr('class', d => 'layers '+d.key)
+      .attr('class', d => `layers ${d.key}`)
       .style('fill', d => vis.colour(d.key))
       .attr('d', area);
+    
+    vis.renderMarkers();
+    vis.renderLegend();
+  }
 
+  renderMarkers() {
+    let vis = this;
+    let flatStack = vis.stackedData.flatMap(arr => {
+      console.log(arr.key)
+      arr.forEach(d => d.key = arr.key)
+      return arr
+    });
+    let nestedStack = d3.nest()
+      .key(d => d.data.year)
+      .entries(flatStack);
+
+    let mouseLine = vis.chart.append('g').attr('class', 'mouseover-tooltip');
+
+    mouseLine.append('path')
+      .attr('class', 'mouseline')
+      .style('stroke', '#A9A9A9')
+      .style('stroke-width', 3)
+      .style('opacity', 1);
+    
+    let mousePerLine = mouseLine.selectAll('.mousePerLine')
+      .data(nestedStack)
+      .enter()
+      .append('g')
+      .attr('class', 'mousePerLine');
+    
+    mousePerLine.append('circle')
+
+    vis.chart.selectAll('.points')
+      .data(flatStack)
+      .enter()
+      .append('circle')
+      .attr('class', d => `points ${d.data.year}`)
+      .attr('fill',  d => vis.colour(d.key))
+      .attr('stroke', '#778899')
+      .attr('cy', d => vis.yScale(d[1]))
+      .attr('cx', d => vis.xScale(d.data.year))
+      .attr('r', 4)
+      .style('opacity', 0)
+      .on('mouseover', vis.showRevenueToolTips);
+  }
+
+  renderLegend() {
+    let vis = this;
     let size = 10;
     vis.chart.selectAll("myrect")
-      .data(vis.categories)
+      .data(vis.categories.reverse())
       .enter()
       .append("rect")
-        .attr("x", 20)
-        .attr("y", (d,i) => 10 + i*(size+5)) // 100 is where the first dot appears. 25 is the distance between dots
-        .attr("width", size)
-        .attr("height", size)
-        .style("fill", d => vis.colour(d))
-        .on("mouseover", vis.highlight)
-        .on("mouseleave", vis.noHighlight)
+      .attr("x", 25)
+      .attr("y", (d, i) => 10 + i * (size + 15))
+      .attr("width", size)
+      .attr("height", size)
+      .style("fill", d => vis.colour(d))
+      .on("mouseover", vis.highlight)
+      .on("mouseleave", vis.noHighlight);
 
     // Add one dot in the legend for each name.
     vis.chart.selectAll("mylabels")
       .data(vis.categories)
       .enter()
       .append("text")
-        .attr("x", 20 + size*1.2)
-        .attr("y",(d,i) => 10 + i*(size+5) + (size/2)) // 100 is where the first dot appears. 25 is the distance between dots
-        .style("fill", d => vis.colour(d))
-        .text(d => vis.label(d))
-        .attr("text-anchor", "left")
-        .style("alignment-baseline", "middle")
-        .on("mouseover", vis.highlight)
-        .on("mouseleave", vis.noHighlight)
+      .attr("x", 25 + size * 1.2)
+      .attr("y", (d, i) => 10 + i * (size + 15) + (size / 2))
+      .style("fill", d => vis.colour(d))
+      .text(d => vis.label(d))
+      .attr("text-anchor", "left")
+      .style("alignment-baseline", "middle")
+      .on("mouseover", vis.highlight)
+      .on("mouseleave", vis.noHighlight);
   }
 
   highlight(d) {
@@ -139,6 +183,10 @@ class Area {
 
   noHighlight(d) {
     d3.selectAll('.layers').style('opacity', 1)
+  }
+
+  showRevenueToolTips(d) {
+
   }
 
   label(d) {
