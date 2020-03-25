@@ -84,10 +84,9 @@ class Area {
       .attr('stroke-width', 1)
       .attr('opacity', 0.5);
 
-    d3.select('body').append('div')
+    vis.tooltip = d3.select('body').append('div')
       .attr('class', 'tooltip')
       .style('position', 'absolute')
-      .style('visibility', 'hidden')
       .style('opacity', 0);
     
     vis.update();
@@ -124,42 +123,54 @@ class Area {
   renderMarkers() {
     let vis = this;
     let flatStack = vis.stackedData.flatMap(arr => {
-      console.log(arr.key)
-      arr.forEach(d => d.key = arr.key)
-      return arr
+      let res = arr.map(d => {
+        return {
+          key: arr.key,
+          y: d[1],
+          value: d.data[arr.key],
+          year: d.data.year
+      }})
+      return res
     });
+
     let nestedStack = d3.nest()
-      .key(d => d.data.year)
+      .key(d => d.year)
       .entries(flatStack);
 
     let mouseLine = vis.chart.append('g').attr('class', 'mouseover-tooltip');
 
-    mouseLine.append('path')
+    // create vertical line to follow the mouse
+    mouseLine.append('line')
       .attr('class', 'mouseline')
       .style('stroke', '#A9A9A9')
-      .style('stroke-width', 3)
+      .style('stroke-width', 2)
       .style('opacity', 1);
     
     let mousePerLine = mouseLine.selectAll('.mousePerLine')
       .data(nestedStack)
       .enter()
       .append('g')
-      .attr('class', 'mousePerLine');
+      .attr('class', d => `mousePerLine year${d.key}`);
     
-    mousePerLine.append('circle')
-
-    vis.chart.selectAll('.points')
-      .data(flatStack)
-      .enter()
-      .append('circle')
-      .attr('class', d => `points ${d.data.year}`)
-      .attr('fill',  d => vis.colour(d.key))
-      .attr('stroke', '#778899')
-      .attr('cy', d => vis.yScale(d[1]))
-      .attr('cx', d => vis.xScale(d.data.year))
-      .attr('r', 4)
-      .style('opacity', 0)
-      .on('mouseover', vis.showRevenueToolTips);
+    mousePerLine.selectAll('.points')
+      .data((d, i) => d.values)
+        .enter()
+        .append('circle')
+        .attr('class', d => `points year${d.year}`)
+        .attr('fill',  d => vis.colour(d.key))
+        .attr('stroke', '#778899')
+        .attr('cy', d => vis.yScale(d.y))
+        .attr('cx', d => vis.xScale(d.year))
+        .attr('r', 4)
+        .style('opacity', 0);
+    
+    mouseLine.append('svg:rect')
+      .attr('width', vis.width)
+      .attr('height', vis.height)
+      .attr('fill', 'none')
+      .attr('pointer-events', 'all')
+      .on('mouseout', () => vis.hideRevenueTooltip(vis))
+      .on('mousemove', () => vis.showRevenueToolTips(vis))
   }
 
   renderLegend() {
@@ -202,8 +213,27 @@ class Area {
     d3.selectAll('.layers').style('opacity', 1)
   }
 
-  showRevenueToolTips(d) {
+  hideRevenueTooltip(vis) {
+    d3.select('.mouseline')
+      .style('opacity', 0);
+    d3.selectAll('.mousePerLine circle')
+      .style('opacity', 0);
+    vis.tooltip.style('opacity', 0);
+  }
 
+  showRevenueToolTips(vis) {
+    let year = Math.floor(vis.xScale.invert(d3.event.pageX))-1;
+    d3.selectAll('.points')
+      .style('opacity', 0);
+    d3.selectAll(`.year${year}`)
+      .style('opacity', 1)
+    
+    d3.select('.mouseline')
+      .style('opacity', 1)
+      .attr('x1', vis.xScale(year))
+      .attr('x2', vis.xScale(year))
+      .attr('y1', 0)
+      .attr('y2', vis.height)
   }
 
   label(d) {
