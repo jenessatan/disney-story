@@ -18,10 +18,10 @@ class DataProcessor {
 
             const year = releaseDate.getFullYear();
             movie["year"] = year;
-            
-            countMap[year] = (!Object.keys(countMap).includes(year.toString())) ? 0 : countMap[year]+1;
+
+            countMap[year] = (!Object.keys(countMap).includes(year.toString())) ? 0 : countMap[year] + 1;
             movie["count"] = countMap[year];
-            
+
             let disneyEra = DataProcessor.getDisneyEra(year);
             movie["disney_era"] = disneyEra;
 
@@ -42,7 +42,7 @@ class DataProcessor {
     }
 
     static getDisneyEra(year) {
-        if (year >= 1928 && year <= 1936 ) {
+        if (year >= 1928 && year <= 1936) {
             return DataProcessor.movieEras[0];
         } else if (year >= 1937 && year <= 1942) {
             return DataProcessor.movieEras[1];
@@ -93,7 +93,7 @@ class DataProcessor {
     }
 
     static getMovieColor(era) {
-        switch(era) {
+        switch (era) {
             case DataProcessor.movieEras[0]:
                 return DataProcessor.movieColourEras[0];
             case DataProcessor.movieEras[1]:
@@ -113,5 +113,28 @@ class DataProcessor {
             default:
                 return "black";
         }
+    }
+
+    static getMoviesCountForBigGroupLabels(moviesRaw) {
+        let moviesCount = d3.nest()
+            .key(d => d["disney_era"])
+            .key(d => d["release_date"].getFullYear())
+            .entries(moviesRaw);
+
+        moviesCount = moviesCount.map(d => {
+            return {
+                disney_era: d.key,
+                count: d.values.length
+            };
+        });
+
+        moviesCount = moviesCount.map((d, i) => {
+            const prev = moviesCount[i - 1];
+            const cumsum = prev ? d.count + prev.cumsum : d.count;
+            d.cumsum = cumsum;
+            return d;
+        });
+
+        return moviesCount
     }
 }

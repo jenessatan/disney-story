@@ -34,33 +34,12 @@ Promise.all([
   area.initVis({data: revenueRaw});
   let startingEra = DataProcessor.movieEras[DataProcessor.movieEras.length - 1];
   nodeLink.initVis({dataByEra: nodeLinkDataByEra, initialEra: startingEra});
-  
-  let moviesCount = d3.nest()
-    .key(d => d["disney_era"])
-    .key(d => d["release_date"].getFullYear())
-    .entries(moviesRaw);
-
-  moviesCount = moviesCount.map(d => {
-    return {
-      disney_era: d.key,
-      count: d.values.length
-    };
-  });
-
-  moviesCount = moviesCount.map((d, i) => {
-    const prev = moviesCount[i-1];
-    const cumsum = prev ? d.count + prev.cumsum : d.count;
-    d.cumsum = cumsum;
-    return d;
-  });
 
   histogram.initVis(
-    moviesRaw, moviesCount,
+    moviesRaw, DataProcessor.getMoviesCountForBigGroupLabels(moviesRaw),
     { x: "year", y: "count", size: "box_office", era: "disney_era" },
     { x: "Time", y: "None", size: "Gross Revenue", era: "Disney Era" },
     "#movie-era-tooltip"
   );
   histogram.render();
 });
-
-
