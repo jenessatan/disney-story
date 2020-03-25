@@ -58,7 +58,7 @@ Promise.all([
     moviesRaw, moviesCount,
     { x: "year", y: "count", size: "box_office", era: "disney_era" },
     { x: "Time", y: "None", size: "Gross Revenue", era: "Disney Era" },
-    "#movie-era-info"
+    "#movie-era-tooltip"
   );
   histogram.render();
 });

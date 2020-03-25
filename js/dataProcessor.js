@@ -5,6 +5,11 @@ class DataProcessor {
         'Disney Renaissance', 'Post-Renaissance', 'Second Disney Renaissance'
     ];
 
+    static movieColourEras = [
+        'gray', 'red', 'orange', '#b59009', 'green',
+        'blue', 'indigo', 'violet'
+    ];
+
     static processMovieData(moviesRaw, nodes) {
         let countMap = {};
         moviesRaw.forEach(movie => {
@@ -90,21 +95,21 @@ class DataProcessor {
     static getMovieColor(era) {
         switch(era) {
             case DataProcessor.movieEras[0]:
-                return "gray";
+                return DataProcessor.movieColourEras[0];
             case DataProcessor.movieEras[1]:
-                return "red";
+                return DataProcessor.movieColourEras[1];
             case DataProcessor.movieEras[2]:
-                return "orange";
+                return DataProcessor.movieColourEras[2];
             case DataProcessor.movieEras[3]:
-                return "yellow";
+                return DataProcessor.movieColourEras[3];
             case DataProcessor.movieEras[4]:
-                return "green";
+                return DataProcessor.movieColourEras[4];
             case DataProcessor.movieEras[5]:
-                return "blue";
+                return DataProcessor.movieColourEras[5];
             case DataProcessor.movieEras[6]:
-                return "indigo";
+                return DataProcessor.movieColourEras[6];
             case DataProcessor.movieEras[7]:
-                return "violet";
+                return DataProcessor.movieColourEras[7];
             default:
                 return "black";
         }
