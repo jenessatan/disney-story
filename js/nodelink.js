@@ -7,7 +7,7 @@ class NodeLink {
     };
     this.config.margin = _config.margin || {
       top: 0,
-      bottom: 0,
+      bottom: 50,
       right: 0,
       left: 0
     };
@@ -33,7 +33,6 @@ class NodeLink {
     vis.dataByEra = props.dataByEra;
     vis.nodeData = props.dataByEra[props.initialEra].nodes;
     vis.linkData = props.dataByEra[props.initialEra].links;
-    vis.dataProcessor = props.dataProcessor;
 
     vis.nodeScale = d3.scaleSqrt()
         .domain([0, 10])
@@ -92,7 +91,7 @@ class NodeLink {
   getNodeColor(node) {
     let vis = this;
     if (node.type === "movie") {
-      return vis.dataProcessor.getMovieColor(node.era);
+      return DataProcessor.getMovieColor(node.era);
     } else {
       return '#fcba03';
     }
