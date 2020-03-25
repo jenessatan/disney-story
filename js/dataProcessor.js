@@ -63,12 +63,14 @@ class DataProcessor {
 
     static processVoiceActorData(actorsRaw, nodes, links) {
         actorsRaw.forEach(vActor => {
-
-            let vActorNode = {
-                type: "actor",
-                id: vActor['voice-actor']
-            };
-            nodes.push(vActorNode);
+            if (nodes.find(node => node.type === 'actor' && node.id === vActor['voice-actor']) === undefined) {
+                // we only want to create and add the node to the array if the actor doesn't exist yet
+                let vActorNode = {
+                    type: "actor",
+                    id: vActor['voice-actor']
+                };
+                nodes.push(vActorNode);
+            }
 
             let link = {
                 source: vActor['voice-actor'],
