@@ -175,7 +175,8 @@ class Area {
   renderLegend() {
     let vis = this;
     let size = 10;
-    vis.chart.selectAll('myrect')
+    let legend = vis.chart.append('g').attr('class', 'area-legend');
+    legend.selectAll('myrect')
       .data(vis.categories.reverse())
       .enter()
       .append('rect')
@@ -187,8 +188,7 @@ class Area {
       .on("mouseover", vis.highlight)
       .on("mouseleave", vis.noHighlight);
 
-    // Add one dot in the legend for each name.
-    vis.chart.selectAll('mylabels')
+    legend.selectAll('mylabels')
       .data(vis.categories)
       .enter()
       .append('text')
@@ -248,10 +248,12 @@ class Area {
     } else {
       vis.tooltip.appendChild(revenueContainer);
     }
+
+    let xpos = year > 2012? vis.xScale(year) - 190 : vis.xScale(year) + 90;
     vis.tooltipSelection
       .style('opacity', 1)
-      .style("top", (d3.event.pageY-15)+"px")
-      .style("left",(d3.event.pageX+5)+"px")
+      .style("top", (d3.event.pageY + 15)+"px")
+      .style("left",(xpos)+"px")
   }
 
   formatToolTipData(props) {
