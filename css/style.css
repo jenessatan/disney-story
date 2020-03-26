@@ -82,3 +82,13 @@ h1, h4, p {
     color: #333;
 }
 
+.role-tooltip {
+    text-align: center;
+    background-color: #333333;
+    color: #fff;
+}
+
+line.link:hover {
+    stroke: black;
+    stroke-width: 4px;
+}

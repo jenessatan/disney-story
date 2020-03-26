@@ -38,6 +38,8 @@ class NodeLink {
         .domain([0, 10])
         .range([0.07, 0.2]);
 
+    vis.hovered = {};
+
     vis.render();
   }
 
@@ -54,26 +56,32 @@ class NodeLink {
         .force('charge', d3.forceManyBody().strength(-1))
         .force('center', d3.forceCenter(vis.config.width/2, vis.config.height/2))
         .force('collide', d3.forceCollide().radius((d) => vis.getNodeRadius(d)).iterations(2))
-        //.force('bounding', vis.boundingForce())
         .force('link', d3.forceLink().id(d => d.id));
 
-    vis.links = vis.chart.append('g')
-        .selectAll('line')
+    vis.links = vis.chart.append('g').selectAll('.link')
         .data(vis.linkData)
-        .enter().append('line')
-        .attr('stroke-width', 1)
-        .attr('stroke', '#e5e5e5')
-        .on('mouseover.tooltip', d => vis.updateNodeTooltip(d))
-        .on('mouseout.tooltip', d => vis.updateNodeTooltip(null));
+        .join(
+            enter => enter.append('line')
+                .attr('class', 'link')
+                .attr('stroke-width', 3)
+                .attr('stroke', '#e5e5e5')
+                .on('mouseover.tooltip', d => vis.updateLinkTooltip(d))
+                .on('mouseout.tooltip', () => vis.updateLinkTooltip(null)));
+
+    vis.links.exit().remove();
 
     vis.nodes = vis.chart.append('g')
         .selectAll('path')
         .data(vis.nodeData, d => d.id)
-        .enter().append('path')
-        .attr('d', d => vis.getPath(d.type))
-        .attr('fill', d => vis.getNodeColor(d))
-        .on('mouseover.tooltip', d => vis.updateNodeTooltip(d))
-        .on('mouseout.tooltip', d => vis.updateNodeTooltip(null));
+        .join(
+            enter => enter.append('path')
+                .attr('d', d => vis.getPath(d.type))
+                .attr('fill', d => vis.getNodeColor(d))
+                .on('mouseover.tooltip', d => vis.updateNodeTooltip(d))
+                .on('mouseout.tooltip', () => vis.updateNodeTooltip(null))
+        );
+
+    vis.nodes.exit().remove();
 
     vis.simulation.force('link').links(vis.linkData);
     vis.simulation.nodes(vis.nodeData).on('tick', () => {
@@ -91,10 +99,66 @@ class NodeLink {
 
   }
 
-  boundingForce() {
-    for (let node of nodes) {
-      node.x = this.getNodeXPosition(node);
-      node.y = this.getNodeYPosition(node);
+  updateLinkTooltip(data) {
+    let vis = this;
+    if (data) {
+      vis.tooltip.className = "role-tooltip";
+
+      let newData = document.createElement('div');
+      newData.className = "tooltip-data";
+
+      let roleData = document.createElement('div');
+      roleData.className = "role-data";
+
+      let actorNameElem = document.createElement('h4');
+      let actorName = document.createTextNode(data.source.id);
+      actorNameElem.appendChild(actorName);
+
+      let asElem = document.createElement('p');
+      let as = document.createTextNode('as');
+      asElem.appendChild(as);
+
+      let characterNameElem = document.createElement('h4');
+      let charName = document.createTextNode(data.role);
+      characterNameElem.appendChild(charName);
+
+      let inElem = document.createElement('p');
+      let inTxt = document.createTextNode('in');
+      inElem.appendChild(inTxt);
+
+      let movieNameElem = document.createElement('h4');
+      let movieName = document.createTextNode(data.target.id);
+      movieNameElem.appendChild(movieName);
+
+      roleData.appendChild(actorNameElem);
+      roleData.appendChild(asElem);
+      roleData.appendChild(characterNameElem);
+      roleData.appendChild(inElem);
+      roleData.appendChild(movieNameElem);
+      newData.appendChild(roleData);
+
+      if (vis.tooltip.children.length !== 0) {
+        // we want to delete the old data inside the tooltip
+        vis.tooltip.replaceChild(newData, vis.tooltip.childNodes[0]);
+      } else {
+        vis.tooltip.appendChild(newData);
+      }
+      vis.tooltipSelection
+          .style('top', () => `${d3.event.pageY}px`)
+          .style('left', () => `${d3.event.pageX + 20}px`)
+          .style('opacity', '1');
+    } else {
+      vis.tooltipSelection
+          .style('opacity', '0');
+    }
+  }
+
+  getStrokeColor(data) {
+    let vis = this;
+    if (vis.hovered.type === 'link' && vis.hovered.data === data) {
+      return 'black';
+    } else {
+      return '#e5e5e5';
     }
   }
 
