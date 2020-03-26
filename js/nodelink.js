@@ -51,7 +51,7 @@ class NodeLink {
     let vis = this;
 
     vis.simulation = d3.forceSimulation(vis.nodeData)
-        .force('charge', d3.forceManyBody().strength(10))
+        .force('charge', d3.forceManyBody().strength(-1))
         .force('center', d3.forceCenter(vis.config.width/2, vis.config.height/2))
         .force('collide', d3.forceCollide().radius((d) => vis.getNodeRadius(d)).iterations(2))
         //.force('bounding', vis.boundingForce())
@@ -175,8 +175,8 @@ class NodeLink {
         vis.tooltip.appendChild(newData);
       }
       vis.tooltipSelection
-          .style('top', () => `${d3.event.pageX}px`)
-          .style('left', () => `${d3.event.pageY}px`)
+          .style('top', () => `${d3.event.pageY}px`)
+          .style('left', () => `${d3.event.pageX + 20}px`)
           .style('opacity', '1');
     } else {
       vis.tooltipSelection
