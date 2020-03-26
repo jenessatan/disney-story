@@ -83,12 +83,12 @@ class Area {
       .attr('stroke', 'grey')
       .attr('stroke-width', 1)
       .attr('opacity', 0.5);
-
-    vis.tooltip = d3.select('body').append('div')
-      .attr('class', 'tooltip')
+    
+    vis.tooltip = document.getElementById('area-tooltip');
+    vis.tooltipSelection = d3.select('#area-tooltip')
       .style('position', 'absolute')
       .style('opacity', 0);
-    
+
     vis.update();
   }
 
@@ -139,7 +139,6 @@ class Area {
 
     let mouseLine = vis.chart.append('g').attr('class', 'mouseover-tooltip');
 
-    // create vertical line to follow the mouse
     mouseLine.append('line')
       .attr('class', 'mouseline')
       .style('stroke', '#A9A9A9')
@@ -218,7 +217,7 @@ class Area {
       .style('opacity', 0);
     d3.selectAll('.mousePerLine circle')
       .style('opacity', 0);
-    vis.tooltip.style('opacity', 0);
+    vis.tooltipSelection.style('opacity', 0);
   }
 
   showRevenueToolTips(vis) {
@@ -234,6 +233,81 @@ class Area {
       .attr('x2', vis.xScale(year))
       .attr('y1', 0)
       .attr('y2', vis.height)
+    
+    vis.updateToolTipContent(year, vis);
+  }
+
+  updateToolTipContent(year, vis) {
+    let obj = vis.data.find(d => d.year == year);
+    let revenueContainer = document.createElement('div');
+
+    vis.formatToolTipData({vis, year, obj, div: revenueContainer});
+    if (vis.tooltip.children.length !== 0) {
+      // we want to delete the old data inside the tooltip
+      vis.tooltip.replaceChild(revenueContainer, vis.tooltip.childNodes[0]);
+    } else {
+      vis.tooltip.appendChild(revenueContainer);
+    }
+    vis.tooltipSelection
+      .style('opacity', 1)
+      .style("top", (d3.event.pageY-15)+"px")
+      .style("left",(d3.event.pageX+5)+"px")
+  }
+
+  formatToolTipData(props) {
+    let {vis, year, obj, div} = props;
+
+    // Year
+    let yearElem = document.createElement('h4');
+    yearElem.className = "year";
+    let yearNode = document.createTextNode(year);
+    yearElem.appendChild(yearNode);
+
+    // Media
+    let mediaElem = document.createElement('p');
+    mediaElem.className = "area-media";
+    mediaElem.style.color = vis.colour('media');
+    let media = document.createTextNode(`Media Networks: ${vis.formatRevenue(obj.media)}`);
+    mediaElem.appendChild(media);
+
+    // Parks & Resorts
+    let parksElem = document.createElement('p');
+    parksElem.className = "area-parks";
+    parksElem.style.color = vis.colour('parks_resorts');
+    let parks = document.createTextNode(`Parks & Resorts: ${vis.formatRevenue(obj.parks_resorts)}`);
+    parksElem.appendChild(parks);
+
+    // Interactive Media
+    let interactiveElem = document.createElement('p');
+    interactiveElem.className = "area-interactive";
+    interactiveElem.style.color = vis.colour('interactive');
+    let interactive = document.createTextNode(`Interactive Media: ${vis.formatRevenue(obj.interactive)}`);
+    interactiveElem.appendChild(interactive);
+
+    // Consumer Products
+    let consumerElem = document.createElement('p');
+    consumerElem.className = "area-consumer";
+    consumerElem.style.color = vis.colour('consumer');
+    let consumer = document.createTextNode(`Consumer Products: ${vis.formatRevenue(obj.consumer)}`);
+    consumerElem.appendChild(consumer);
+
+    // Studio Entertainment
+    let studioElem = document.createElement('p');
+    studioElem.className = "area-studio";
+    studioElem.style.color = vis.colour('studio');
+    let studio = document.createTextNode(`Studio Entertainment: ${vis.formatRevenue(obj.studio)}`);
+    studioElem.appendChild(studio);
+
+    div.appendChild(yearElem);
+    div.appendChild(mediaElem);
+    div.appendChild(parksElem);
+    div.appendChild(interactiveElem);
+    div.appendChild(consumerElem);
+    div.appendChild(studioElem);
+  }
+
+  formatRevenue(val) {
+    return val == 0? `$ ${val}` : (val > 1000)? `$ ${(val/1000).toFixed(2)}B` : `$ ${val}M`;
   }
 
   label(d) {
