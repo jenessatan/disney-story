@@ -3,9 +3,9 @@ class Histogram {
         this.config = {
             parentElement: _config.parentElement,
             containerWidth: _config.containerWidth || 1500,
-            containerHeight: _config.containerHeight || 300,
+            containerHeight: _config.containerHeight || 250,
         };
-        this.config.margin = _config.margin || { top: 50, right: 50, bottom: 100, left: 50 };
+        this.config.margin = _config.margin || { top: 0, right: 50, bottom: 100, left: 50 };
     }
 
     initVis(movies, moviesCount, columns, labels, tooltipDivId) {

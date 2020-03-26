@@ -3,7 +3,7 @@ class NodeLink {
     this.config = {
       parentElement: _config.parentElement,
       containerWidth: _config.containerWidth || 1300,
-      containerHeight: _config.containerHeight || 600
+      containerHeight: _config.containerHeight || 500
     };
     this.config.margin = _config.margin || {
       top: 0,
@@ -51,9 +51,10 @@ class NodeLink {
     let vis = this;
 
     vis.simulation = d3.forceSimulation(vis.nodeData)
-        .force('charge', d3.forceManyBody().strength(-4))
+        .force('charge', d3.forceManyBody().strength(10))
         .force('center', d3.forceCenter(vis.config.width/2, vis.config.height/2))
-        .force('collide', d3.forceCollide().radius(10).iterations(2))
+        .force('collide', d3.forceCollide().radius((d) => vis.getNodeRadius(d)).iterations(2))
+        //.force('bounding', vis.boundingForce())
         .force('link', d3.forceLink().id(d => d.id));
 
     vis.links = vis.chart.append('g')
@@ -77,7 +78,9 @@ class NodeLink {
     vis.simulation.force('link').links(vis.linkData);
     vis.simulation.nodes(vis.nodeData).on('tick', () => {
       vis.nodes
-          .attr('transform', node => `translate(${node.x - 5}, ${node.y - 5}), scale(0.07)`);
+          .attr('x', node => vis.getNodeXPosition(node))
+          .attr('y', node => vis.getNodeYPosition(node))
+          .attr('transform', node => vis.adjustNodePosition(node));
 
       vis.links
           .attr('x1', link => link.source.x)
@@ -88,8 +91,14 @@ class NodeLink {
 
   }
 
+  boundingForce() {
+    for (let node of nodes) {
+      node.x = this.getNodeXPosition(node);
+      node.y = this.getNodeYPosition(node);
+    }
+  }
+
   getNodeColor(node) {
-    let vis = this;
     if (node.type === "movie") {
       return DataProcessor.getMovieColor(node.era);
     } else {
@@ -104,6 +113,45 @@ class NodeLink {
     } else {
       // star path
       return "M83.2937 7.56232C85.0898 2.03445 92.9102 2.03444 94.7063 7.5623L111.227 58.4073C112.03 60.8794 114.334 62.5532 116.933 62.5532H170.395C176.207 62.5532 178.624 69.9909 173.922 73.4073L130.67 104.831C128.567 106.359 127.687 109.067 128.491 111.539L145.011 162.384C146.807 167.912 140.48 172.509 135.778 169.093L92.5267 137.669C90.4238 136.141 87.5762 136.141 85.4733 137.669L42.222 169.093C37.5197 172.509 31.1928 167.912 32.9889 162.384L49.5094 111.539C50.3127 109.067 49.4327 106.359 47.3298 104.831L4.07847 73.4073C-0.623809 69.9909 1.79283 62.5532 7.60517 62.5532H61.0668C63.6661 62.5532 65.9699 60.8795 66.7731 58.4073L83.2937 7.56232Z"
+    }
+  }
+
+  getNodeXPosition(node) {
+    let vis = this;
+    let nodeRadius;
+    if (node.type === 'actor') {
+      nodeRadius = 5;
+    } else {
+      nodeRadius = vis.getNodeRadius(node)/2;
+    }
+    return Math.max(nodeRadius, Math.min((vis.config.width - (nodeRadius * 2)), node.x));
+  }
+
+  getNodeYPosition(node) {
+    let vis = this;
+    let nodeRadius;
+    if (node.type === 'actor') {
+      nodeRadius = 5;
+    } else {
+      nodeRadius = vis.getNodeRadius(node)/2;
+    }
+    return Math.max(nodeRadius * 2, Math.min((vis.config.height - (nodeRadius * 2)), node.y));
+  }
+
+  adjustNodePosition(node) {
+    let vis = this;
+    let nodeRadius = vis.getNodeRadius(node)/2;
+    let scale = node.type === 'actor'? 0.07 : vis.nodeScale(node.rating);
+    return `translate(${node.x-nodeRadius}, ${node.y-nodeRadius}), scale(${scale})`;
+  }
+
+  getNodeRadius(node) {
+    let vis = this;
+    if (node.type === 'movie') {
+      let scale = vis.nodeScale(node.rating);
+      return 215 * scale;
+    } else {
+      return 10;
     }
   }
 
