@@ -9,11 +9,15 @@ let nodeLinkDataByEra = {};
 Promise.all([
   d3.csv('data/disney_revenue.csv'),
   d3.csv('data/disney-movies.csv'),
-  d3.csv('data/disney-voice-actors.csv')
+  d3.csv('data/disney-voice-actors.csv'),
+  d3.csv('data/disney-actors-awards.csv'),
+  d3.csv('data/disney-movies-awards.csv')
 ]).then(files => {
   let revenueRaw = files[0];
   let moviesRaw = files[1];
   let actorsRaw = files[2];
+  let actorAwardsRaw = files[3];
+  let movieAwardsRaw = files[4];
 
   revenueRaw.forEach(val => {
     val.year = +val.year;
