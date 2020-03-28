@@ -14,7 +14,7 @@ From going into detail about the movies and their related voice actors, we decid
 Our vision for this project has not changed since our proposal. While we had to make adjustments from our original plan (such as only showing the most recent era of the node-link graph) from a useability perspective, these changes do not impact the visualization goals that we set out to achieve.
 
 ### Screenshots
-![Revenue Area Chart](images\screenshots\area.png)
+![Revenue Area Chart](/images/screenshots/area.png)
 
 ### Sources of Data:
 As per our project proposal, our visualizations use the Disney dataset provided in [Data World](https://data.world/dot2/disney-character-data-set-project/workspace/project-summary?agentid=kgarrett&datasetid=disney-character-success-00-16) and the [Academy Award dataset from Kaggle](https://www.kaggle.com/theacademy/academy-awards). Missing movie and actor data was taken from IMDB.
