@@ -40,6 +40,9 @@ class NodeLink {
 
     vis.hovered = {};
 
+   vis.chart.append('g').attr('class', 'link-group');
+   vis.chart.append('g').attr('class', 'node-group');
+
     vis.render();
   }
 
@@ -58,21 +61,23 @@ class NodeLink {
         .force('charge', d3.forceManyBody().strength(-1))
         .force('center', d3.forceCenter(vis.config.width/2, vis.config.height/2))
         .force('collide', d3.forceCollide().radius((d) => vis.getNodeRadius(d)).iterations(2))
+        .force('x', d3.forceX(vis.config.width/2).strength(0.015))
+        .force('y', d3.forceY(vis.config.height/2).strength(0.015))
         .force('link', d3.forceLink().id(d => d.id))
         .on('tick', () => {
-          vis.nodes
+          vis.nodeEnter
               .attr('x', node => vis.getNodeXPosition(node))
               .attr('y', node => vis.getNodeYPosition(node))
               .attr('transform', node => vis.adjustNodePosition(node));
 
-          vis.links
+          vis.linkEnter
               .attr('x1', link => link.source.x)
               .attr('y1', link => link.source.y)
               .attr('x2', link => link.target.x)
               .attr('y2', link => link.target.y);
         });
 
-    vis.links = vis.chart.append('g').selectAll('.link')
+    vis.links = vis.chart.select('.link-group').selectAll('.link')
         .data(vis.linkData, d => d.source.id + " - " + d.target.id);
 
     vis.links.exit()
@@ -80,7 +85,7 @@ class NodeLink {
         .attr('stroke-opacity', 0)
         .remove();
 
-    vis.links = vis.links.enter().append('line')
+    vis.linkEnter = vis.links.enter().append('line')
         .attr('class', 'link')
         .attr('stroke-width', 3)
         .attr('stroke', '#e5e5e5')
@@ -88,10 +93,11 @@ class NodeLink {
         .on('mouseout.tooltip', () => vis.updateLinkTooltip(null))
         .merge(vis.links);
 
-    vis.nodes = vis.chart.append('g').selectAll('path')
+    vis.nodes = vis.chart.select('.node-group').selectAll('path')
         .data(vis.nodeData, d => d.id);
+
     vis.nodes.exit().remove();
-    vis.nodes = vis.nodes.enter().append('path')
+    vis.nodeEnter = vis.nodes.enter().append('path')
         .attr('d', d => vis.getPath(d.type))
         .attr('fill', d => vis.getNodeColor(d))
         .on('mouseover.tooltip', d => vis.updateNodeTooltip(d))
