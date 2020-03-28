@@ -100,6 +100,8 @@ class NodeLink {
     vis.nodeEnter = vis.nodes.enter().append('path')
         .attr('d', d => vis.getPath(d.type))
         .attr('fill', d => vis.getNodeColor(d))
+        .attr('stroke-width', d => vis.getNodeStrokeWidth(d.award))
+        .attr('stroke', 'black')
         .on('mouseover.tooltip', d => vis.updateNodeTooltip(d))
         .on('mouseout.tooltip', () => vis.updateNodeTooltip(null))
         .merge(vis.nodes);
@@ -179,6 +181,10 @@ class NodeLink {
       // star path
       return "M83.2937 7.56232C85.0898 2.03445 92.9102 2.03444 94.7063 7.5623L111.227 58.4073C112.03 60.8794 114.334 62.5532 116.933 62.5532H170.395C176.207 62.5532 178.624 69.9909 173.922 73.4073L130.67 104.831C128.567 106.359 127.687 109.067 128.491 111.539L145.011 162.384C146.807 167.912 140.48 172.509 135.778 169.093L92.5267 137.669C90.4238 136.141 87.5762 136.141 85.4733 137.669L42.222 169.093C37.5197 172.509 31.1928 167.912 32.9889 162.384L49.5094 111.539C50.3127 109.067 49.4327 106.359 47.3298 104.831L4.07847 73.4073C-0.623809 69.9909 1.79283 62.5532 7.60517 62.5532H61.0668C63.6661 62.5532 65.9699 60.8795 66.7731 58.4073L83.2937 7.56232Z"
     }
+  }
+
+  getNodeStrokeWidth(award) {
+    return (award === "") ? 0 : 10;
   }
 
   getNodeXPosition(node) {
@@ -286,6 +292,14 @@ class NodeLink {
     movieContainer.appendChild(directorElem);
     movieContainer.appendChild(boxOfficeElem);
 
+    // Awards
+    if (data.award !== "") {
+      let awardsElem = document.createElement('p');
+      let awards = document.createTextNode('Awards: ' + data.award);
+      awardsElem.appendChild(awards);
+      movieContainer.appendChild(awardsElem);
+    }
+
   }
 
   formatActorData(data, div) {
@@ -298,6 +312,14 @@ class NodeLink {
     actorElem.appendChild(actor);
 
     actorContainer.appendChild(actorElem);
+
+    // Awards
+    if (data.award !== "") {
+      let awardsElem = document.createElement('p');
+      let award = document.createTextNode('Awards: ' + data.award);
+      awardsElem.appendChild(award);
+      actorContainer.appendChild(awardsElem);
+    }
   }
 
 }

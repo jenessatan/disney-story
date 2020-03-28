@@ -96,6 +96,7 @@ line.link:hover {
 #era-navigation {
     display: flex;
     flex-direction: row;
+    margin-bottom: 4px;
 }
 
 #era-navigation button {

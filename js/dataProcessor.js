@@ -72,7 +72,8 @@ class DataProcessor {
                 // we only want to create and add the node to the array if the actor doesn't exist yet
                 let vActorNode = {
                     type: "actor",
-                    id: vActor['voice-actor']
+                    id: vActor['voice-actor'],
+                    award: vActor['Award']
                 };
                 nodes.push(vActorNode);
             }
