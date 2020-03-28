@@ -3,7 +3,7 @@ class NodeLink {
     this.config = {
       parentElement: _config.parentElement,
       containerWidth: _config.containerWidth || 1300,
-      containerHeight: _config.containerHeight || 600
+      containerHeight: _config.containerHeight || 450
     };
     this.config.margin = _config.margin || {
       top: 0,
@@ -38,6 +38,11 @@ class NodeLink {
         .domain([0, 10])
         .range([0.07, 0.2]);
 
+    vis.hovered = {};
+
+   vis.chart.append('g').attr('class', 'link-group');
+   vis.chart.append('g').attr('class', 'node-group');
+
     vis.render();
   }
 
@@ -45,51 +50,122 @@ class NodeLink {
     let vis = this;
     vis.nodeData = vis.dataByEra[era].nodes;
     vis.linkData = vis.dataByEra[era].links;
+
+    vis.render();
   }
 
   render() {
     let vis = this;
 
     vis.simulation = d3.forceSimulation(vis.nodeData)
-        .force('charge', d3.forceManyBody().strength(-4))
+        .force('charge', d3.forceManyBody().strength(-1))
         .force('center', d3.forceCenter(vis.config.width/2, vis.config.height/2))
-        .force('collide', d3.forceCollide().radius(10).iterations(2))
-        .force('link', d3.forceLink().id(d => d.id));
+        .force('collide', d3.forceCollide().radius((d) => vis.getNodeRadius(d)).iterations(2))
+        .force('x', d3.forceX(vis.config.width/2).strength(0.015))
+        .force('y', d3.forceY(vis.config.height/2).strength(0.03))
+        .force('link', d3.forceLink().id(d => d.id))
+        .on('tick', () => {
+          vis.nodeEnter
+              .attr('x', node => vis.getNodeXPosition(node))
+              .attr('y', node => vis.getNodeYPosition(node))
+              .attr('transform', node => vis.adjustNodePosition(node));
 
-    vis.links = vis.chart.append('g')
-        .selectAll('line')
-        .data(vis.linkData)
-        .enter().append('line')
-        .attr('stroke-width', 1)
+          vis.linkEnter
+              .attr('x1', link => link.source.x)
+              .attr('y1', link => link.source.y)
+              .attr('x2', link => link.target.x)
+              .attr('y2', link => link.target.y);
+        });
+
+    vis.links = vis.chart.select('.link-group').selectAll('.link')
+        .data(vis.linkData, d => d.source.id + " - " + d.target.id);
+
+    vis.links.exit()
+        .transition()
+        .attr('stroke-opacity', 0)
+        .remove();
+
+    vis.linkEnter = vis.links.enter().append('line')
+        .attr('class', 'link')
+        .attr('stroke-width', 3)
         .attr('stroke', '#e5e5e5')
-        .on('mouseover.tooltip', d => vis.updateNodeTooltip(d))
-        .on('mouseout.tooltip', d => vis.updateNodeTooltip(null));
+        .on('mouseover.tooltip', d => vis.updateLinkTooltip(d))
+        .on('mouseout.tooltip', () => vis.updateLinkTooltip(null))
+        .merge(vis.links);
 
-    vis.nodes = vis.chart.append('g')
-        .selectAll('path')
-        .data(vis.nodeData, d => d.id)
-        .enter().append('path')
+    vis.nodes = vis.chart.select('.node-group').selectAll('path')
+        .data(vis.nodeData, d => d.id);
+
+    vis.nodes.exit().remove();
+    vis.nodeEnter = vis.nodes.enter().append('path')
         .attr('d', d => vis.getPath(d.type))
         .attr('fill', d => vis.getNodeColor(d))
+        .attr('stroke-width', d => vis.getNodeStrokeWidth(d.award))
+        .attr('stroke', 'black')
         .on('mouseover.tooltip', d => vis.updateNodeTooltip(d))
-        .on('mouseout.tooltip', d => vis.updateNodeTooltip(null));
+        .on('mouseout.tooltip', () => vis.updateNodeTooltip(null))
+        .merge(vis.nodes);
 
     vis.simulation.force('link').links(vis.linkData);
-    vis.simulation.nodes(vis.nodeData).on('tick', () => {
-      vis.nodes
-          .attr('transform', node => `translate(${node.x - 5}, ${node.y - 5}), scale(0.07)`);
+    vis.simulation.nodes(vis.nodeData);
+    vis.simulation.alpha(1).restart();
+  }
 
-      vis.links
-          .attr('x1', link => link.source.x)
-          .attr('y1', link => link.source.y)
-          .attr('x2', link => link.target.x)
-          .attr('y2', link => link.target.y);
-    });
+  updateLinkTooltip(data) {
+    let vis = this;
+    if (data) {
+      vis.tooltip.className = "role-tooltip";
 
+      let newData = document.createElement('div');
+      newData.className = "tooltip-data";
+
+      let roleData = document.createElement('div');
+      roleData.className = "role-data";
+
+      let actorNameElem = document.createElement('h4');
+      let actorName = document.createTextNode(data.source.id);
+      actorNameElem.appendChild(actorName);
+
+      let asElem = document.createElement('p');
+      let as = document.createTextNode('as');
+      asElem.appendChild(as);
+
+      let characterNameElem = document.createElement('h4');
+      let charName = document.createTextNode(data.role);
+      characterNameElem.appendChild(charName);
+
+      let inElem = document.createElement('p');
+      let inTxt = document.createTextNode('in');
+      inElem.appendChild(inTxt);
+
+      let movieNameElem = document.createElement('h4');
+      let movieName = document.createTextNode(data.target.id);
+      movieNameElem.appendChild(movieName);
+
+      roleData.appendChild(actorNameElem);
+      roleData.appendChild(asElem);
+      roleData.appendChild(characterNameElem);
+      roleData.appendChild(inElem);
+      roleData.appendChild(movieNameElem);
+      newData.appendChild(roleData);
+
+      if (vis.tooltip.children.length !== 0) {
+        // we want to delete the old data inside the tooltip
+        vis.tooltip.replaceChild(newData, vis.tooltip.childNodes[0]);
+      } else {
+        vis.tooltip.appendChild(newData);
+      }
+      vis.tooltipSelection
+          .style('top', () => `${d3.event.pageY}px`)
+          .style('left', () => `${d3.event.pageX + 20}px`)
+          .style('opacity', '1');
+    } else {
+      vis.tooltipSelection
+          .style('opacity', '0');
+    }
   }
 
   getNodeColor(node) {
-    let vis = this;
     if (node.type === "movie") {
       return DataProcessor.getMovieColor(node.era);
     } else {
@@ -104,6 +180,49 @@ class NodeLink {
     } else {
       // star path
       return "M83.2937 7.56232C85.0898 2.03445 92.9102 2.03444 94.7063 7.5623L111.227 58.4073C112.03 60.8794 114.334 62.5532 116.933 62.5532H170.395C176.207 62.5532 178.624 69.9909 173.922 73.4073L130.67 104.831C128.567 106.359 127.687 109.067 128.491 111.539L145.011 162.384C146.807 167.912 140.48 172.509 135.778 169.093L92.5267 137.669C90.4238 136.141 87.5762 136.141 85.4733 137.669L42.222 169.093C37.5197 172.509 31.1928 167.912 32.9889 162.384L49.5094 111.539C50.3127 109.067 49.4327 106.359 47.3298 104.831L4.07847 73.4073C-0.623809 69.9909 1.79283 62.5532 7.60517 62.5532H61.0668C63.6661 62.5532 65.9699 60.8795 66.7731 58.4073L83.2937 7.56232Z"
+    }
+  }
+
+  getNodeStrokeWidth(award) {
+    return (award === "") ? 0 : 10;
+  }
+
+  getNodeXPosition(node) {
+    let vis = this;
+    let nodeRadius;
+    if (node.type === 'actor') {
+      nodeRadius = 5;
+    } else {
+      nodeRadius = vis.getNodeRadius(node)/2;
+    }
+    return Math.max(nodeRadius * 4, Math.min((vis.config.width - (nodeRadius * 4)), node.x));
+  }
+
+  getNodeYPosition(node) {
+    let vis = this;
+    let nodeRadius;
+    if (node.type === 'actor') {
+      nodeRadius = 5;
+    } else {
+      nodeRadius = vis.getNodeRadius(node)/2;
+    }
+    return Math.max(nodeRadius * 4, Math.min((vis.config.height - (nodeRadius * 4)), node.y));
+  }
+
+  adjustNodePosition(node) {
+    let vis = this;
+    let nodeRadius = vis.getNodeRadius(node)/2;
+    let scale = node.type === 'actor'? 0.07 : vis.nodeScale(node.rating);
+    return `translate(${node.x-nodeRadius}, ${node.y-nodeRadius}), scale(${scale})`;
+  }
+
+  getNodeRadius(node) {
+    let vis = this;
+    if (node.type === 'movie') {
+      let scale = vis.nodeScale(node.rating);
+      return 215 * scale;
+    } else {
+      return 10;
     }
   }
 
@@ -127,8 +246,8 @@ class NodeLink {
         vis.tooltip.appendChild(newData);
       }
       vis.tooltipSelection
-          .style('top', () => `${d3.event.pageX}px`)
-          .style('left', () => `${d3.event.pageY}px`)
+          .style('top', () => `${d3.event.pageY}px`)
+          .style('left', () => `${d3.event.pageX + 20}px`)
           .style('opacity', '1');
     } else {
       vis.tooltipSelection
@@ -173,6 +292,14 @@ class NodeLink {
     movieContainer.appendChild(directorElem);
     movieContainer.appendChild(boxOfficeElem);
 
+    // Awards
+    if (data.award !== "") {
+      let awardsElem = document.createElement('p');
+      let awards = document.createTextNode('Awards: ' + data.award);
+      awardsElem.appendChild(awards);
+      movieContainer.appendChild(awardsElem);
+    }
+
   }
 
   formatActorData(data, div) {
@@ -185,6 +312,14 @@ class NodeLink {
     actorElem.appendChild(actor);
 
     actorContainer.appendChild(actorElem);
+
+    // Awards
+    if (data.award !== "") {
+      let awardsElem = document.createElement('p');
+      let award = document.createTextNode('Awards: ' + data.award);
+      awardsElem.appendChild(award);
+      actorContainer.appendChild(awardsElem);
+    }
   }
 
 }

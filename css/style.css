@@ -48,15 +48,10 @@ h1, h4, p {
     font-family: 'Raleway', sans-serif;
 }
 
-
-#movie-era-info {
-    visibility: hidden;
+#movie-era-tooltip {
     position: absolute;
-    /* font-size: 0.75em; */
-    font-weight: bold;
-    background-color: rgb(83, 19, 95);
-    color: rgb(160, 216, 226);
-    border-radius: 12px;
+    padding: 10px 16px 12px 16px;
+    border-radius: 5px;
 }
 
 .movie-data .movie-title {
@@ -90,5 +85,26 @@ h1, h4, p {
 #area-tooltip {
     background-color: #2B2D2F;
     color: #fff;
+}
+
+.role-tooltip {
+    text-align: center;
+    background-color: #333333;
+    color: #fff;
+}
+
+line.link:hover {
+    stroke: black;
+    stroke-width: 4px;
+}
+
+#era-navigation {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 4px;
+}
+
+#era-navigation button {
+    margin-left: 16px;
 }
 

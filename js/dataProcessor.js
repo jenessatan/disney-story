@@ -5,6 +5,15 @@ class DataProcessor {
         'Disney Renaissance', 'Post-Renaissance', 'Second Disney Renaissance'
     ];
 
+    static movieColourEras = [
+        'gray', 'red', 'orange', '#b59009', 'green',
+        'blue', 'indigo', 'violet'
+    ];
+
+    static movieColourErasHovered = [
+
+    ];
+
     static processMovieData(moviesRaw, nodes) {
         let countMap = {};
         moviesRaw.forEach(movie => {
@@ -13,10 +22,10 @@ class DataProcessor {
 
             const year = releaseDate.getFullYear();
             movie["year"] = year;
-            
-            countMap[year] = (!Object.keys(countMap).includes(year.toString())) ? 0 : countMap[year]+1;
+
+            countMap[year] = (!Object.keys(countMap).includes(year.toString())) ? 0 : countMap[year] + 1;
             movie["count"] = countMap[year];
-            
+
             let disneyEra = DataProcessor.getDisneyEra(year);
             movie["disney_era"] = disneyEra;
 
@@ -30,14 +39,15 @@ class DataProcessor {
                 release_date: releaseDate,
                 rating: +movie["rating"],
                 box_office: +movie["box_office"],
-                era: disneyEra
+                era: disneyEra,
+                award: movie["Award"]
             };
             nodes.push(movieObj);
         });
     }
 
     static getDisneyEra(year) {
-        if (year >= 1928 && year <= 1936 ) {
+        if (year >= 1928 && year <= 1936) {
             return DataProcessor.movieEras[0];
         } else if (year >= 1937 && year <= 1942) {
             return DataProcessor.movieEras[1];
@@ -58,12 +68,15 @@ class DataProcessor {
 
     static processVoiceActorData(actorsRaw, nodes, links) {
         actorsRaw.forEach(vActor => {
-
-            let vActorNode = {
-                type: "actor",
-                id: vActor['voice-actor']
-            };
-            nodes.push(vActorNode);
+            if (nodes.find(node => node.type === 'actor' && node.id === vActor['voice-actor']) === undefined) {
+                // we only want to create and add the node to the array if the actor doesn't exist yet
+                let vActorNode = {
+                    type: "actor",
+                    id: vActor['voice-actor'],
+                    award: vActor['Award']
+                };
+                nodes.push(vActorNode);
+            }
 
             let link = {
                 source: vActor['voice-actor'],
@@ -88,25 +101,48 @@ class DataProcessor {
     }
 
     static getMovieColor(era) {
-        switch(era) {
+        switch (era) {
             case DataProcessor.movieEras[0]:
-                return "gray";
+                return DataProcessor.movieColourEras[0];
             case DataProcessor.movieEras[1]:
-                return "red";
+                return DataProcessor.movieColourEras[1];
             case DataProcessor.movieEras[2]:
-                return "orange";
+                return DataProcessor.movieColourEras[2];
             case DataProcessor.movieEras[3]:
-                return "yellow";
+                return DataProcessor.movieColourEras[3];
             case DataProcessor.movieEras[4]:
-                return "green";
+                return DataProcessor.movieColourEras[4];
             case DataProcessor.movieEras[5]:
-                return "blue";
+                return DataProcessor.movieColourEras[5];
             case DataProcessor.movieEras[6]:
-                return "indigo";
+                return DataProcessor.movieColourEras[6];
             case DataProcessor.movieEras[7]:
-                return "violet";
+                return DataProcessor.movieColourEras[7];
             default:
                 return "black";
         }
+    }
+
+    static getMoviesCountForBigGroupLabels(moviesRaw) {
+        let moviesCount = d3.nest()
+            .key(d => d["disney_era"])
+            .key(d => d["release_date"].getFullYear())
+            .entries(moviesRaw);
+
+        moviesCount = moviesCount.map(d => {
+            return {
+                disney_era: d.key,
+                count: d.values.length
+            };
+        });
+
+        moviesCount = moviesCount.map((d, i) => {
+            const prev = moviesCount[i - 1];
+            const cumsum = prev ? d.count + prev.cumsum : d.count;
+            d.cumsum = cumsum;
+            return d;
+        });
+
+        return moviesCount
     }
 }

@@ -8,8 +8,8 @@ let nodeLinkDataByEra = {};
 
 Promise.all([
   d3.csv('data/disney_revenue.csv'),
-  d3.csv('data/disney-movies.csv'),
-  d3.csv('data/disney-voice-actors.csv')
+  d3.csv('data/disney-movies-awards.csv'),
+  d3.csv('data/disney-actors-awards.csv')
 ]).then(files => {
   let revenueRaw = files[0];
   let moviesRaw = files[1];
@@ -34,33 +34,36 @@ Promise.all([
   area.initVis({data: revenueRaw});
   let startingEra = DataProcessor.movieEras[DataProcessor.movieEras.length - 1];
   nodeLink.initVis({dataByEra: nodeLinkDataByEra, initialEra: startingEra});
-  
-  let moviesCount = d3.nest()
-    .key(d => d["disney_era"])
-    .key(d => d["release_date"].getFullYear())
-    .entries(moviesRaw);
-
-  moviesCount = moviesCount.map(d => {
-    return {
-      disney_era: d.key,
-      count: d.values.length
-    };
-  });
-
-  moviesCount = moviesCount.map((d, i) => {
-    const prev = moviesCount[i-1];
-    const cumsum = prev ? d.count + prev.cumsum : d.count;
-    d.cumsum = cumsum;
-    return d;
-  });
 
   histogram.initVis(
-    moviesRaw, moviesCount,
+    moviesRaw, DataProcessor.getMoviesCountForBigGroupLabels(moviesRaw),
     { x: "year", y: "count", size: "box_office", era: "disney_era" },
     { x: "Time", y: "None", size: "Gross Revenue", era: "Disney Era" },
-    "#movie-era-info"
+    "#movie-era-tooltip"
   );
   histogram.render();
 });
 
+// -------- INTERACTIVE CHECKS --------
+let updateNodeLinkGraph = function() {
+  console.log('button click');
+  let era =$(this).val();
+  console.log(era);
+  nodeLink.update(era);
+};
 
+let preGoldenBtn = document.getElementById('pre-golden-age-btn');
+let goldenBtn = document.getElementById('golden-age-btn');
+let wartimeBtn = document.getElementById('wartime-era-btn');
+let silverBtn = document.getElementById('silver-age-btn');
+let darkAgeBtn = document.getElementById('dark-age-btn');
+let renaissanceBtn = document.getElementById('renaissance-btn');
+let postRenaissanceBtn = document.getElementById('post-renaissance-btn');
+let secondRenaissanceBtn = document.getElementById('second-renaissance-btn');
+
+let eraButtons = [
+    preGoldenBtn, goldenBtn, wartimeBtn, silverBtn, darkAgeBtn, renaissanceBtn,
+    postRenaissanceBtn, secondRenaissanceBtn
+];
+
+eraButtons.forEach(button => button.addEventListener('click', updateNodeLinkGraph));
