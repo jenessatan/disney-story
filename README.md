@@ -22,7 +22,7 @@ This is the landing screen and visualization where we discuss the Walt Disney An
 This is the exploratory view where users can view different eras and look at voice actors and movie data.
 
 ### Sources of Data:
-As per our project proposal, our visualizations use the Disney dataset provided in [Data World](https://data.world/dot2/disney-character-data-set-project/workspace/project-summary?agentid=kgarrett&datasetid=disney-character-success-00-16) and the [Academy Award dataset from Kaggle](https://www.kaggle.com/theacademy/academy-awards). Missing movie and actor data was taken from IMDB.
+As per our project proposal, our visualizations use the [Disney dataset provided in Data World](https://data.world/dot2/disney-character-data-set-project/workspace/project-summary?agentid=kgarrett&datasetid=disney-character-success-00-16) and the [Academy Award dataset from Kaggle](https://www.kaggle.com/theacademy/academy-awards). Missing movie and actor data was taken manually from [IMDB](https://www.imdb.com/).
 
 ### Data Preprocessing Pipeline
 There were slight inconsistencies between the Disney datasets in the Data World workspace. Therefore, most of our data preprocessing involved rectifying those inconsistencies. This includes:
@@ -67,9 +67,11 @@ Some preprocessing steps were done manually in Excel, and some were done automat
 |Brush Selection Interactivity|Mar 28| -----|17|-----|J|
 |Linkage Between Node & Dot Views|Mar 28|-----|12|-----|K|
 |Character Icon Files| Mar 30| -----| 6| -----|J|
+|Add Narrative | Mar 31| -----| 3| ----- | J|
 |Legend Creation|Mar 31| -----| 4| -----|C|
 |Tech Debt & Testing | Apr 3 | ----- | 15 | ----- | CJK|
 |Milestone 3 Writeup | Apr 5 | ----- | 8 | ----- | CJK |
+
 C = Bang Chi Duong ; J = Jenessa Tan ; K = Ana Katrina Tan
 
 ###  Contributions Breakdown
@@ -79,7 +81,11 @@ Everyone is contributing equally.
 
 ### Team Process
 Team has a clear vision of the problems: **Excellent**
+
 Team is properly organized to complete task and cooperates well: **Excellent**
+
 Team managed time wisely: **Good**
+
 Team acquired needed knowledge base: **Good**
+
 Efforts communicated well within group: **Excellent**
