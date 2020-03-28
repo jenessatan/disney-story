@@ -288,8 +288,8 @@ class Histogram {
     showTooltip(row) {
         this.tooltip
             .style("visibility", "visible")
-            .style("left", `${d3.event.pageX}px`)
-            .style("top", `${d3.event.pageY - 120}px`);
+            .style("left", () => this.getXposition())
+            .style("top", () => this.getYposition());
         this.createTooltipData(row);
     }
     
@@ -310,6 +310,22 @@ class Histogram {
 
     removeTooltipData() {
         this.tooltip_data.remove();
+    }
+
+    getXposition() {
+        if (d3.event.pageX < 1300) {
+            return (d3.event.pageX - 50) + "px";
+        } else {
+            return (d3.event.pageX - 200) + "px";
+        }
+    }
+
+    getYposition() {
+        if (d3.event.pageY > 300) {
+            return (d3.event.pageY - 120) + "px";
+        } else {
+            return (d3.event.pageY + 50) + "px";
+        }
     }
 
     // Legends
