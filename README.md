@@ -19,7 +19,7 @@ The area chart offers the ability to compare the gross annual revenues from vari
 
 The node-link graph lets users explore the connections between voice actors and the various movies they may have participated in. Users can learn more about the actors, movies, and roles by hovering over the different nodes and links. This information includes character names, actor and movie Academy Awards, movie revenues, and movie ratings. Further interactivity will come in later iterations.
 
-Finally, the dot plot histogram allows users to gain insight into the various Disney eras and the movies that defined them. They can observe the overall trend of movie releases and box office revenues over time. Some movie information can be gained through interacting with individual dots. But more interactivity is expected for later iterations that will tie the node-link and dot plot histograms together.
+Finally, the dot plot histogram allows users to gain insight into the various Disney eras and the movies that defined them. They can observe the distribution of movie releases and box office revenues over time. Some movie information can be gained through interacting with individual dots. But more interactivity is expected for later iterations that will tie the node-link and dot plot histograms together.
 
 Overall, we believe that our visualizations successfully communicate the Disney story. 
 
