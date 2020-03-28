@@ -47,6 +47,8 @@ class NodeLink {
     let vis = this;
     vis.nodeData = vis.dataByEra[era].nodes;
     vis.linkData = vis.dataByEra[era].links;
+
+    vis.render();
   }
 
   render() {
@@ -56,47 +58,49 @@ class NodeLink {
         .force('charge', d3.forceManyBody().strength(-1))
         .force('center', d3.forceCenter(vis.config.width/2, vis.config.height/2))
         .force('collide', d3.forceCollide().radius((d) => vis.getNodeRadius(d)).iterations(2))
-        .force('link', d3.forceLink().id(d => d.id));
+        .force('link', d3.forceLink().id(d => d.id))
+        .on('tick', () => {
+          vis.nodes
+              .attr('x', node => vis.getNodeXPosition(node))
+              .attr('y', node => vis.getNodeYPosition(node))
+              .attr('transform', node => vis.adjustNodePosition(node));
+
+          vis.links
+              .attr('x1', link => link.source.x)
+              .attr('y1', link => link.source.y)
+              .attr('x2', link => link.target.x)
+              .attr('y2', link => link.target.y);
+        });
 
     vis.links = vis.chart.append('g').selectAll('.link')
-        .data(vis.linkData)
-        .join(
-            enter => enter.append('line')
-                .attr('class', 'link')
-                .attr('stroke-width', 3)
-                .attr('stroke', '#e5e5e5')
-                .on('mouseover.tooltip', d => vis.updateLinkTooltip(d))
-                .on('mouseout.tooltip', () => vis.updateLinkTooltip(null)));
+        .data(vis.linkData, d => d.source.id + " - " + d.target.id);
 
-    vis.links.exit().remove();
+    vis.links.exit()
+        .transition()
+        .attr('stroke-opacity', 0)
+        .remove();
 
-    vis.nodes = vis.chart.append('g')
-        .selectAll('path')
-        .data(vis.nodeData, d => d.id)
-        .join(
-            enter => enter.append('path')
-                .attr('d', d => vis.getPath(d.type))
-                .attr('fill', d => vis.getNodeColor(d))
-                .on('mouseover.tooltip', d => vis.updateNodeTooltip(d))
-                .on('mouseout.tooltip', () => vis.updateNodeTooltip(null))
-        );
+    vis.links = vis.links.enter().append('line')
+        .attr('class', 'link')
+        .attr('stroke-width', 3)
+        .attr('stroke', '#e5e5e5')
+        .on('mouseover.tooltip', d => vis.updateLinkTooltip(d))
+        .on('mouseout.tooltip', () => vis.updateLinkTooltip(null))
+        .merge(vis.links);
 
+    vis.nodes = vis.chart.append('g').selectAll('path')
+        .data(vis.nodeData, d => d.id);
     vis.nodes.exit().remove();
+    vis.nodes = vis.nodes.enter().append('path')
+        .attr('d', d => vis.getPath(d.type))
+        .attr('fill', d => vis.getNodeColor(d))
+        .on('mouseover.tooltip', d => vis.updateNodeTooltip(d))
+        .on('mouseout.tooltip', () => vis.updateNodeTooltip(null))
+        .merge(vis.nodes);
 
     vis.simulation.force('link').links(vis.linkData);
-    vis.simulation.nodes(vis.nodeData).on('tick', () => {
-      vis.nodes
-          .attr('x', node => vis.getNodeXPosition(node))
-          .attr('y', node => vis.getNodeYPosition(node))
-          .attr('transform', node => vis.adjustNodePosition(node));
-
-      vis.links
-          .attr('x1', link => link.source.x)
-          .attr('y1', link => link.source.y)
-          .attr('x2', link => link.target.x)
-          .attr('y2', link => link.target.y);
-    });
-
+    vis.simulation.nodes(vis.nodeData);
+    vis.simulation.alpha(1).restart();
   }
 
   updateLinkTooltip(data) {
@@ -153,15 +157,6 @@ class NodeLink {
     }
   }
 
-  getStrokeColor(data) {
-    let vis = this;
-    if (vis.hovered.type === 'link' && vis.hovered.data === data) {
-      return 'black';
-    } else {
-      return '#e5e5e5';
-    }
-  }
-
   getNodeColor(node) {
     if (node.type === "movie") {
       return DataProcessor.getMovieColor(node.era);
@@ -188,7 +183,7 @@ class NodeLink {
     } else {
       nodeRadius = vis.getNodeRadius(node)/2;
     }
-    return Math.max(nodeRadius, Math.min((vis.config.width - (nodeRadius * 2)), node.x));
+    return Math.max(nodeRadius * 4, Math.min((vis.config.width - (nodeRadius * 4)), node.x));
   }
 
   getNodeYPosition(node) {
@@ -199,7 +194,7 @@ class NodeLink {
     } else {
       nodeRadius = vis.getNodeRadius(node)/2;
     }
-    return Math.max(nodeRadius * 2, Math.min((vis.config.height - (nodeRadius * 2)), node.y));
+    return Math.max(nodeRadius * 4, Math.min((vis.config.height - (nodeRadius * 4)), node.y));
   }
 
   adjustNodePosition(node) {

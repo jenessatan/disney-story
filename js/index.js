@@ -8,16 +8,12 @@ let nodeLinkDataByEra = {};
 
 Promise.all([
   d3.csv('data/disney_revenue.csv'),
-  d3.csv('data/disney-movies.csv'),
-  d3.csv('data/disney-voice-actors.csv'),
-  d3.csv('data/disney-actors-awards.csv'),
-  d3.csv('data/disney-movies-awards.csv')
+  d3.csv('data/disney-movies-awards.csv'),
+  d3.csv('data/disney-actors-awards.csv')
 ]).then(files => {
   let revenueRaw = files[0];
   let moviesRaw = files[1];
   let actorsRaw = files[2];
-  let actorAwardsRaw = files[3];
-  let movieAwardsRaw = files[4];
 
   revenueRaw.forEach(val => {
     val.year = +val.year;
@@ -47,3 +43,27 @@ Promise.all([
   );
   histogram.render();
 });
+
+// -------- INTERACTIVE CHECKS --------
+let updateNodeLinkGraph = function() {
+  console.log('button click');
+  let era =$(this).val();
+  console.log(era);
+  nodeLink.update(era);
+};
+
+let preGoldenBtn = document.getElementById('pre-golden-age-btn');
+let goldenBtn = document.getElementById('golden-age-btn');
+let wartimeBtn = document.getElementById('wartime-era-btn');
+let silverBtn = document.getElementById('silver-age-btn');
+let darkAgeBtn = document.getElementById('dark-age-btn');
+let renaissanceBtn = document.getElementById('renaissance-btn');
+let postRenaissanceBtn = document.getElementById('post-renaissance-btn');
+let secondRenaissanceBtn = document.getElementById('second-renaissance-btn');
+
+let eraButtons = [
+    preGoldenBtn, goldenBtn, wartimeBtn, silverBtn, darkAgeBtn, renaissanceBtn,
+    postRenaissanceBtn, secondRenaissanceBtn
+];
+
+eraButtons.forEach(button => button.addEventListener('click', updateNodeLinkGraph))

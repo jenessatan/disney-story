@@ -10,6 +10,10 @@ class DataProcessor {
         'blue', 'indigo', 'violet'
     ];
 
+    static movieColourErasHovered = [
+
+    ];
+
     static processMovieData(moviesRaw, nodes) {
         let countMap = {};
         moviesRaw.forEach(movie => {
@@ -35,7 +39,8 @@ class DataProcessor {
                 release_date: releaseDate,
                 rating: +movie["rating"],
                 box_office: +movie["box_office"],
-                era: disneyEra
+                era: disneyEra,
+                award: movie["Award"]
             };
             nodes.push(movieObj);
         });

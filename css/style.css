@@ -92,3 +92,12 @@ line.link:hover {
     stroke: black;
     stroke-width: 4px;
 }
+
+#era-navigation {
+    display: flex;
+    flex-direction: row;
+}
+
+#era-navigation button {
+    margin-left: 16px;
+}
