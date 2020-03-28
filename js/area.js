@@ -235,10 +235,12 @@ class Area {
       .attr('y1', 0)
       .attr('y2', vis.height)
     
-    vis.updateToolTipContent(year, mouse, vis);
+      console.log("line: " + vis.xScale(year));
+    
+    vis.updateToolTipContent(year, vis);
   }
 
-  updateToolTipContent(year, mouse, vis) {
+  updateToolTipContent(year, vis) {
     let obj = vis.data.find(d => d.year == year);
     let revenueContainer = document.createElement('div');
 
@@ -250,7 +252,7 @@ class Area {
       vis.tooltip.appendChild(revenueContainer);
     }
 
-    let xpos = year > 2012? vis.xScale(year) : vis.xScale(year);
+    let xpos = year > 2012 ? d3.event.pageX - 210: d3.event.pageX + 5;
     vis.tooltipSelection
       .style('opacity', 1)
       .style("top", (d3.event.pageY + 15)+"px")
