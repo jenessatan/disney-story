@@ -10,9 +10,18 @@ After showing the financial part of the animation studio, we wanted users to be 
 
 From going into detail about the movies and their related voice actors, we decide to take a step back and provide another overview of movies. We utilized a dot plot and size-coded the dots to express its gross revenue. As previously mentioned, we use color hue to encode the era each movie belongs to. We decided to use a dot plot because each dot still expresses a single movie and the user will be able to see the number of movies released each year. Typically there’s only about 1-3 movies released per year and our years range from 1928-2016 (approximately 87 years). We chose the dot plot visualization over a bar chart because being able to see the movies individually is important. After the milestone, we want to use the dot-plot graph as an interactive navigation for users to see different movies in the node-link graph by using brush selection. This will remove the limitation of seeing voice actor-movie relationships only for movies within the same era and allow users to explore our dataset better.
 
-### Vision changes since your proposal? 
-Our vision for this project has not changed since our proposal. While we had to make adjustments from our original plan (such as only showing the most recent era of the node-link graph) from a useability perspective, these changes do not impact the visualization goals that we set out to achieve. 
+### Vision changes since your proposal
+Our vision for this project has not changed since our proposal. While we had to make adjustments from our original plan (such as only showing the selected Disney era of the node-link graph) from a useability perspective, these changes do not impact the visualization goals that we set out to achieve.
 
+Our goal was to provide general users with interesting, interactive visualizations that would allow them to explore and learn about different aspects of the Walt Disney Company and Disney animation. 
+
+The area chart offers the ability to compare the gross annual revenues from various sectors within the Walt Disney Company. A more detailed breakdown of the yearly revenue will be shown in a tooltip when the user mouses over the area chart. Hovering over the sector name in the upper left legend, users would be able to observe the trend of generated revenue for that sector in isolation from the others. 
+
+The node-link graph lets users explore the connections between voice actors and the various movies they may have participated in. Users can learn more about the actors, movies, and roles by hovering over the different nodes and links. This information includes character names, actor and movie Academy Awards, movie revenues, and movie ratings. Further interactivity will come in later iterations.
+
+Finally, the dot plot histogram allows users to gain insight into the various Disney eras and the movies that defined them. They can observe the overall trend of movie releases and box office revenues over time. Some movie information can be gained through interacting with individual dots. But more interactivity is expected for later iterations that will tie the node-link and dot plot histograms together.
+
+Overall, we believe that our visualizations successfully communicate the Disney story. 
 
 ### Screenshots
 ![Revenue Area Chart](/images/screenshots/area.png)
