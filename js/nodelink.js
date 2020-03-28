@@ -3,7 +3,7 @@ class NodeLink {
     this.config = {
       parentElement: _config.parentElement,
       containerWidth: _config.containerWidth || 1300,
-      containerHeight: _config.containerHeight || 500
+      containerHeight: _config.containerHeight || 450
     };
     this.config.margin = _config.margin || {
       top: 0,
@@ -62,7 +62,7 @@ class NodeLink {
         .force('center', d3.forceCenter(vis.config.width/2, vis.config.height/2))
         .force('collide', d3.forceCollide().radius((d) => vis.getNodeRadius(d)).iterations(2))
         .force('x', d3.forceX(vis.config.width/2).strength(0.015))
-        .force('y', d3.forceY(vis.config.height/2).strength(0.015))
+        .force('y', d3.forceY(vis.config.height/2).strength(0.03))
         .force('link', d3.forceLink().id(d => d.id))
         .on('tick', () => {
           vis.nodeEnter

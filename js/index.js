@@ -66,4 +66,4 @@ let eraButtons = [
     postRenaissanceBtn, secondRenaissanceBtn
 ];
 
-eraButtons.forEach(button => button.addEventListener('click', updateNodeLinkGraph))
+eraButtons.forEach(button => button.addEventListener('click', updateNodeLinkGraph));
