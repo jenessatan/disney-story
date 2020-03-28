@@ -10,11 +10,16 @@ After showing the financial part of the animation studio, we wanted users to be 
 
 From going into detail about the movies and their related voice actors, we decide to take a step back and provide another overview of movies. We utilized a dot plot and size-coded the dots to express its gross revenue. As previously mentioned, we use color hue to encode the era each movie belongs to. We decided to use a dot plot because each dot still expresses a single movie and the user will be able to see the number of movies released each year. Typically there’s only about 1-3 movies released per year and our years range from 1928-2016 (approximately 87 years). We chose the dot plot visualization over a bar chart because being able to see the movies individually is important. After the milestone, we want to use the dot-plot graph as an interactive navigation for users to see different movies in the node-link graph by using brush selection. This will remove the limitation of seeing voice actor-movie relationships only for movies within the same era and allow users to explore our dataset better.
 
-### !!!TODO: How has your vision changed since your proposal?
-Our vision for this project has not changed since our proposal. While we had to make adjustments from our original plan (such as only showing the most recent era of the node-link graph) from a useability perspective, these changes do not impact the visualization goals that we set out to achieve.
+### Vision changes since your proposal? 
+Our vision for this project has not changed since our proposal. While we had to make adjustments from our original plan (such as only showing the most recent era of the node-link graph) from a useability perspective, these changes do not impact the visualization goals that we set out to achieve. 
+
 
 ### Screenshots
 ![Revenue Area Chart](/images/screenshots/area.png)
+This is the landing screen and visualization where we discuss the Walt Disney Animation Studio in relation to the global corporation.
+
+![Actor Node-Link Chart & Movie Era Dot Plot](/images/screenshots/node-dot.png)
+This is the exploratory view where users can view different eras and look at voice actors and movie data.
 
 ### Sources of Data:
 As per our project proposal, our visualizations use the Disney dataset provided in [Data World](https://data.world/dot2/disney-character-data-set-project/workspace/project-summary?agentid=kgarrett&datasetid=disney-character-success-00-16) and the [Academy Award dataset from Kaggle](https://www.kaggle.com/theacademy/academy-awards). Missing movie and actor data was taken from IMDB.
@@ -44,3 +49,37 @@ Some preprocessing steps were done manually in Excel, and some were done automat
 1.  Cleaning the movie titles and actor names in movies, actors, and awards datasets
     
 2.  In the awards dataset, columns called “Name” and “Film” are relevant. For each of the movies and actors datasets, two left joins from the award to the movies/actors were carried out and then concatenated to produce a single result. Since we were dealing with strings comparison, I used fuzzy matching (package “fuzzywuzzy”) with a threshold of 95% on the matching score.
+
+## Project Management & Team Assessment
+### Status Update & Contributions Breakdown
+| Milestone | Est Date | Actual Date | Est Hrs | Actual Hrs | Team Member |
+|--|--|--|--|--|--|
+| Narrative | Mar 10 | Mar 23 | 3 | 4 | J |
+|Data Processing|Mar 14|Mar 25|12|12|CJK|
+|Glyph Files|Mar 15|Mar 15|3|0.5|K|
+|Static Area View|Mar 18|Mar 19| 7 | 7|J|
+|Area Interactivity|Mar 28|Mar 28|8|8|J|
+|Static Node View|Mar 20|Mar 27|27|24|K|
+|Static Dot Plot View|Mar 20|Mar 24|17|13|C|
+|Tooltip Creation| Mar 31| Mar 25| 9|9|CK|
+|Milestone 2 Writeup| Mar 23|Mar 28| 4|4|CJK|
+|Data Filtering by Era|Mar 28|-----|17|-----|C|
+|Brush Selection Interactivity|Mar 28| -----|17|-----|J|
+|Linkage Between Node & Dot Views|Mar 28|-----|12|-----|K|
+|Character Icon Files| Mar 30| -----| 6| -----|J|
+|Legend Creation|Mar 31| -----| 4| -----|C|
+|Tech Debt & Testing | Apr 3 | ----- | 15 | ----- | CJK|
+|Milestone 3 Writeup | Apr 5 | ----- | 8 | ----- | CJK |
+C = Bang Chi Duong ; J = Jenessa Tan ; K = Ana Katrina Tan
+
+###  Contributions Breakdown
+**Bang Chi** processed the Academy Award data to get the award information for each of the movies and actors of interest, cleaning and joining multiple datasets as described above. He built the dot plot histogram view of the Disney movies broken down by year and Disney era. **Jenessa** cleaned and processed the original Disney DataWorld datasets, filtering out the irrelevant movies and voice actors, filling in missing data & ensuring proper formatting of the dates.  She built the area view of the Disney corporate revenue. **Ana Katrina** processed the original Disney DataWorld datasets as well, ensuring consistency between the voice actor and movie datasets. She built the node-link view of the movies and voice actors. 
+
+Everyone is contributing equally.
+
+### Team Process
+Team has a clear vision of the problems: **Excellent**
+Team is properly organized to complete task and cooperates well: **Excellent**
+Team managed time wisely: **Good**
+Team acquired needed knowledge base: **Good**
+Efforts communicated well within group: **Excellent**
