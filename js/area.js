@@ -235,8 +235,6 @@ class Area {
       .attr('y1', 0)
       .attr('y2', vis.height)
     
-      console.log("line: " + vis.xScale(year));
-    
     vis.updateToolTipContent(year, vis);
   }
 
@@ -246,7 +244,6 @@ class Area {
 
     vis.formatToolTipData({vis, year, obj, div: revenueContainer});
     if (vis.tooltip.children.length !== 0) {
-      // we want to delete the old data inside the tooltip
       vis.tooltip.replaceChild(revenueContainer, vis.tooltip.childNodes[0]);
     } else {
       vis.tooltip.appendChild(revenueContainer);
