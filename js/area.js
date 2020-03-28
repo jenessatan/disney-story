@@ -163,13 +163,14 @@ class Area {
         .attr('r', 4)
         .style('opacity', 0);
     
-    mouseLine.append('svg:rect')
+    mouseLine.append('rect')
       .attr('width', vis.width)
       .attr('height', vis.height)
       .attr('fill', 'none')
       .attr('pointer-events', 'all')
-      .on('mouseout', () => vis.hideRevenueTooltip(vis))
-      .on('mousemove', () => vis.showRevenueToolTips(vis))
+      .on('mouseout', function() {return vis.hideRevenueTooltip(vis)})
+      .on('mousemove', function() {
+        return vis.showRevenueToolTips(vis, d3.mouse(this))})
   }
 
   renderLegend() {
@@ -220,8 +221,8 @@ class Area {
     vis.tooltipSelection.style('opacity', 0);
   }
 
-  showRevenueToolTips(vis) {
-    let year = Math.floor(vis.xScale.invert(d3.event.pageX))-1;
+  showRevenueToolTips(vis, mouse) {
+    let year = Math.floor(vis.xScale.invert(mouse[0]) +0.2);
     d3.selectAll('.points')
       .style('opacity', 0);
     d3.selectAll(`.year${year}`)
@@ -234,10 +235,10 @@ class Area {
       .attr('y1', 0)
       .attr('y2', vis.height)
     
-    vis.updateToolTipContent(year, vis);
+    vis.updateToolTipContent(year, mouse, vis);
   }
 
-  updateToolTipContent(year, vis) {
+  updateToolTipContent(year, mouse, vis) {
     let obj = vis.data.find(d => d.year == year);
     let revenueContainer = document.createElement('div');
 
@@ -249,7 +250,7 @@ class Area {
       vis.tooltip.appendChild(revenueContainer);
     }
 
-    let xpos = year > 2012? vis.xScale(year) - 190 : vis.xScale(year) + 90;
+    let xpos = year > 2012? vis.xScale(year) : vis.xScale(year);
     vis.tooltipSelection
       .style('opacity', 1)
       .style("top", (d3.event.pageY + 15)+"px")
