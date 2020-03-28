@@ -252,7 +252,7 @@ class Area {
       vis.tooltip.appendChild(revenueContainer);
     }
 
-    let xpos = year > 2012 ? d3.event.pageX - 210: d3.event.pageX + 5;
+    let xpos = year > 2012 ? d3.event.pageX - 250: d3.event.pageX + 5;
     vis.tooltipSelection
       .style('opacity', 1)
       .style("top", (d3.event.pageY + 15)+"px")
