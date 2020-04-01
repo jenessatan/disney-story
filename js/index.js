@@ -6,6 +6,8 @@ let nodes = [];
 let links = [];
 let nodeLinkDataByEra = {};
 
+let selectedNode = null;
+
 Promise.all([
   d3.csv('data/disney_revenue.csv'),
   d3.csv('data/disney-movies-awards.csv'),
@@ -67,3 +69,15 @@ let eraButtons = [
 ];
 
 eraButtons.forEach(button => button.addEventListener('click', updateNodeLinkGraph));
+
+let nodeSelectionHandler = function(node){
+  if(selectedNode == null) {
+    selectedNode = node;
+    histogram.selectMovie(node);
+    nodeLink.showOneHopNodeLink(node);
+  } else {
+    selectedNode = null;
+    histogram.deselectMovie();
+    nodeLink.showAllNodeLink();
+  }
+} 

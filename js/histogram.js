@@ -200,6 +200,8 @@ class Histogram {
                 .attr("fill", d => this.scale_colour_era(this.value_colour_era(d)))
                 .on("mouseover", d => this.showTooltip(d))
                 .on("mouseout", () => this.hideTooltip())
+                .on("click", d => {
+                    nodeSelectionHandler(d.movie_title)})
             .transition().duration(1000)
                 .attr("r", d => this.scale_size(this.value_size(d)))
                 .attr("cy", d => this.scale_y(this.value_y(d)))
@@ -423,5 +425,18 @@ class Histogram {
 
     formatThousandCommas(number) {
         return d3.format(',.2f')(number);
+    }
+
+    selectMovie(name) {
+        d3.selectAll('circle').filter(d => {
+            return d.movie_title == name})
+            .attr('stroke-opacity', 1)
+            .attr('stroke', 'black')
+            .attr('stroke-width', 1.5)
+    }
+
+    deselectMovie() {
+        d3.selectAll('circle')
+            .attr('stroke-opacity', 0)
     }
 }

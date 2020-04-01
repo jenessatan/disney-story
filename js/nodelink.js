@@ -40,7 +40,6 @@ class NodeLink {
         .range([0.07, 0.2]);
 
     vis.hovered = {};
-    vis.toggle = 0;
 
    vis.chart.append('g').attr('class', 'link-group');
    vis.chart.append('g').attr('class', 'node-group');
@@ -108,7 +107,7 @@ class NodeLink {
         .attr('stroke', 'black')
         .on('mouseover.tooltip', d => vis.updateNodeTooltip(d))
         .on('mouseout.tooltip', () => vis.updateNodeTooltip(null))
-        .on('click', d => vis.toggleView(d))
+        .on('click', d => nodeSelectionHandler(d.id))
         .merge(vis.nodes);
 
     vis.simulation.force('link').links(vis.linkData);
@@ -327,24 +326,21 @@ class NodeLink {
     }
   }
 
-  toggleView(node) {
+  showOneHopNodeLink(node) {
     let vis = this;
-    if(vis.toggle == 0) {
-      d3.selectAll('.link').style('stroke-opacity', l => {
-        return l.target == node || l.source == node ? 1 : 0.1
-      });
+    d3.selectAll('.link').style('stroke-opacity', l => {
+      return l.target.id == node || l.source.id == node ? 1 : 0.1
+    });
 
-      d3.selectAll('.node').style('opacity', n => {
-        if(n.id == node.id) return 1;
-        return vis.neighbours[node.id + ' , ' + n.id] ? 1 : 0.1;
-      })
+    d3.selectAll('.node').style('opacity', n => {
+      if(n.id == node) return 1;
+      return vis.neighbours[node + ' , ' + n.id] ? 1 : 0.1;
+    })
+  }
 
-      vis.toggle = 1;
-    } else {
-      d3.selectAll('.link').style('stroke-opacity', 1);
-      d3.selectAll('.node').style('opacity', 1);
-      vis.toggle = 0;
-    }
+  showAllNodeLink() {
+    d3.selectAll('.link').style('stroke-opacity', 1);
+    d3.selectAll('.node').style('opacity', 1);
   }
 
 }
