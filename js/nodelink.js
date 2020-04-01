@@ -33,12 +33,14 @@ class NodeLink {
     vis.dataByEra = props.dataByEra;
     vis.nodeData = props.dataByEra[props.initialEra].nodes;
     vis.linkData = props.dataByEra[props.initialEra].links;
+    vis.neighbours = props.dataByEra[props.initialEra].neighbours;
 
     vis.nodeScale = d3.scaleSqrt()
         .domain([0, 10])
         .range([0.07, 0.2]);
 
     vis.hovered = {};
+    vis.toggle = 0;
 
    vis.chart.append('g').attr('class', 'link-group');
    vis.chart.append('g').attr('class', 'node-group');
@@ -50,6 +52,7 @@ class NodeLink {
     let vis = this;
     vis.nodeData = vis.dataByEra[era].nodes;
     vis.linkData = vis.dataByEra[era].links;
+    vis.neighbours = vis.dataByEra[era].neighbours;
 
     vis.render();
   }
@@ -98,12 +101,14 @@ class NodeLink {
 
     vis.nodes.exit().remove();
     vis.nodeEnter = vis.nodes.enter().append('path')
+        .attr('class', 'node')
         .attr('d', d => vis.getPath(d.type))
         .attr('fill', d => vis.getNodeColor(d))
         .attr('stroke-width', d => vis.getNodeStrokeWidth(d.award))
         .attr('stroke', 'black')
         .on('mouseover.tooltip', d => vis.updateNodeTooltip(d))
         .on('mouseout.tooltip', () => vis.updateNodeTooltip(null))
+        .on('click', d => vis.toggleView(d))
         .merge(vis.nodes);
 
     vis.simulation.force('link').links(vis.linkData);
@@ -319,6 +324,26 @@ class NodeLink {
       let award = document.createTextNode('Awards: ' + data.award);
       awardsElem.appendChild(award);
       actorContainer.appendChild(awardsElem);
+    }
+  }
+
+  toggleView(node) {
+    let vis = this;
+    if(vis.toggle == 0) {
+      d3.selectAll('.link').style('stroke-opacity', l => {
+        return l.target == node || l.source == node ? 1 : 0.1
+      });
+
+      d3.selectAll('.node').style('opacity', n => {
+        if(n.id == node.id) return 1;
+        return vis.neighbours[node.id + ' , ' + n.id] ? 1 : 0.1;
+      })
+
+      vis.toggle = 1;
+    } else {
+      d3.selectAll('.link').style('stroke-opacity', 1);
+      d3.selectAll('.node').style('opacity', 1);
+      vis.toggle = 0;
     }
   }
 
