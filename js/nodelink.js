@@ -105,9 +105,15 @@ class NodeLink {
         .attr('fill', d => vis.getNodeColor(d))
         .attr('stroke-width', d => vis.getNodeStrokeWidth(d.award))
         .attr('stroke', 'black')
-        .on('mouseover.tooltip', d => vis.updateNodeTooltip(d))
-        .on('mouseout.tooltip', () => vis.updateNodeTooltip(null))
-        .on('click', d => nodeSelectionHandler(d.id))
+        .on('mouseover.tooltip', d => {
+          setHoveredNode(d.id, d.type);
+          vis.updateNodeTooltip(d);
+        })
+        .on('mouseout.tooltip', () => {
+          resetHoveredNode();
+          vis.updateNodeTooltip(null);
+        })
+        // .on('click', d => nodeSelectionHandler(d.id))
         .merge(vis.nodes);
 
     vis.simulation.force('link').links(vis.linkData);
@@ -328,19 +334,19 @@ class NodeLink {
 
   showOneHopNodeLink(node) {
     let vis = this;
-    d3.selectAll('.link').style('stroke-opacity', l => {
+    d3.selectAll('.link').transition().style('stroke-opacity', l => {
       return l.target.id == node || l.source.id == node ? 1 : 0.1
     });
 
-    d3.selectAll('.node').style('opacity', n => {
+    d3.selectAll('.node').transition().style('opacity', n => {
       if(n.id == node) return 1;
       return vis.neighbours[node + ' , ' + n.id] ? 1 : 0.1;
     })
   }
 
   showAllNodeLink() {
-    d3.selectAll('.link').style('stroke-opacity', 1);
-    d3.selectAll('.node').style('opacity', 1);
+    d3.selectAll('.link').transition().style('stroke-opacity', 1);
+    d3.selectAll('.node').transition().style('opacity', 1);
   }
 
 }
