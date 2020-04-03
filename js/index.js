@@ -48,7 +48,7 @@ Promise.all([
 });
 
 // -------- INTERACTIVE CHECKS --------
-let updateNodeLinkGraph = function(era) {
+let updateNodeGraphByEraLabel = function(era) {
   currentEra = era;
   nodeLink.update(currentEra);
 };
@@ -80,3 +80,27 @@ let resetHoveredNode = function() {
   histogram.deselectMovie();
   nodeLink.showAllNodeLink();
 }
+
+// -------- INTERACTIVE CHECKS --------
+let updateNodeLinkGraph = function() {
+  console.log('button click');
+  let era =$(this).val();
+  console.log(era);
+  nodeLink.update(era);
+};
+
+let preGoldenBtn = document.getElementById('pre-golden-age-btn');
+let goldenBtn = document.getElementById('golden-age-btn');
+let wartimeBtn = document.getElementById('wartime-era-btn');
+let silverBtn = document.getElementById('silver-age-btn');
+let darkAgeBtn = document.getElementById('dark-age-btn');
+let renaissanceBtn = document.getElementById('renaissance-btn');
+let postRenaissanceBtn = document.getElementById('post-renaissance-btn');
+let secondRenaissanceBtn = document.getElementById('second-renaissance-btn');
+
+let eraButtons = [
+    preGoldenBtn, goldenBtn, wartimeBtn, silverBtn, darkAgeBtn, renaissanceBtn,
+    postRenaissanceBtn, secondRenaissanceBtn
+];
+
+eraButtons.forEach(button => button.addEventListener('click', updateNodeLinkGraph));

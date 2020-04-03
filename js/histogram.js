@@ -258,7 +258,7 @@ class Histogram {
             .style("font-size", 11)
             .style("font-weight", "bold")
             .style('pointer-events', 'auto')
-            .on('click', d => updateNodeLinkGraph(d.disney_era))
+            .on('click', d => updateNodeGraphByEraLabel(d.disney_era))
             .text(d => this.value_colour_era(d))
             .call(this.wrap, 5);
         era.exit().remove();
