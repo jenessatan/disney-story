@@ -223,7 +223,11 @@ class NodeLink {
     let vis = this;
     let nodeRadius = vis.getNodeRadius(node)/2;
     let scale = node.type === 'actor'? 0.07 : vis.nodeScale(node.rating);
-    return `translate(${node.x-nodeRadius}, ${node.y-nodeRadius}), scale(${scale})`;
+    let clipX = Math.max(nodeRadius * 2, Math.min((vis.config.width - (nodeRadius * 2)), node.x));
+    let clipY = Math.max(nodeRadius * 4, Math.min((vis.config.height - (nodeRadius * 4)), node.y));
+    node.x = clipX;
+    node.y = clipY;
+    return `translate(${clipX-nodeRadius}, ${clipY-nodeRadius}), scale(${scale})`;
   }
 
   getNodeRadius(node) {

@@ -10,10 +10,6 @@ class DataProcessor {
         'blue', 'indigo', 'violet'
     ];
 
-    static movieColourErasHovered = [
-
-    ];
-
     static processMovieData(moviesRaw, nodes) {
         let countMap = {};
         moviesRaw.forEach(movie => {
