@@ -6,6 +6,9 @@ let nodes = [];
 let links = [];
 let nodeLinkDataByEra = {};
 
+let hoveredNode = null;
+let currentEra = '';
+
 Promise.all([
   d3.csv('data/disney_revenue.csv'),
   d3.csv('data/disney-movies-awards.csv'),
@@ -32,8 +35,8 @@ Promise.all([
   });
 
   area.initVis({data: revenueRaw});
-  let startingEra = DataProcessor.movieEras[DataProcessor.movieEras.length - 1];
-  nodeLink.initVis({dataByEra: nodeLinkDataByEra, initialEra: startingEra});
+  currentEra = DataProcessor.movieEras[DataProcessor.movieEras.length - 1];
+  nodeLink.initVis({dataByEra: nodeLinkDataByEra, initialEra: currentEra});
 
   histogram.initVis(
     moviesRaw, DataProcessor.getMoviesCountForBigGroupLabels(moviesRaw),
@@ -43,6 +46,40 @@ Promise.all([
   );
   histogram.render();
 });
+
+// -------- INTERACTIVE CHECKS --------
+let updateNodeGraphByEraLabel = function(era) {
+  currentEra = era;
+  nodeLink.update(currentEra);
+};
+
+let nodeSelectionHandler = function(node){
+  if(hoveredNode == null) {
+    hoveredNode = node;
+    nodeLink.showOneHopNodeLink(node);
+  } else {
+    hoveredNode = null;
+    nodeLink.showAllNodeLink();
+  }
+} 
+
+let setHoveredNode = function(node, type, era) {
+  hoveredNode = node;
+  if(type == "actor") {
+    nodeLink.showOneHopNodeLink(node);
+  } else if (!era || (!!era && era == currentEra)) {
+    histogram.selectMovie(node);
+    nodeLink.showOneHopNodeLink(node);
+  } else {
+    histogram.selectMovie(node);
+  }
+}
+
+let resetHoveredNode = function() {
+  hoveredNode = null;
+  histogram.deselectMovie();
+  nodeLink.showAllNodeLink();
+}
 
 // -------- INTERACTIVE CHECKS --------
 let updateNodeLinkGraph = function() {

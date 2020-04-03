@@ -94,9 +94,15 @@ class DataProcessor {
         let matchingLinks = links.filter(link => movies.includes(link.target));
         let voiceActors = matchingLinks.map(link => link.source);
         let matchingVoiceActorNodes = nodes.filter(node => node.type === "actor" && voiceActors.includes(node.id));
+        let neighbours = {};
+        matchingLinks.forEach((d) => {
+            neighbours[d.source + " , " + d.target] = 1;
+            neighbours[d.target + " , " + d.source] = 1;
+        })
         result[era] = {
             nodes: matchingMovieNodes.concat(matchingVoiceActorNodes),
-            links: matchingLinks
+            links: matchingLinks,
+            neighbours
         };
     }
 

@@ -2,8 +2,8 @@ class Area {
   constructor(_config) {
     this.config = {
       parentElement: _config.parentElement,
-      containerWidth: _config.containerWidth || 1200,
-      containerHeight: _config.containerHeight || 420
+      containerWidth: _config.containerWidth || 1300,
+      containerHeight: _config.containerHeight || 450
     };
     this.config.margin = _config.margin || {
       top: 10,

@@ -33,6 +33,7 @@ class NodeLink {
     vis.dataByEra = props.dataByEra;
     vis.nodeData = props.dataByEra[props.initialEra].nodes;
     vis.linkData = props.dataByEra[props.initialEra].links;
+    vis.neighbours = props.dataByEra[props.initialEra].neighbours;
 
     vis.nodeScale = d3.scaleSqrt()
         .domain([0, 10])
@@ -50,6 +51,7 @@ class NodeLink {
     let vis = this;
     vis.nodeData = vis.dataByEra[era].nodes;
     vis.linkData = vis.dataByEra[era].links;
+    vis.neighbours = vis.dataByEra[era].neighbours;
 
     vis.render();
   }
@@ -98,12 +100,20 @@ class NodeLink {
 
     vis.nodes.exit().remove();
     vis.nodeEnter = vis.nodes.enter().append('path')
+        .attr('class', 'node')
         .attr('d', d => vis.getPath(d.type))
         .attr('fill', d => vis.getNodeColor(d))
         .attr('stroke-width', d => vis.getNodeStrokeWidth(d.award))
         .attr('stroke', 'black')
-        .on('mouseover.tooltip', d => vis.updateNodeTooltip(d))
-        .on('mouseout.tooltip', () => vis.updateNodeTooltip(null))
+        .on('mouseover.tooltip', d => {
+          setHoveredNode(d.id, d.type);
+          vis.updateNodeTooltip(d);
+        })
+        .on('mouseout.tooltip', () => {
+          resetHoveredNode();
+          vis.updateNodeTooltip(null);
+        })
+        // .on('click', d => nodeSelectionHandler(d.id))
         .merge(vis.nodes);
 
     vis.simulation.force('link').links(vis.linkData);
@@ -320,6 +330,23 @@ class NodeLink {
       awardsElem.appendChild(award);
       actorContainer.appendChild(awardsElem);
     }
+  }
+
+  showOneHopNodeLink(node) {
+    let vis = this;
+    d3.selectAll('.link').transition().style('stroke-opacity', l => {
+      return l.target.id == node || l.source.id == node ? 1 : 0.1
+    });
+
+    d3.selectAll('.node').transition().style('opacity', n => {
+      if(n.id == node) return 1;
+      return vis.neighbours[node + ' , ' + n.id] ? 1 : 0.1;
+    })
+  }
+
+  showAllNodeLink() {
+    d3.selectAll('.link').transition().style('stroke-opacity', 1);
+    d3.selectAll('.node').transition().style('opacity', 1);
   }
 
 }

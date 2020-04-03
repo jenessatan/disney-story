@@ -198,8 +198,16 @@ class Histogram {
                 .attr("cy", d => this.scale_y(this.value_y(d)))
             .merge(circles)
                 .attr("fill", d => this.scale_colour_era(this.value_colour_era(d)))
-                .on("mouseover", d => this.showTooltip(d))
-                .on("mouseout", () => this.hideTooltip())
+                .on("mouseover", d => {
+                    setHoveredNode(d.movie_title, "movie", d.disney_era);
+                    this.showTooltip(d)
+                })
+                .on("mouseout", () => {
+                    resetHoveredNode();
+                    this.hideTooltip()
+                })
+                // .on("click", d => {
+                //     nodeSelectionHandler(d.movie_title)})
             .transition().duration(1000)
                 .attr("r", d => this.scale_size(this.value_size(d)))
                 .attr("cy", d => this.scale_y(this.value_y(d)))
@@ -249,6 +257,8 @@ class Histogram {
             .attr("dominant-baseline", "hanging")
             .style("font-size", 11)
             .style("font-weight", "bold")
+            .style('pointer-events', 'auto')
+            .on('click', d => updateNodeGraphByEraLabel(d.disney_era))
             .text(d => this.value_colour_era(d))
             .call(this.wrap, 5);
         era.exit().remove();
@@ -423,5 +433,21 @@ class Histogram {
 
     formatThousandCommas(number) {
         return d3.format(',.2f')(number);
+    }
+
+    selectMovie(name) {
+        d3.selectAll('circle').transition().attr('opacity', 0.3);
+        d3.selectAll('circle').filter(d => {
+            return d.movie_title == name}).transition()
+            .attr('opacity', 0.9)
+            .attr('stroke-opacity', 1)
+            .attr('stroke', 'black')
+            .attr('stroke-width', 1.5)
+    }
+
+    deselectMovie() {
+        d3.selectAll('circle').transition()
+            .attr('opacity', 0.7)
+            .attr('stroke-opacity', 0)
     }
 }
