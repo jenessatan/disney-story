@@ -2,7 +2,7 @@ class NodeLink {
   constructor(_config) {
     this.config = {
       parentElement: _config.parentElement,
-      containerWidth: _config.containerWidth || 1300,
+      containerWidth: _config.containerWidth || 1000,
       containerHeight: _config.containerHeight || 450
     };
     this.config.margin = _config.margin || {
@@ -47,13 +47,18 @@ class NodeLink {
     vis.render();
   }
 
-  update(era) {
+  updateEra(era) {
     let vis = this;
     vis.nodeData = vis.dataByEra[era].nodes;
     vis.linkData = vis.dataByEra[era].links;
     vis.neighbours = vis.dataByEra[era].neighbours;
 
     vis.render();
+  }
+
+  updateMovie(movie) {
+    let vis = this;
+
   }
 
   render() {

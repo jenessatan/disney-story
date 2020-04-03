@@ -50,7 +50,7 @@ Promise.all([
 // -------- INTERACTIVE CHECKS --------
 let updateNodeGraphByEraLabel = function(era) {
   currentEra = era;
-  nodeLink.update(currentEra);
+  nodeLink.updateEra(currentEra);
 };
 
 let nodeSelectionHandler = function(node){
@@ -86,7 +86,7 @@ let updateNodeLinkGraph = function() {
   console.log('button click');
   let era =$(this).val();
   console.log(era);
-  nodeLink.update(era);
+  nodeLink.updateEra(era);
 };
 
 let preGoldenBtn = document.getElementById('pre-golden-age-btn');
@@ -98,9 +98,13 @@ let renaissanceBtn = document.getElementById('renaissance-btn');
 let postRenaissanceBtn = document.getElementById('post-renaissance-btn');
 let secondRenaissanceBtn = document.getElementById('second-renaissance-btn');
 
+// order matters to properly match the color of the buttons with the colors of the eras
 let eraButtons = [
     preGoldenBtn, goldenBtn, wartimeBtn, silverBtn, darkAgeBtn, renaissanceBtn,
     postRenaissanceBtn, secondRenaissanceBtn
 ];
 
-eraButtons.forEach(button => button.addEventListener('click', updateNodeLinkGraph));
+eraButtons.forEach(button  => {
+  button.addEventListener('click', updateNodeLinkGraph)
+  button.style.backgroundColor = DataProcessor.getMovieColor(button.value)
+});
