@@ -152,8 +152,10 @@ class NodeLink {
       let movieName = document.createTextNode(data.target.id);
       movieNameElem.appendChild(movieName);
 
-      let imgElem = document.createElement('IMG');
-      imgElem.src = `../images/characters/${data.role}`;
+      let imgElem = document.createElement('img');
+      imgElem.classList = 'character-image';
+      imgElem.src = `/images/characters/${data.role}.png`;
+      imgElem.setAttribute('onerror', "this.src='/images/characters/default.png';");
 
       roleData.appendChild(imgElem);
       roleData.appendChild(actorNameElem);

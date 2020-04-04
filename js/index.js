@@ -13,7 +13,8 @@ let currentEra = '';
 Promise.all([
   d3.csv('data/disney_revenue.csv'),
   d3.csv('data/disney-movies-awards.csv'),
-  d3.csv('data/disney-actors-awards.csv')
+  // d3.csv('data/disney-actors-awards.csv')
+  d3.csv('data/disney-voice-actors-2.csv')
 ]).then(files => {
   let revenueRaw = files[0];
   let moviesRaw = files[1];
