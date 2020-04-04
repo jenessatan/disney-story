@@ -86,7 +86,6 @@ let nodeSelectionHandler = function(title, era){
 
 let setHoveredNode = function(node, type, era) {
   hoveredNode = node;
-  console.log(selectedNode)
   if(type == "actor" && selectedNode === null) {
     nodeLink.showOneHopNodeLink(node);
   } else if ((!era || (!!era && era == currentEra))) {
