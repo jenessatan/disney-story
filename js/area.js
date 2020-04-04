@@ -2,8 +2,8 @@ class Area {
   constructor(_config) {
     this.config = {
       parentElement: _config.parentElement,
-      containerWidth: _config.containerWidth || 1300,
-      containerHeight: _config.containerHeight || 450
+      containerWidth: _config.containerWidth || 900,
+      containerHeight: _config.containerHeight || 300
     };
     this.config.margin = _config.margin || {
       top: 10,
@@ -23,7 +23,9 @@ class Area {
     vis.width = vis.config.containerWidth - vis.config.margin.left - vis.config.margin.right;
     vis.height = vis.config.containerHeight - vis.config.margin.top - vis.config.margin.bottom;
 
-    vis.svg = d3.select(vis.config.parentElement);
+    vis.svg = d3.select(vis.config.parentElement)
+        .attr('width', this.config.containerWidth)
+        .attr('height', this.config.containerHeight);
     vis.chart = vis.svg.append("g")
       .attr('transform', `translate(${vis.config.margin.left}, ${vis.config.margin.top})`);
     

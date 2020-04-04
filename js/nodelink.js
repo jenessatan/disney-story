@@ -2,12 +2,12 @@ class NodeLink {
   constructor(_config) {
     this.config = {
       parentElement: _config.parentElement,
-      containerWidth: _config.containerWidth || 1000,
-      containerHeight: _config.containerHeight || 450
+      containerWidth: _config.containerWidth || 600,
+      containerHeight: _config.containerHeight || 350
     };
     this.config.margin = _config.margin || {
       top: 0,
-      bottom: 50,
+      bottom: 0,
       right: 0,
       left: 0
     };
@@ -56,9 +56,19 @@ class NodeLink {
     vis.render();
   }
 
-  updateMovie(movie) {
+  updateMovie(movie, era) {
     let vis = this;
+    let eraNodeData = vis.dataByEra[era].nodes;
+    let eraLinkData = vis.dataByEra[era].links;
+    let filteredLinks = eraLinkData.filter(link => link.target === movie);
+    let actors = filteredLinks.map(link => link.source);
+    let movieNode = eraNodeData.find(node => node.type === 'movie' && node.id === movie);
+    let actorNodes = eraNodeData.filter(node => node.type === 'actor' && actors.includes(node.id));
+    vis.nodeData = actorNodes.concat(movieNode);
+    vis.linkData = filteredLinks;
+    vis.neighbours = vis.dataByEra[era].neighbours;
 
+    vis.render();
   }
 
   render() {

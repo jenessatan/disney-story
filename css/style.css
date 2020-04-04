@@ -11,14 +11,19 @@ h1, h4, p {
     margin: 0;
 }
 
+h1 {
+    font-size: 20px;
+}
+
 p {
     line-height: 1.5em;
+    font-size: 14px;
 }
 
 .wrapper {
     display: flex;
     flex-direction: row;
-    width: 80%;
+    width: 900px;
     margin: 0 auto;
 }
 
@@ -78,7 +83,7 @@ p {
 }
 
 #disney-era-blurb {
-    margin-top: 80px;
+    margin-top: 30px;
 }
 
 #node-link-tooltip, #area-tooltip {
@@ -120,16 +125,16 @@ line.link:hover {
 #era-navigation {
     display: flex;
     flex-direction: row;
-    margin-bottom: 20px;
+    margin-bottom: 8px;
 }
 
 #era-navigation button {
     display: flex;
     flex-direction: row;
     flex-grow: 1;
-    padding: 20px 24px;
+    padding: 8px 18px;
     border: none;
-    font-size: 18px;
+    font-size: 12px;
     font-weight: bold;
     text-transform: uppercase;
     color: #fff;

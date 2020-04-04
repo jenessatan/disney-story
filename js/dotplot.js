@@ -1,11 +1,11 @@
-class Histogram {
+class Dotplot {
     constructor(_config) {
         this.config = {
             parentElement: _config.parentElement,
-            containerWidth: _config.containerWidth || 1500,
-            containerHeight: _config.containerHeight || 250,
+            containerWidth: _config.containerWidth || 900,
+            containerHeight: _config.containerHeight || 200,
         };
-        this.config.margin = _config.margin || { top: 0, right: 50, bottom: 100, left: 50 };
+        this.config.margin = _config.margin || { top: 0, right: 0, bottom: 100, left: 10 };
     }
 
     initVis(movies, moviesCount, columns, labels, tooltipDivId) {
@@ -73,7 +73,7 @@ class Histogram {
 
     setScaleSize() {
         const domain_size = d3.extent(this.movies, this.value_size);
-        const range_size = [1, 14];
+        const range_size = [1, 8];
         this.scale_size = this.getScaleSqrt(domain_size, range_size);
     }
 
@@ -206,8 +206,8 @@ class Histogram {
                     resetHoveredNode();
                     this.hideTooltip()
                 })
-                // .on("click", d => {
-                //     nodeSelectionHandler(d.movie_title)})
+                .on("click", d => {
+                    nodeSelectionHandler(d.movie_title, d.disney_era)})
             .transition().duration(1000)
                 .attr("r", d => this.scale_size(this.value_size(d)))
                 .attr("cy", d => this.scale_y(this.value_y(d)))
@@ -332,7 +332,7 @@ class Histogram {
 
     getYposition() {
         if (d3.event.pageY > 300) {
-            return (d3.event.pageY - 120) + "px";
+            return (d3.event.pageY - 180) + "px";
         } else {
             return (d3.event.pageY + 50) + "px";
         }

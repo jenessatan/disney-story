@@ -1,12 +1,13 @@
 let area = new Area({ parentElement: '#revenue-overall' });
 let nodeLink = new NodeLink({ parentElement: '#movie-actors' });
-let histogram = new Histogram({ parentElement: '#movie-era' });
+let histogram = new Dotplot({ parentElement: '#movie-era' });
 
 let nodes = [];
 let links = [];
 let nodeLinkDataByEra = {};
 
 let hoveredNode = null;
+let selectedNode = null;
 let currentEra = '';
 
 Promise.all([
@@ -53,13 +54,14 @@ let updateNodeGraphByEraLabel = function(era) {
   nodeLink.updateEra(currentEra);
 };
 
-let nodeSelectionHandler = function(node){
-  if(hoveredNode == null) {
-    hoveredNode = node;
-    nodeLink.showOneHopNodeLink(node);
+let nodeSelectionHandler = function(title, era){
+  if(selectedNode === null || selectedNode !== title) {
+    selectedNode = title;
+    nodeLink.updateMovie(title, era);
+    currentEra = era;
   } else {
-    hoveredNode = null;
-    nodeLink.showAllNodeLink();
+    selectedNode = null;
+    nodeLink.updateEra(currentEra);
   }
 } 
 
@@ -98,13 +100,12 @@ let renaissanceBtn = document.getElementById('renaissance-btn');
 let postRenaissanceBtn = document.getElementById('post-renaissance-btn');
 let secondRenaissanceBtn = document.getElementById('second-renaissance-btn');
 
-// order matters to properly match the color of the buttons with the colors of the eras
 let eraButtons = [
     preGoldenBtn, goldenBtn, wartimeBtn, silverBtn, darkAgeBtn, renaissanceBtn,
     postRenaissanceBtn, secondRenaissanceBtn
 ];
 
 eraButtons.forEach(button  => {
-  button.addEventListener('click', updateNodeLinkGraph)
-  button.style.backgroundColor = DataProcessor.getMovieColor(button.value)
+  button.addEventListener('click', updateNodeLinkGraph);
+  button.style.backgroundColor = DataProcessor.getMovieColor(button.value);
 });
