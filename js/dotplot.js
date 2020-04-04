@@ -30,7 +30,7 @@ class Dotplot {
 
     markGapYears() {
         this.chart.selectAll('.gap-years')
-            .data([1929, 1937,1940, 1943, 1951, 1953, 1955, 1959, 1961, 1963, 1967, 1970, 1973, 1977, 1981, 1986, 1992])
+            .data([1929, 1937, 1943, 1951, 1953, 1955, 1959, 1961, 1963, 1967, 1970, 1973, 1977, 1981, 1986, 1992])
             .enter().append('line')
             .attr('class', 'gap-years')
             .attr('x1', d => this.scale_x(d) + (this.scale_x(1929)/2))
