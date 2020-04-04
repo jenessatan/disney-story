@@ -25,6 +25,21 @@ class Dotplot {
             .style("height", `${this.config.containerHeight}px`)
             .style("width", `${this.config.containerWidth}px`);
         this.chart = this.svg.append("g").attr("transform", `translate(${this.config.margin.left},${this.config.margin.top})`);
+        this.markGapYears();
+    }
+
+    markGapYears() {
+        this.chart.selectAll('.gap-years')
+            .data([1929, 1937,1940, 1943, 1951, 1953, 1955, 1959, 1961, 1963, 1967, 1970, 1973, 1977, 1981, 1986, 1992])
+            .enter().append('line')
+            .attr('class', 'gap-years')
+            .attr('x1', d => this.scale_x(d) + (this.scale_x(1929)/2))
+            .attr('x2', d => this.scale_x(d) + (this.scale_x(1929)/2))
+            .attr('y1', this.height)
+            .attr('y2', 0)
+            .attr('stroke', '#786d4c')
+            .attr('stroke-width', 1)
+            .attr('opacity', 0.2);
     }
 
     setColours() {
