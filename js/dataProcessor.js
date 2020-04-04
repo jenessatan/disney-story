@@ -80,7 +80,6 @@ class DataProcessor {
                 role: vActor['character']
             };
             links.push(link);
-
         });
     }
 
@@ -100,6 +99,24 @@ class DataProcessor {
             links: matchingLinks,
             neighbours
         };
+    }
+
+    /**
+     * Returns the nodes and links of a single movie
+     * @param era
+     * @param title
+     * @param nodeLinkDataByEra
+     *
+     */
+    static getMovieNodeLinkData(era, title, nodeLinkDataByEra) {
+        let eraNodeData = nodeLinkDataByEra[era].nodes;
+        let eraLinkData = nodeLinkDataByEra[era].links;
+        let filteredLinks = eraLinkData.filter(link => link.target === title);
+        let actors = filteredLinks.map(link => link.source);
+        let movieNode = eraNodeData.find(node => node.type === 'movie' && node.id === title);
+        let actorNodes = eraNodeData.filter(node => node.type === 'actor' && actors.includes(node.id));
+        let movieNodes = actorNodes.concat(movieNode);
+        return {filteredLinks, movieNodes};
     }
 
     static getMovieColor(era) {

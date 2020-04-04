@@ -37,7 +37,13 @@ Promise.all([
 
   area.initVis({data: revenueRaw});
   currentEra = DataProcessor.movieEras[DataProcessor.movieEras.length - 1];
-  nodeLink.initVis({dataByEra: nodeLinkDataByEra, initialEra: currentEra});
+
+  /**
+   * Because the nodeLink graph mutates the data that is passed to it, we have to provide it a deep copy rather than
+   * a reference to the data. This allows us to keep the original data intact and update the data of the graph based
+   * on the user's interactions
+   */
+  nodeLink.initVis({dataByEra: JSON.parse(JSON.stringify(nodeLinkDataByEra)), initialEra: currentEra});
 
   dotplot.initVis(
     moviesRaw, DataProcessor.getMoviesCountForBigGroupLabels(moviesRaw),
@@ -51,25 +57,39 @@ Promise.all([
 // -------- INTERACTIVE CHECKS --------
 let updateNodeGraphByEraLabel = function(era) {
   currentEra = era;
-  nodeLink.updateEra(currentEra);
+  selectedNode = null;
+  nodeLink.updateEra(
+      JSON.parse(JSON.stringify(nodeLinkDataByEra[currentEra].nodes)),
+      JSON.parse(JSON.stringify(nodeLinkDataByEra[currentEra].links)),
+      JSON.parse(JSON.stringify(nodeLinkDataByEra[currentEra].neighbours)));
 };
 
+
+
 let nodeSelectionHandler = function(title, era){
+  let nodeData, nodeLinks, nodeNeighbors;
   if(selectedNode === null || selectedNode !== title) {
     selectedNode = title;
-    nodeLink.updateMovie(title, era);
     currentEra = era;
+    let {filteredLinks, movieNodes } = DataProcessor.getMovieNodeLinkData(era, title, nodeLinkDataByEra);
+    nodeData = JSON.parse(JSON.stringify(movieNodes));
+    nodeLinks = JSON.parse(JSON.stringify(filteredLinks));
+    nodeNeighbors = JSON.parse(JSON.stringify(nodeLinkDataByEra[era].neighbours));
   } else {
     selectedNode = null;
-    nodeLink.updateEra(currentEra);
+    nodeData = JSON.parse(JSON.stringify(nodeLinkDataByEra[currentEra].nodes));
+    nodeLinks = JSON.parse(JSON.stringify(nodeLinkDataByEra[currentEra].links));
+    nodeNeighbors = JSON.parse(JSON.stringify(nodeLinkDataByEra[currentEra].neighbours))
   }
+  nodeLink.updateEra(nodeData, nodeLinks, nodeNeighbors);
 } 
 
 let setHoveredNode = function(node, type, era) {
   hoveredNode = node;
-  if(type == "actor") {
+  console.log(selectedNode)
+  if(type == "actor" && selectedNode === null) {
     nodeLink.showOneHopNodeLink(node);
-  } else if (!era || (!!era && era == currentEra)) {
+  } else if ((!era || (!!era && era == currentEra))) {
     dotplot.selectMovie(node);
     nodeLink.showOneHopNodeLink(node);
   } else {
@@ -85,10 +105,11 @@ let resetHoveredNode = function() {
 
 // -------- INTERACTIVE CHECKS --------
 let updateNodeLinkGraph = function() {
-  console.log('button click');
   let era =$(this).val();
-  console.log(era);
-  nodeLink.updateEra(era);
+  nodeLink.updateEra(
+      JSON.parse(JSON.stringify(nodeLinkDataByEra[era].nodes)),
+      JSON.parse(JSON.stringify(nodeLinkDataByEra[era].links)),
+      JSON.parse(JSON.stringify(nodeLinkDataByEra[era].neighbours)));
 };
 
 let preGoldenBtn = document.getElementById('pre-golden-age-btn');

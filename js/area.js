@@ -8,7 +8,7 @@ class Area {
     this.config.margin = _config.margin || {
       top: 10,
       bottom: 45,
-      right: 10,
+      right: 20,
       left: 50
     };
   }

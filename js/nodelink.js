@@ -30,8 +30,8 @@ class NodeLink {
     vis.chart = vis.svg.append('g')
         .attr('transform', `translate(${vis.config.margin.left}, ${vis.config.margin.top})`);
 
-    vis.dataByEra = props.dataByEra;
-    vis.nodeData = props.dataByEra[props.initialEra].nodes;
+    vis.dataByEra =props.dataByEra;
+    vis.nodeData =  props.dataByEra[props.initialEra].nodes;
     vis.linkData = props.dataByEra[props.initialEra].links;
     vis.neighbours = props.dataByEra[props.initialEra].neighbours;
 
@@ -47,26 +47,11 @@ class NodeLink {
     vis.render();
   }
 
-  updateEra(era) {
+  updateEra(node, link, neighbors) {
     let vis = this;
-    vis.nodeData = vis.dataByEra[era].nodes;
-    vis.linkData = vis.dataByEra[era].links;
-    vis.neighbours = vis.dataByEra[era].neighbours;
-
-    vis.render();
-  }
-
-  updateMovie(movie, era) {
-    let vis = this;
-    let eraNodeData = vis.dataByEra[era].nodes;
-    let eraLinkData = vis.dataByEra[era].links;
-    let filteredLinks = eraLinkData.filter(link => link.target === movie);
-    let actors = filteredLinks.map(link => link.source);
-    let movieNode = eraNodeData.find(node => node.type === 'movie' && node.id === movie);
-    let actorNodes = eraNodeData.filter(node => node.type === 'actor' && actors.includes(node.id));
-    vis.nodeData = actorNodes.concat(movieNode);
-    vis.linkData = filteredLinks;
-    vis.neighbours = vis.dataByEra[era].neighbours;
+    vis.nodeData = node;
+    vis.linkData = link;
+    vis.neighbours = neighbors;
 
     vis.render();
   }
