@@ -1,6 +1,6 @@
 let area = new Area({ parentElement: '#revenue-overall' });
 let nodeLink = new NodeLink({ parentElement: '#movie-actors' });
-let histogram = new Dotplot({ parentElement: '#movie-era' });
+let dotplot = new Dotplot({ parentElement: '#movie-era' });
 
 let nodes = [];
 let links = [];
@@ -39,13 +39,13 @@ Promise.all([
   currentEra = DataProcessor.movieEras[DataProcessor.movieEras.length - 1];
   nodeLink.initVis({dataByEra: nodeLinkDataByEra, initialEra: currentEra});
 
-  histogram.initVis(
+  dotplot.initVis(
     moviesRaw, DataProcessor.getMoviesCountForBigGroupLabels(moviesRaw),
     { x: "year", y: "count", size: "box_office", era: "disney_era" },
     { x: "Time", y: "None", size: "Gross Revenue", era: "Disney Era" },
     "#movie-era-tooltip"
   );
-  histogram.render();
+  dotplot.render();
 });
 
 // -------- INTERACTIVE CHECKS --------
@@ -70,16 +70,16 @@ let setHoveredNode = function(node, type, era) {
   if(type == "actor") {
     nodeLink.showOneHopNodeLink(node);
   } else if (!era || (!!era && era == currentEra)) {
-    histogram.selectMovie(node);
+    dotplot.selectMovie(node);
     nodeLink.showOneHopNodeLink(node);
   } else {
-    histogram.selectMovie(node);
+    dotplot.selectMovie(node);
   }
 }
 
 let resetHoveredNode = function() {
   hoveredNode = null;
-  histogram.deselectMovie();
+  dotplot.deselectMovie();
   nodeLink.showAllNodeLink();
 }
 
