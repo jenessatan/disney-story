@@ -294,7 +294,7 @@ class NodeLink {
 
     // Release Date
     let releaseElem = document.createElement('p');
-    let release = document.createTextNode("Release Date: " + vis.dateFormatter(data.release_date));
+    let release = document.createTextNode("Release Date: " + vis.dateFormatter(new Date(data.release_date)));
     releaseElem.appendChild(release);
 
     // Directors
