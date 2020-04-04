@@ -65,11 +65,14 @@ p {
 .title h1 {
     font-family: 'Rock Salt', cursive;
     margin-bottom: -15px;
+    margin-top: -10px;
+    font-size: 36px;
 }
 
 .title p {
     text-transform: uppercase;
     font-family: 'Raleway', sans-serif;
+    font-size: 20px;
 }
 
 #movie-era-tooltip {
@@ -143,5 +146,21 @@ line.link:hover {
 
 #node-link {
     margin-left: 20px;
+}
+
+#landing {
+    margin-bottom: 200px;
+}
+
+#landing button {
+    margin-top: 12px;
+    font-weight: 600;
+    font-size: 12px;
+    font-family: 'Rock Salt', cursive;
+    border-radius: 5px;
+    padding: 4px 16px;
+    border: none;
+    background-color: #e733ff;
+    color: #fff;
 }
 
