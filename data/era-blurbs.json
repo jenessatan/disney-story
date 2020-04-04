@@ -1,0 +1,34 @@
+{
+    "Pre-Golden Age": {
+        "years": "1928 - 1936",
+        "description": ""
+    }, 
+    "Golden Age": {
+        "years": "1937 - 1942",
+        "description": ""
+    }, 
+    "Wartime Era": {
+        "years": "1943 - 1949",
+        "description": ""
+    }, 
+    "Silver Age": {
+        "years": "1950 - 1969",
+        "description": ""
+    }, 
+    "Dark Age": {
+        "years": "1970 - 1988",
+        "description": ""
+    },
+    "Disney Renaissance": {
+        "years": "1989 - 1999",
+        "description": ""
+    }, 
+    "Post-Renaissance": {
+        "years": "2000 - 2009",
+        "description": ""
+    }, 
+    "Second Disney Renaissance": {
+        "years": "2010 - 2019",
+        "description": ""
+    }
+}

@@ -5,6 +5,7 @@ let dotplot = new Dotplot({ parentElement: '#movie-era' });
 let nodes = [];
 let links = [];
 let nodeLinkDataByEra = {};
+let blurbs = {};
 
 let hoveredNode = null;
 let selectedNode = null;
@@ -14,11 +15,13 @@ Promise.all([
   d3.csv('data/disney_revenue.csv'),
   d3.csv('data/disney-movies-awards.csv'),
   // d3.csv('data/disney-actors-awards.csv')
-  d3.csv('data/disney-voice-actors-2.csv')
+  d3.csv('data/disney-voice-actors-2.csv'),
+  d3.json('data/era-blurbs.json')
 ]).then(files => {
   let revenueRaw = files[0];
   let moviesRaw = files[1];
   let actorsRaw = files[2];
+  blurbs = files[3];
 
   revenueRaw.forEach(val => {
     val.year = +val.year;
@@ -64,8 +67,6 @@ let updateNodeGraphByEraLabel = function(era) {
       JSON.parse(JSON.stringify(nodeLinkDataByEra[currentEra].links)),
       JSON.parse(JSON.stringify(nodeLinkDataByEra[currentEra].neighbours)));
 };
-
-
 
 let nodeSelectionHandler = function(title, era){
   let nodeData, nodeLinks, nodeNeighbors;
@@ -130,3 +131,19 @@ eraButtons.forEach(button  => {
   button.addEventListener('click', updateNodeLinkGraph);
   button.style.backgroundColor = DataProcessor.getMovieColor(button.value);
 });
+
+let updateEraBlurb = function() {
+  let blurbContainer = document.getElementById('disney-era-blurb');
+
+  let headerElem = document.createElement('h1');
+  let header = document.createTextNode(currentEra);
+  headerElem.append(header);
+
+  let yearElem = document.createElement('h3');
+  let year = document.createTextNode(blurbs[currentEra].years);
+  yearElem.append(year);
+
+  let blurbElem = document.createElement('p');
+  let blurb = document.createTextNode(blurbs[currentEra].description);
+  blurbElem.append(blurb);
+};
