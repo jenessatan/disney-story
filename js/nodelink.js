@@ -153,8 +153,9 @@ class NodeLink {
       movieNameElem.appendChild(movieName);
 
       let imgElem = document.createElement('img');
+      let source = data.role == 'Penny'? `/images/characters/${data.role} ${data.target.id}.png` : `/images/characters/${data.role}.png`;
       imgElem.classList = 'character-image';
-      imgElem.src = `/images/characters/${data.role}.png`;
+      imgElem.src = source;
       imgElem.setAttribute('onerror', "this.src='/images/characters/default.png';");
 
       roleData.appendChild(imgElem);

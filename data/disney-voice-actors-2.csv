@@ -19,9 +19,11 @@ Princess Atta,Julia Louis-Dreyfus,A Bug's Life,,./images/character/Princess Atta
 Hopper,Kevin Spacey,A Bug's Life,1995:Actor in a Supporting Role:The Usual Suspects;1999:Actor in a Leading Role:American Beauty,./images/character/Hopper
 Queen,Phyllis Diller,A Bug's Life,,./images/character/Queen
 Roxanne,Kellie Martin,A Goofy Movie,,./images/character/Roxanne
-"Robert ""Bobby"" Zimmeruski",Pauly Shore,A Goofy Movie,,"./images/character/Robert ""Bobby"" Zimmeruski"
+Bobby Zimmeruski,Pauly Shore,A Goofy Movie,,"./images/character/Robert ""Bobby"" Zimmeruski"
 Powerline,Tevin Campbell,A Goofy Movie,,./images/character/Powerline
 Principal Mazur,Wallace Shawn,A Goofy Movie,,./images/character/Principal Mazur
+Max,Jason Marsden,A Goofy Movie,,./images/character/Max
+Goofy Goof,Bill Farmer,A Goofy Movie,,./images/character/Goofy Goof
 The Sultan,Douglas Seale,Aladdin,,./images/character/The Sultan
 Abu,Frank Welker,Aladdin,,./images/character/Abu
 Rajah,Frank Welker,Aladdin,,./images/character/Rajah
@@ -49,32 +51,32 @@ The Caterpillar,Richard Haydn,Alice in Wonderland,,./images/character/The Caterp
 Cheshire Cat,Sterling Holloway,Alice in Wonderland,,./images/character/Cheshire Cat
 The Queen of Hearts,Verna Felton,Alice in Wonderland,,./images/character/The Queen of Hearts
 Helga Sinclair,Claudia Christian,Atlantis: The Lost Empire,,./images/character/Helga Sinclair
-"Gaetan ""Mole"" Moliere",Corey Burton,Atlantis: The Lost Empire,,./images/character/Gaetan Mole Moliere
+Gaetan 'Mole' Moliere,Corey Burton,Atlantis: The Lost Empire,,./images/character/Gaetan Mole Moliere
 Princess Kidagakash,Cree Summer,Atlantis: The Lost Empire,,./images/character/Princess Kidagakash
-"Vincenzo ""Vinny"" Santorini",Don Novello,Atlantis: The Lost Empire,,"./images/character/Vincenzo ""Vinny"" Santorini"
+Vincenzo 'Vinny' Santorini,Don Novello,Atlantis: The Lost Empire,,"./images/character/Vincenzo ""Vinny"" Santorini"
 Audrey Ramirez,Jacqueline Obradors,Atlantis: The Lost Empire,,./images/character/Audrey Ramirez
 Commander Lyle Rourke,James Garner,Atlantis: The Lost Empire,,./images/character/Commander Lyle Rourke
 Cookie,Jim Varney,Atlantis: The Lost Empire,,./images/character/Cookie
-Preston B. Whitmore,John Mahoney,Atlantis: The Lost Empire,,./images/character/Preston B. Whitmore
+Preston B Whitmore,John Mahoney,Atlantis: The Lost Empire,,./images/character/Preston B. Whitmore
 King Kashekim Nedakh,Leonard Nimoy,Atlantis: The Lost Empire,,./images/character/King Kashekim Nedakh
 Milo Thatch,Michael J. Fox,Atlantis: The Lost Empire,,./images/character/Milo Thatch
-Dr. Joshua Sweet,Phil Morris,Atlantis: The Lost Empire,,./images/character/Dr Joshua Sweet
+Dr Joshua Sweet,Phil Morris,Atlantis: The Lost Empire,,./images/character/Dr Joshua Sweet
 Faline,Ann Gillis,Bambi,,./images/character/Faline
 Bambi,Donnie Dunagan,Bambi,,./images/character/Bambi
 Great Prince of the Forest,Fred Shields,Bambi,,./images/character/Great Prince of the Forest
 Bambi,Hardie Albright,Bambi,,./images/character/Bambi
 Thumper's Mother,Margaret Lee,Bambi,,./images/character/Thumper's Mother
-Mrs. Possum,Mary Lansing,Bambi,,./images/character/Mrs. Possum
+Mrs Possum,Mary Lansing,Bambi,,./images/character/Mrs. Possum
 Bambi's Mother,Paula Winslowe,Bambi,,./images/character/Bambi's Mother
 Thumper,Sam Edwards,Bambi,,./images/character/Thumper
 Flower,Sterling Holloway,Bambi,,./images/character/Flower
 Friend Owl,Will Wright,Bambi,,./images/character/Friend Owl
-Mrs. Potts,Angela Lansbury,Beauty and the Beast,2013:Honorary Award:nan,./images/character/Mrs Potts
+Mrs Potts,Angela Lansbury,Beauty and the Beast,2013:Honorary Award:nan,./images/character/Mrs Potts
 Chip Potts,Bradley Michael Pierce,Beauty and the Beast,,./images/character/Chip Potts
 Cogsworth,David Ogden Stiers,Beauty and the Beast,,./images/character/Cogsworth
 Sultan the Footstool,Frank Welker,Beauty and the Beast,,./images/character/Sultan the Footstool
 Philippe the Horse,Hal Smith,Beauty and the Beast,,./images/character/Philippe the Horse
-Lumi??re,Jerry Orbach,Beauty and the Beast,,./images/character/Lumi??re
+Lumiere,Jerry Orbach,Beauty and the Beast,,./images/character/Lumi??re
 Le Fou,Jesse Corti,Beauty and the Beast,,./images/character/Le Fou
 Armoire,Jo Anne Worley,Beauty and the Beast,,./images/character/Armoire
 Fifi the Featherduster,Kimmy Robertson,Beauty and the Beast,,./images/character/Fifi the Featherduster
@@ -93,7 +95,7 @@ Robert Callaghan,James Cromwell,Big Hero 6,,./images/character/Robert Callaghan
 Alistair Krei,Alan Tudyk,Big Hero 6,,./images/character/Alistair Krei
 Cass,Maya Rudolph,Big Hero 6,,./images/character/Cass
 Bolt,John Travolta,Bolt,,./images/character/Bolt
-Dr. Calico,Malcolm McDowell,Bolt,,./images/character/Dr. Calico
+Dr Calico,Malcolm McDowell,Bolt,,./images/character/Dr. Calico
 Rhino,Mark Walton,Bolt,,./images/character/Rhino
 Penny,Miley Cyrus,Bolt,,./images/character/Penny
 Mittens,Susie Essman,Bolt,,./images/character/Mittens
@@ -447,10 +449,10 @@ Laverne,Mary Wickes,The Hunchback of Notre Dame,,./images/character/Laverne
 Clopin Trouillefou,Paul Kandel,The Hunchback of Notre Dame,,./images/character/Clopin Trouillefou
 Quasimodo,Tom Hulce,The Hunchback of Notre Dame,,./images/character/Quasimodo
 Judge Claude Frollo,Tony Jay,The Hunchback of Notre Dame,,./images/character/Judge Claude Frollo
-Bob Parr Mr Incredible,Craig T. Nelson,The Incredibles,,./images/character/Bob Parr Mr Incredible
-Helen Parr Elastigirl,Holly Hunter,The Incredibles,1993:Actress in a Leading Role:The Piano,./images/character/Helen Parr Elastigirl
-Buddy Pine Syndrome,Jason Lee,The Incredibles,,./images/character/Buddy Pine Syndrome
-Lucius Best Frozone,Samuel L. Jackson,The Incredibles,,./images/character/Lucius Best Frozone
+Bob Parr (Mr Incredible),Craig T. Nelson,The Incredibles,,./images/character/Bob Parr Mr Incredible
+Helen Parr (Elastigirl),Holly Hunter,The Incredibles,1993:Actress in a Leading Role:The Piano,./images/character/Helen Parr Elastigirl
+Buddy Pine (Syndrome),Jason Lee,The Incredibles,,./images/character/Buddy Pine Syndrome
+Lucius Best (Frozone),Samuel L. Jackson,The Incredibles,,./images/character/Lucius Best Frozone
 Violet Parr,Sarah Vowell,The Incredibles,,./images/character/Violet Parr
 Dash Parr,Spencer Fox,The Incredibles,,./images/character/Dash Parr
 Mowgli,Bruce Reitherman,The Jungle Book,,./images/character/Mowgli
@@ -500,7 +502,7 @@ Prince Naveen,Bruno Campos,The Princess and the Frog,,./images/character/Prince 
 Mama Odie,Jenifer Lewis,The Princess and the Frog,,./images/character/Mama Odie
 Charlotte La Bouff,Jennifer Cody,The Princess and the Frog,,./images/character/Charlotte La Bouff
 Ray the Firefly,Jim Cummings,The Princess and the Frog,,./images/character/Ray the Firefly
-Eli Big Daddy La Bouff,John Goodman,The Princess and the Frog,,./images/character/Eli Big Daddy La Bouff
+Eli 'Big Daddy' La Bouff,John Goodman,The Princess and the Frog,,./images/character/Eli Big Daddy La Bouff
 Dr Facilier,Keith David,The Princess and the Frog,,./images/character/Dr Facilier
 Louis the Alligator,Michael-Leon Wooley,The Princess and the Frog,,./images/character/Louis the Alligator
 Eudora,Oprah Winfrey,The Princess and the Frog,2011:Jean Hersholt Humanitarian Award:nan,./images/character/Eudora
@@ -527,9 +529,9 @@ Archimedes,Junius Matthews,The Sword in the Stone,,./images/character/Archimedes
 Merlin,Karl Swenson,The Sword in the Stone,,./images/character/Merlin
 Madam Mim,Martha Wentworth,The Sword in the Stone,,./images/character/Madam Mim
 Sir Kay,Norman Alden,The Sword in the Stone,,./images/character/Sir Kay
-Arthur˜Pendragon,Richard Reitherman,The Sword in the Stone,,./images/character/Arthur˜Pendragon
-Arthur˜Pendragon,Rickie Sorensen,The Sword in the Stone,,./images/character/Arthur˜Pendragon
-Arthur˜Pendragon,Robert Reitherman,The Sword in the Stone,,./images/character/Arthur˜Pendragon
+Arthur Pendragon,Richard Reitherman,The Sword in the Stone,,./images/character/Arthur˜Pendragon
+Arthur Pendragon,Rickie Sorensen,The Sword in the Stone,,./images/character/Arthur˜Pendragon
+Arthur Pendragon,Robert Reitherman,The Sword in the Stone,,./images/character/Arthur˜Pendragon
 Sir Ector,Sebastian Cabot,The Sword in the Stone,,./images/character/Sir Ector
 Black Bart,Thurl Ravenscroft,The Sword in the Stone,,./images/character/Black Bart
 Panchito Pistoles,Joaquin Garay,The Three Caballeros,,./images/character/Panchito Pistoles
