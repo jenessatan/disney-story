@@ -165,8 +165,8 @@ line.link:hover {
 }
 
 .character-image {
-    height: 75%;
-    width: 75%;
+    height: 150px;
+    width: 150px;
     background-color: white;
     border-radius: 10%
 }
