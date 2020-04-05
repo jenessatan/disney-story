@@ -171,3 +171,11 @@ line.link:hover {
     border-radius: 10%
 }
 
+.blurb-details h3 {
+    margin: 0;
+    margin-bottom: 5px
+}
+
+#previous-era, #next-era {
+    margin-top: 15px
+}
