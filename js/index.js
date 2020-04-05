@@ -167,14 +167,41 @@ let updateEraBlurb = function() {
   mainContainer.replaceChild(blurbDetailsContainer, mainContainer.children[0]);
 };
 
+let updateBlurbToFunFact = function() {
+  let mainContainer = document.getElementById('disney-era-blurb');
+  let factNumber = Math.floor(Math.random() * 40);
+  let fact = blurbs['Fun Fact'][factNumber];
+
+  let blurbDetailsContainer = document.createElement('div');
+  blurbDetailsContainer.className = 'blurb-details';
+
+  let headerElem = document.createElement('h1');
+  let header = document.createTextNode('Fun Fact');
+  headerElem.appendChild(header);
+
+  let blurbElem = document.createElement('p');
+  let blurb = document.createTextNode(fact);
+  blurbElem.appendChild(blurb);
+
+  blurbDetailsContainer.appendChild(headerElem);
+  blurbDetailsContainer.appendChild(blurbElem);
+
+  mainContainer.replaceChild(blurbDetailsContainer, mainContainer.children[0]);
+};
+
 let updateEraBlurbButton = function() {
   let indexOfCurrent = DataProcessor.movieEras.indexOf(currentEra);
 
-  if(indexOfCurrent == 0) {
+  if(indexOfCurrent == -1){
+    nextBtn.style.visibility = 'hidden';
     previousBtn.style.visibility = 'hidden';
+  }else if(indexOfCurrent == 0) {
+    previousBtn.style.visibility = 'hidden';
+    nextBtn.style.visibility = 'visible';
     nextBtn.style.backgroundColor = DataProcessor.movieColourEras[indexOfCurrent + 1];
   } else if(indexOfCurrent == DataProcessor.movieEras.length - 1) {
     nextBtn.style.visibility = 'hidden';
+    previousBtn.style.visibility = 'visible';
     previousBtn.style.backgroundColor = DataProcessor.movieColourEras[indexOfCurrent - 1];
   } else {
     previousBtn.style.visibility = 'visible';
@@ -198,3 +225,9 @@ let changeToPreviousEra = function(){
 
 previousBtn.addEventListener('click', changeToPreviousEra);
 nextBtn.addEventListener('click', changeToNextEra);
+
+let changeToFunFact = function(){
+  currentEra = 'user selected';
+  updateBlurbToFunFact();
+  updateEraBlurbButton();
+}
