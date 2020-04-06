@@ -5,7 +5,7 @@ class Dotplot {
             containerWidth: _config.containerWidth || 900,
             containerHeight: _config.containerHeight || 200,
         };
-        this.config.margin = _config.margin || { top: 0, right: 0, bottom: 100, left: 10 };
+        this.config.margin = _config.margin || { top: 0, right: 10, bottom: 100, left: 10 };
     }
 
     initVis(movies, moviesCount, columns, labels, tooltipDivId) {
@@ -233,7 +233,7 @@ class Dotplot {
     tiltTickAxisX(rotation=-45, dx="-0.8em", dy="-0.15em") {
         this.axis_x_g.selectAll("text:not(.x-axis-label)")
             .attr("fill", d => this.scale_colour_era(DataProcessor.getDisneyEra(d)))
-            .style("font-size", 11)
+            .style("font-size", 10)
             .style("text-anchor", "end")
             .attr("dx", `${dx}`)
             .attr("dy", `${dy}`)
@@ -247,10 +247,10 @@ class Dotplot {
         this.axis_x_g.append("text")
             .attr("fill", "black")
             .attr("class", "x-axis-label")
-            .attr("y", -10)
-            .attr("x", this.width - 20)
+            .attr("y", -3)
+            .attr("x", this.width - 13)
             .text(this.labels.x)
-            .style("font-size", 15)
+            .style("font-size", 12)
             .style("font-weight", "bold");
     }
 
@@ -267,11 +267,11 @@ class Dotplot {
             .attr("x", (d, i) => (this.scale_x.bandwidth() * d.cumsum) - (this.scale_x.bandwidth() * d.count / 2))
             .attr("text-anchor", "middle")
             .attr("dominant-baseline", "hanging")
-            .style("font-size", 11)
+            .style("font-size", 10)
             .style("font-weight", "bold")
             .style('pointer-events', 'auto')
             .on('click', d => updateNodeGraphByEraLabel(d.disney_era))
-            .text(d => this.value_colour_era(d))
+            .text(d => this.value_colour_era(d).includes("Pre-Golden") ? "Pre- Golden Age" : this.value_colour_era(d))
             .call(this.wrap, 5);
         era.exit().remove();
 
@@ -279,9 +279,9 @@ class Dotplot {
             .attr("fill", "black")
             .attr("class", "era-axis-label")
             .text(this.labels.era)
-            .style("font-size", 15)
+            .style("font-size", 13)
             .style("font-weight", "bold")
-            .attr("transform", `translate(${this.width -20}, -25), rotate(${rotation})`);
+            .attr("transform", `translate(${this.width -15}, -25), rotate(${rotation})`);
     }
 
     // Tool tip
