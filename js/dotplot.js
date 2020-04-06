@@ -53,7 +53,11 @@ class Dotplot {
 
         setYearSelection({start: upperYear, end: lowerYear});
 
-        d3.select('.brush').transition().call(d3.event.target.move, [upperBound, lowerBound]);
+        // adjust selection to the years
+        let adjustedUpperBound = this.scale_x(upperYear) - this.scale_x.step()/2;
+        let adjustedLowerBound = this.scale_x(lowerYear) + this.scale_x.step()/2;
+
+        d3.select('.brush').transition().call(d3.event.target.move, [adjustedUpperBound, adjustedLowerBound]);
     }
 
     clearBrush() {
