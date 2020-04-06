@@ -5,7 +5,7 @@ class Dotplot {
             containerWidth: _config.containerWidth || 900,
             containerHeight: _config.containerHeight || 200,
         };
-        this.config.margin = _config.margin || { top: 0, right: 0, bottom: 100, left: 10 };
+        this.config.margin = _config.margin || { top: 0, right: 10, bottom: 100, left: 10 };
     }
 
     initVis(movies, moviesCount, columns, labels, tooltipDivId) {
@@ -49,11 +49,15 @@ class Dotplot {
         // need to take into account the padding so additional computations are made
         let domain = this.scale_x.domain();
         let lowerBoundIndex = domain.findIndex(val => val === this.scale_x.invert(lowerBound));
-        let lowerYear = domain[lowerBoundIndex - 1];
+        let lowerYear = domain[lowerBoundIndex - 1] ? domain[lowerBoundIndex - 1] : 2016;
 
         setYearSelection({start: upperYear, end: lowerYear});
 
-        d3.select('.brush').transition().call(d3.event.target.move, [upperBound, lowerBound]);
+        // adjust selection to the years
+        let adjustedUpperBound = this.scale_x(upperYear) - this.scale_x.step()/2;
+        let adjustedLowerBound = this.scale_x(lowerYear) + this.scale_x.step()/2;
+
+        d3.select('.brush').transition().call(d3.event.target.move, [adjustedUpperBound, adjustedLowerBound]);
     }
 
     clearBrush() {
@@ -233,7 +237,7 @@ class Dotplot {
     tiltTickAxisX(rotation=-45, dx="-0.8em", dy="-0.15em") {
         this.axis_x_g.selectAll("text:not(.x-axis-label)")
             .attr("fill", d => this.scale_colour_era(DataProcessor.getDisneyEra(d)))
-            .style("font-size", 11)
+            .style("font-size", 10)
             .style("text-anchor", "end")
             .attr("dx", `${dx}`)
             .attr("dy", `${dy}`)
@@ -247,10 +251,10 @@ class Dotplot {
         this.axis_x_g.append("text")
             .attr("fill", "black")
             .attr("class", "x-axis-label")
-            .attr("y", -10)
-            .attr("x", this.width - 20)
+            .attr("y", -3)
+            .attr("x", this.width - 13)
             .text(this.labels.x)
-            .style("font-size", 15)
+            .style("font-size", 12)
             .style("font-weight", "bold");
     }
 
@@ -267,11 +271,11 @@ class Dotplot {
             .attr("x", (d, i) => (this.scale_x.bandwidth() * d.cumsum) - (this.scale_x.bandwidth() * d.count / 2))
             .attr("text-anchor", "middle")
             .attr("dominant-baseline", "hanging")
-            .style("font-size", 11)
+            .style("font-size", 10)
             .style("font-weight", "bold")
             .style('pointer-events', 'auto')
             .on('click', d => updateNodeGraphByEraLabel(d.disney_era))
-            .text(d => this.value_colour_era(d))
+            .text(d => this.value_colour_era(d).includes("Pre-Golden") ? "Pre- Golden Age" : this.value_colour_era(d))
             .call(this.wrap, 5);
         era.exit().remove();
 
@@ -279,9 +283,9 @@ class Dotplot {
             .attr("fill", "black")
             .attr("class", "era-axis-label")
             .text(this.labels.era)
-            .style("font-size", 15)
+            .style("font-size", 13)
             .style("font-weight", "bold")
-            .attr("transform", `translate(${this.width -20}, -25), rotate(${rotation})`);
+            .attr("transform", `translate(${this.width -15}, -25), rotate(${rotation})`);
     }
 
     // Tool tip

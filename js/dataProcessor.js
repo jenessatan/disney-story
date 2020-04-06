@@ -126,16 +126,20 @@ class DataProcessor {
         if (startEra === endEra) {
             return this.getMoviesWithinRange(nodeLinkDataByEra, startEra, start, end);
         } else {
-            const startEraData = this.getMoviesWithinRange(nodeLinkDataByEra, startEra, start, end);
-            const endEraData = this.getMoviesWithinRange(nodeLinkDataByEra, endEra, start, end);
-            let nodes = startEraData.nodes.concat(endEraData.nodes);
-            let links = startEraData.links.concat(endEraData.links);
-            let neighbours = startEraData.neighbours;
-            let endEraNeighbourKeys = Object.keys(endEraData.neighbours);
-            let endEraNeighbours = endEraData.neighbours;
-            endEraNeighbourKeys.forEach(key => {
-                neighbours[key] = endEraNeighbours[key]
-            });
+            let nodes = [];
+            let links = [];
+            let neighbours = {};
+            let startIndex = this.movieEras.findIndex(era => era === startEra);
+            let endIndex = this.movieEras.findIndex(era => era === endEra);
+            for(let i = startIndex; i <= endIndex; i++) {
+                let data = this.getMoviesWithinRange(nodeLinkDataByEra, this.movieEras[i], start, end);
+                nodes = nodes.concat(data.nodes);
+                links = links.concat(data.links);
+                let neighborKeys = Object.keys(data.neighbours);
+                neighborKeys.forEach(key => {
+                    neighbours[key] = data.neighbours[key];
+                })
+            }
             return { links: links, nodes:nodes, neighbours: neighbours };
         }
     }
