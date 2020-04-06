@@ -70,12 +70,22 @@ let updateNodeGraphByEraLabel = function(era) {
   updateEraBlurbButton();
 };
 
+let setYearSelection = function (yearRange) {
+  let data = DataProcessor.getMovieNodeLinkDataByYearRange(yearRange.start, yearRange.end, nodeLinkDataByEra);
+  nodeLink.updateEra(
+      JSON.parse(JSON.stringify(data.nodes)),
+      JSON.parse(JSON.stringify(data.links)),
+      JSON.parse(JSON.stringify(data.neighbours))
+  );
+  changeToFunFact();
+};
+
 let nodeSelectionHandler = function(title, era){
   let nodeData, nodeLinks, nodeNeighbors;
   if(selectedNode === null || selectedNode !== title) {
     selectedNode = title;
     currentEra = era;
-    let {filteredLinks, movieNodes } = DataProcessor.getMovieNodeLinkData(era, title, nodeLinkDataByEra);
+    let {filteredLinks, movieNodes } = DataProcessor.getMovieNodeLinkDataByMovie(era, title, nodeLinkDataByEra);
     nodeData = JSON.parse(JSON.stringify(movieNodes));
     nodeLinks = JSON.parse(JSON.stringify(filteredLinks));
     nodeNeighbors = JSON.parse(JSON.stringify(nodeLinkDataByEra[era].neighbours));
@@ -112,9 +122,10 @@ let resetHoveredNode = function() {
 let updateNodeLinkGraph = function() {
   currentEra =$(this).val();
   nodeLink.updateEra(
-      JSON.parse(JSON.stringify(nodeLinkDataByEra[currentEra].nodes)),
-      JSON.parse(JSON.stringify(nodeLinkDataByEra[currentEra].links)),
-      JSON.parse(JSON.stringify(nodeLinkDataByEra[currentEra].neighbours)));
+      JSON.parse(JSON.stringify(nodeLinkDataByEra[era].nodes)),
+      JSON.parse(JSON.stringify(nodeLinkDataByEra[era].links)),
+      JSON.parse(JSON.stringify(nodeLinkDataByEra[era].neighbours)));
+  dotplot.clearBrush();
   updateEraBlurb();
   updateEraBlurbButton();
 };

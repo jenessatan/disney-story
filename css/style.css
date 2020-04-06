@@ -179,3 +179,7 @@ line.link:hover {
 #previous-era, #next-era {
     margin-top: 15px
 }
+
+.selection {
+    fill: #d9c48d;
+}
