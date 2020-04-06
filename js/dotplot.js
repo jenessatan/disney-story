@@ -49,7 +49,7 @@ class Dotplot {
         // need to take into account the padding so additional computations are made
         let domain = this.scale_x.domain();
         let lowerBoundIndex = domain.findIndex(val => val === this.scale_x.invert(lowerBound));
-        let lowerYear = domain[lowerBoundIndex - 1];
+        let lowerYear = domain[lowerBoundIndex - 1] ? domain[lowerBoundIndex - 1] : 2016;
 
         setYearSelection({start: upperYear, end: lowerYear});
 
