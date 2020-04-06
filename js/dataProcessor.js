@@ -108,7 +108,7 @@ class DataProcessor {
      * @param nodeLinkDataByEra
      *
      */
-    static getMovieNodeLinkData(era, title, nodeLinkDataByEra) {
+    static getMovieNodeLinkDataByMovie(era, title, nodeLinkDataByEra) {
         let eraNodeData = nodeLinkDataByEra[era].nodes;
         let eraLinkData = nodeLinkDataByEra[era].links;
         let filteredLinks = eraLinkData.filter(link => link.target === title);
@@ -117,6 +117,45 @@ class DataProcessor {
         let actorNodes = eraNodeData.filter(node => node.type === 'actor' && actors.includes(node.id));
         let movieNodes = actorNodes.concat(movieNode);
         return {filteredLinks, movieNodes};
+    }
+
+    static getMovieNodeLinkDataByYearRange(start, end, nodeLinkDataByEra) {
+        let startEra = this.getDisneyEra(start);
+        let endEra = this.getDisneyEra(end);
+
+        if (startEra === endEra) {
+            return this.getMoviesWithinRange(nodeLinkDataByEra, startEra, start, end);
+        } else {
+            const startEraData = this.getMoviesWithinRange(nodeLinkDataByEra, startEra, start, end);
+            const endEraData = this.getMoviesWithinRange(nodeLinkDataByEra, endEra, start, end);
+            let nodes = startEraData.nodes.concat(endEraData.nodes);
+            let links = startEraData.links.concat(endEraData.links);
+            let neighbours = startEraData.neighbours;
+            let endEraNeighbourKeys = Object.keys(endEraData.neighbours);
+            let endEraNeighbours = endEraData.neighbours;
+            endEraNeighbourKeys.forEach(key => {
+                neighbours[key] = endEraNeighbours[key]
+            });
+            return { links: links, nodes:nodes, neighbours: neighbours };
+        }
+    }
+
+    static getMoviesWithinRange(nodeLinkDataByEra, era, start, end) {
+        let eraNodeData = nodeLinkDataByEra[era].nodes;
+        let eraLinkData = nodeLinkDataByEra[era].links;
+        let movieNodes = eraNodeData.filter(node => {
+            let year = new Date(node.release_date).getFullYear();
+            return node.type === 'movie' && year >= start && year <= end;
+        });
+        let movieTitles = movieNodes.map(node => node.id);
+        let filteredLinks = eraLinkData.filter(link => movieTitles.includes(link.target));
+        let actorList = filteredLinks.map(link => link.source);
+        let actorNodes = eraNodeData.filter(node => {
+            return node.type === 'actor' && actorList.includes(node.id);
+        });
+        let nodes = movieNodes.concat(actorNodes);
+        let neighbours = nodeLinkDataByEra[era].neighbours;
+        return {links: filteredLinks, nodes: nodes, neighbours: neighbours};
     }
 
     static getMovieColor(era) {

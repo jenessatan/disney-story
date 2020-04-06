@@ -26,6 +26,38 @@ class Dotplot {
             .style("width", `${this.config.containerWidth}px`);
         this.chart = this.svg.append("g").attr("transform", `translate(${this.config.margin.left},${this.config.margin.top})`);
         this.markGapYears();
+        this.initBrushSelection();
+    }
+
+    initBrushSelection() {
+       this.brush = this.chart.append('g')
+           .attr('class', 'brush')
+           .call(d3.brushX()
+                .extent([[0,0], [this.width, this.height]])
+                .on('end', () => {this.brushEnd()}));
+    }
+
+    brushEnd() {
+        const maxBound = 99; // spans max of 6 years
+        if (!d3.event.sourceEvent) return;
+        if (!d3.event.selection) return;
+
+        let upperBound = d3.event.selection[0];
+        let lowerBound = Math.min(d3.event.selection[1], upperBound + maxBound);
+        let upperYear = this.scale_x.invert(upperBound);
+
+        // need to take into account the padding so additional computations are made
+        let domain = this.scale_x.domain();
+        let lowerBoundIndex = domain.findIndex(val => val === this.scale_x.invert(lowerBound));
+        let lowerYear = domain[lowerBoundIndex - 1];
+
+        setYearSelection({start: upperYear, end: lowerYear});
+
+        d3.select('.brush').transition().call(d3.event.target.move, [upperBound, lowerBound]);
+    }
+
+    clearBrush() {
+        d3.select('.brush').call(d3.brushX().move, null);
     }
 
     markGapYears() {
@@ -33,8 +65,8 @@ class Dotplot {
             .data([1929, 1937, 1943, 1951, 1953, 1955, 1959, 1961, 1963, 1967, 1970, 1973, 1977, 1981, 1986, 1992])
             .enter().append('line')
             .attr('class', 'gap-years')
-            .attr('x1', d => this.scale_x(d) + (this.scale_x(1929)/2))
-            .attr('x2', d => this.scale_x(d) + (this.scale_x(1929)/2))
+            .attr('x1', d => this.scale_x(d) + (this.scale_x.step()/2))
+            .attr('x2', d => this.scale_x(d) + (this.scale_x.step()/2))
             .attr('y1', this.height)
             .attr('y2', 0)
             .attr('stroke', '#786d4c')
@@ -47,12 +79,6 @@ class Dotplot {
         this.colour_hover = "#f2bf33";
         this.colour_select = "#dea814";
     }
-
-    // setDataByYear(year) {
-    //  
-    //     this.year = year;
-    //     this.movies = this.movies.filter(row => (row[`${this.columns["x"]}`].getFullYear() >= year) && row[`${this.columns["x"]}`].getFullYear() < year+10);
-    // }
 
     setWidthHeight() {
         this.width = this.config.containerWidth - this.config.margin.left - this.config.margin.right;
@@ -78,6 +104,12 @@ class Dotplot {
         const domain_x = this.movies.map(this.value_x);
         const range_x = [0, this.width];
         this.scale_x = this.getScaleBand(domain_x, range_x, 0, 1);
+        this.scale_x.invert = (value) => {
+            let step = this.scale_x.step();
+            let index = Math.floor((value / step));
+            let domain = this.scale_x.domain();
+            return domain[index];
+        }
     }
 
     setScaleY() {
@@ -98,13 +130,6 @@ class Dotplot {
         this.scale_colour_era = this.getScaleOrdinal(domain_colour, range_colour);
     }
 
-    // getScaleLinear(domain, range) {
-    //     return d3.scaleLinear()
-    //         .domain(domain)
-    //         .range(range)
-    //         .nice();
-    // }
-
     getScaleSqrt(domain, range) {
         return d3.scaleSqrt()
             .domain(domain)
@@ -124,12 +149,6 @@ class Dotplot {
             .domain(domain)
             .range(range);
     }
-
-    // getScaleTime(domain, range) {
-    //     return d3.scaleTime()
-    //         .domain(domain)
-    //         .range(range);
-    // }
 
     setAxes() {
         this.setAxisX();
@@ -183,25 +202,6 @@ class Dotplot {
         // this.renderLegends();
     }
 
-    // renderMarks(className, x_offset, y_offset) {
-    //  
-    //     const marks = this.chart.selectAll(`.${className}`).data(this.movies, d => d["date"]);
-    //     marks
-    //         .enter().append("image") // Should be constant and not changed when updating
-    //         .attr("class", className)
-    //         .attr("width", "2.7em")
-    //         .attr("transform", `translate(${x_offset}, ${y_offset})`)
-    //         .attr("y", d => this.scale_y(this.value_y(d))) // init position
-    //         .attr("x", d => this.scale_x(this.value_x(d))) // init position
-    //         .merge(marks) // Enter + Update
-    //         .attr("href", d => this.scale_size(this.value_rocket(d)))
-    //         .on("mouseover", d => this.showTooltip(d))
-    //         .on("mouseout", () => this.hideTooltip())
-    //         .attr("y", d => this.scale_y(this.value_y(d)))
-    //         .attr("x", d => this.scale_x(this.value_x(d)));
-    //     marks.exit().remove();
-    // }
-
     renderCircles(className) {
         const circles = this.chart.selectAll(`.${className}`).data(this.movies);
         circles
@@ -243,10 +243,7 @@ class Dotplot {
     renderAxisX(x_axis) {
         this.axis_x_g = this.chart.append("g").call(x_axis)
             .attr("transform", `translate(0,${this.height})`);
-        // this.axis_x_g.selectAll(".tick line") // Change attr of the minor-axis lines
-        //     .attr("stroke", "#b89c98")
-        //     .attr("stroke-width", "1")
-        //     .attr("opacity", "0.6");
+
         this.axis_x_g.append("text")
             .attr("fill", "black")
             .attr("class", "x-axis-label")
@@ -285,24 +282,6 @@ class Dotplot {
             .style("font-size", 15)
             .style("font-weight", "bold")
             .attr("transform", `translate(${this.width -20}, -25), rotate(${rotation})`);
-    }
-
-    renderAxisY(y_axis) {
-        this.axis_y_g = this.chart.append("g").call(y_axis);
-        this.axis_y_g.selectAll(".tick line") // Change attr of the minor-axis lines
-            .attr("stroke", "#b89c98")
-            .attr("stroke-width", "1")
-            .attr("opacity", "0.6");
-        this.axis_y_g.append("text")
-            .attr("fill", "black")
-            .attr("class", "y-axis-label")
-            .attr("y", -this.config.margin.left / 2 + 30)
-            .attr("x", -30)
-            .attr("transform", "rotate(-90)")
-            .attr("text-anchor", "middle")
-            .text(this.labels.y)
-            .style("font-size", 15)
-            .style("font-weight", "bold");
     }
 
     // Tool tip
