@@ -171,3 +171,6 @@ line.link:hover {
     border-radius: 10%
 }
 
+.selection {
+    fill: #d9c48d;
+}
