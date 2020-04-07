@@ -129,6 +129,7 @@ class DataProcessor {
             let nodes = [];
             let links = [];
             let neighbours = {};
+            let eras = [];
             let startIndex = this.movieEras.findIndex(era => era === startEra);
             let endIndex = this.movieEras.findIndex(era => era === endEra);
             for(let i = startIndex; i <= endIndex; i++) {
@@ -146,8 +147,9 @@ class DataProcessor {
                 neighborKeys.forEach(key => {
                     neighbours[key] = data.neighbours[key];
                 })
+                eras = eras.concat(data.eras);
             }
-            return { links: links, nodes:nodes, neighbours: neighbours };
+            return { links: links, nodes:nodes, neighbours: neighbours, eras: eras };
         }
     }
 
@@ -166,7 +168,7 @@ class DataProcessor {
         });
         let nodes = movieNodes.concat(actorNodes);
         let neighbours = nodeLinkDataByEra[era].neighbours;
-        return {links: filteredLinks, nodes: nodes, neighbours: neighbours};
+        return {links: filteredLinks, nodes: nodes, neighbours: neighbours, eras: [era] };
     }
 
     static getMovieColor(era) {

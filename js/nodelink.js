@@ -31,12 +31,12 @@ class NodeLink {
         .attr('transform', `translate(${vis.config.margin.left}, ${vis.config.margin.top})`);
 
     vis.dataByEra =props.dataByEra;
-    vis.nodeData =  props.dataByEra[props.initialEra].nodes;
-    vis.linkData = props.dataByEra[props.initialEra].links;
-    vis.neighbours = props.dataByEra[props.initialEra].neighbours;
+    vis.nodeData =  props.dataByEra[props.initialEra[0]].nodes;
+    vis.linkData = props.dataByEra[props.initialEra[0]].links;
+    vis.neighbours = props.dataByEra[props.initialEra[0]].neighbours;
 
     vis.nodeScale = d3.scaleSqrt()
-        .domain([0, 10])
+        .domain([5, 10])
         .range([0.07, 0.2]);
 
     vis.hovered = {};

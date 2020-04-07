@@ -8,12 +8,12 @@ let nodeLinkDataByEra = {};
 
 let hoveredNode = null;
 let selectedNode = null;
-let currentEra = '';
+let currentEra = [];
+let nodeIds = [];
 
 Promise.all([
   d3.csv('data/disney_revenue.csv'),
   d3.csv('data/disney-movies-awards.csv'),
-  // d3.csv('data/disney-actors-awards.csv')
   d3.csv('data/disney-voice-actors-2.csv')
 ]).then(files => {
   let revenueRaw = files[0];
@@ -37,7 +37,7 @@ Promise.all([
   });
 
   area.initVis({data: revenueRaw});
-  currentEra = DataProcessor.movieEras[DataProcessor.movieEras.length - 1];
+  currentEra = [DataProcessor.movieEras[DataProcessor.movieEras.length - 1]];
 
   /**
    * Because the nodeLink graph mutates the data that is passed to it, we have to provide it a deep copy rather than
@@ -57,8 +57,9 @@ Promise.all([
 
 // -------- INTERACTIVE CHECKS --------
 let updateNodeGraphByEraLabel = function(era) {
-  currentEra = era;
+  currentEra = [era];
   selectedNode = null;
+  nodeIds = nodeLinkDataByEra[currentEra].nodes.map(node => node.id);
   nodeLink.updateEra(
       JSON.parse(JSON.stringify(nodeLinkDataByEra[currentEra].nodes)),
       JSON.parse(JSON.stringify(nodeLinkDataByEra[currentEra].links)),
@@ -67,18 +68,20 @@ let updateNodeGraphByEraLabel = function(era) {
 
 let setYearSelection = function (yearRange) {
   let data = DataProcessor.getMovieNodeLinkDataByYearRange(yearRange.start, yearRange.end, nodeLinkDataByEra);
+  currentEra = data.eras;
+  nodeIds = data.nodes.map(node => node.id);
   nodeLink.updateEra(
       JSON.parse(JSON.stringify(data.nodes)),
       JSON.parse(JSON.stringify(data.links)),
-      JSON.parse(JSON.stringify(data.neighbours))
-  );
+      JSON.parse(JSON.stringify(data.neighbours)));
+  selectedNode = null;
 };
 
 let nodeSelectionHandler = function(title, era){
   let nodeData, nodeLinks, nodeNeighbors;
   if(selectedNode === null || selectedNode !== title) {
     selectedNode = title;
-    currentEra = era;
+    currentEra = [era];
     let {filteredLinks, movieNodes } = DataProcessor.getMovieNodeLinkDataByMovie(era, title, nodeLinkDataByEra);
     nodeData = JSON.parse(JSON.stringify(movieNodes));
     nodeLinks = JSON.parse(JSON.stringify(filteredLinks));
@@ -89,15 +92,22 @@ let nodeSelectionHandler = function(title, era){
     nodeLinks = JSON.parse(JSON.stringify(nodeLinkDataByEra[currentEra].links));
     nodeNeighbors = JSON.parse(JSON.stringify(nodeLinkDataByEra[currentEra].neighbours))
   }
+  nodeIds = nodeData.map(node => node.id);
   nodeLink.updateEra(nodeData, nodeLinks, nodeNeighbors);
   dotplot.clearBrush();
-} 
+};
 
 let setHoveredNode = function(node, type, era) {
   hoveredNode = node;
-  if(type == "actor" && selectedNode === null) {
+  if(type === "actor" && selectedNode === null) {
+    // if we hover over an actor and there's no selected node,
+    // then we can show the one hop
     nodeLink.showOneHopNodeLink(node);
-  } else if ((!era || (!!era && era == currentEra))) {
+  } else if (era && currentEra.includes(era) && nodeIds.includes(node)) {
+    // we want to check if the node-link graph is showing the node in the
+    dotplot.selectMovie(node);
+    nodeLink.showOneHopNodeLink(node);
+  } else if (era === undefined) {
     dotplot.selectMovie(node);
     nodeLink.showOneHopNodeLink(node);
   } else {
@@ -114,6 +124,7 @@ let resetHoveredNode = function() {
 // -------- INTERACTIVE CHECKS --------
 let updateNodeLinkGraph = function() {
   let era =$(this).val();
+  currentEra = [era];
   nodeLink.updateEra(
       JSON.parse(JSON.stringify(nodeLinkDataByEra[era].nodes)),
       JSON.parse(JSON.stringify(nodeLinkDataByEra[era].links)),
