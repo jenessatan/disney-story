@@ -6,20 +6,25 @@ const legend = new Legend({ parentElement: "#legend-plot" });
 let nodes = [];
 let links = [];
 let nodeLinkDataByEra = {};
+let blurbs = {};
 
 let hoveredNode = null;
 let selectedNode = null;
 let currentEra = [];
 let nodeIds = [];
+let userSelected = false;
 
 Promise.all([
   d3.csv('data/disney_revenue.csv'),
   d3.csv('data/disney-movies-awards.csv'),
-  d3.csv('data/disney-voice-actors-2.csv')
+  // d3.csv('data/disney-actors-awards.csv')
+  d3.csv('data/disney-voice-actors-2.csv'),
+  d3.json('data/era-blurbs.json')
 ]).then(files => {
   let revenueRaw = files[0];
   let moviesRaw = files[1];
   let actorsRaw = files[2];
+  blurbs = files[3];
 
   revenueRaw.forEach(val => {
     val.year = +val.year;
@@ -38,7 +43,8 @@ Promise.all([
   });
 
   area.initVis({data: revenueRaw});
-  currentEra = [DataProcessor.movieEras[DataProcessor.movieEras.length - 1]];
+  currentEra = [DataProcessor.movieEras[0]];/* [DataProcessor.movieEras[DataProcessor.movieEras.length - 1]]; */
+
 
   /**
    * Because the nodeLink graph mutates the data that is passed to it, we have to provide it a deep copy rather than
@@ -65,6 +71,7 @@ Promise.all([
 
 // -------- INTERACTIVE CHECKS --------
 let updateNodeGraphByEraLabel = function(era) {
+  userSelected = false;
   currentEra = [era];
   selectedNode = null;
   nodeIds = nodeLinkDataByEra[currentEra].nodes.map(node => node.id);
@@ -72,9 +79,12 @@ let updateNodeGraphByEraLabel = function(era) {
       JSON.parse(JSON.stringify(nodeLinkDataByEra[currentEra].nodes)),
       JSON.parse(JSON.stringify(nodeLinkDataByEra[currentEra].links)),
       JSON.parse(JSON.stringify(nodeLinkDataByEra[currentEra].neighbours)));
+  updateEraBlurb();
+  updateEraBlurbButton();
 };
 
 let setYearSelection = function (yearRange) {
+  userSelected = true;
   let data = DataProcessor.getMovieNodeLinkDataByYearRange(yearRange.start, yearRange.end, nodeLinkDataByEra);
   currentEra = data.eras;
   nodeIds = data.nodes.map(node => node.id);
@@ -83,9 +93,11 @@ let setYearSelection = function (yearRange) {
       JSON.parse(JSON.stringify(data.links)),
       JSON.parse(JSON.stringify(data.neighbours)));
   selectedNode = null;
+  changeToFunFact();
 };
 
 let nodeSelectionHandler = function(title, era){
+  userSelected = false;
   let nodeData, nodeLinks, nodeNeighbors;
   if(selectedNode === null || selectedNode !== title) {
     selectedNode = title;
@@ -103,6 +115,8 @@ let nodeSelectionHandler = function(title, era){
   nodeIds = nodeData.map(node => node.id);
   nodeLink.updateEra(nodeData, nodeLinks, nodeNeighbors);
   dotplot.clearBrush();
+  updateEraBlurb();
+  updateEraBlurbButton();
 };
 
 let setHoveredNode = function(node, type, era) {
@@ -131,6 +145,7 @@ let resetHoveredNode = function() {
 
 // -------- INTERACTIVE CHECKS --------
 let updateNodeLinkGraph = function() {
+  userSelected = false;
   let era =$(this).val();
   currentEra = [era];
   nodeLink.updateEra(
@@ -138,6 +153,8 @@ let updateNodeLinkGraph = function() {
       JSON.parse(JSON.stringify(nodeLinkDataByEra[era].links)),
       JSON.parse(JSON.stringify(nodeLinkDataByEra[era].neighbours)));
   dotplot.clearBrush();
+  updateEraBlurb();
+  updateEraBlurbButton();
 };
 
 let preGoldenBtn = document.getElementById('pre-golden-age-btn');
@@ -148,6 +165,9 @@ let darkAgeBtn = document.getElementById('dark-age-btn');
 let renaissanceBtn = document.getElementById('renaissance-btn');
 let postRenaissanceBtn = document.getElementById('post-renaissance-btn');
 let secondRenaissanceBtn = document.getElementById('second-renaissance-btn');
+let previousBtn = document.getElementById('previous-era');
+let nextBtn = document.getElementById('next-era');
+
 
 let eraButtons = [
     preGoldenBtn, goldenBtn, wartimeBtn, silverBtn, darkAgeBtn, renaissanceBtn,
@@ -158,3 +178,93 @@ eraButtons.forEach(button  => {
   button.addEventListener('click', updateNodeLinkGraph);
   button.style.backgroundColor = DataProcessor.getMovieColor(button.value);
 });
+
+let updateEraBlurb = function() {
+  let mainContainer = document.getElementById('disney-era-blurb');
+
+  let blurbDetailsContainer = document.createElement('div');
+  blurbDetailsContainer.className = 'blurb-details';
+
+  let headerElem = document.createElement('h1');
+  let header = document.createTextNode(currentEra);
+  headerElem.style.color = DataProcessor.getMovieColor(currentEra[0]);
+  headerElem.appendChild(header);
+
+  let yearElem = document.createElement('h3');
+  let year = document.createTextNode(blurbs[currentEra].years);
+  yearElem.appendChild(year);
+
+  let blurbElem = document.createElement('p');
+  let blurb = document.createTextNode(blurbs[currentEra].description);
+  blurbElem.appendChild(blurb);
+
+  blurbDetailsContainer.appendChild(headerElem);
+  blurbDetailsContainer.appendChild(yearElem);
+  blurbDetailsContainer.appendChild(blurbElem);
+
+  mainContainer.replaceChild(blurbDetailsContainer, mainContainer.children[0]);
+};
+
+let updateBlurbToFunFact = function() {
+  let mainContainer = document.getElementById('disney-era-blurb');
+  let factNumber = Math.floor(Math.random() * 40);
+  let fact = blurbs['Fun Fact'][factNumber];
+
+  let blurbDetailsContainer = document.createElement('div');
+  blurbDetailsContainer.className = 'blurb-details';
+
+  let headerElem = document.createElement('h1');
+  let header = document.createTextNode('Fun Fact');
+  headerElem.appendChild(header);
+
+  let blurbElem = document.createElement('p');
+  let blurb = document.createTextNode(fact);
+  blurbElem.appendChild(blurb);
+
+  blurbDetailsContainer.appendChild(headerElem);
+  blurbDetailsContainer.appendChild(blurbElem);
+
+  mainContainer.replaceChild(blurbDetailsContainer, mainContainer.children[0]);
+};
+
+let updateEraBlurbButton = function() {
+  let indexOfCurrent = DataProcessor.movieEras.indexOf(currentEra[0]);
+
+  if(userSelected){
+    nextBtn.style.visibility = 'hidden';
+    previousBtn.style.visibility = 'hidden';
+  }else if(indexOfCurrent == 0) {
+    previousBtn.style.visibility = 'hidden';
+    nextBtn.style.visibility = 'visible';
+    nextBtn.style.backgroundColor = DataProcessor.movieColourEras[indexOfCurrent + 1];
+  } else if(indexOfCurrent == DataProcessor.movieEras.length - 1) {
+    nextBtn.style.visibility = 'hidden';
+    previousBtn.style.visibility = 'visible';
+    previousBtn.style.backgroundColor = DataProcessor.movieColourEras[indexOfCurrent - 1];
+  } else {
+    previousBtn.style.visibility = 'visible';
+    nextBtn.style.visibility = 'visible';
+    previousBtn.style.backgroundColor = DataProcessor.movieColourEras[indexOfCurrent - 1];
+    nextBtn.style.backgroundColor = DataProcessor.movieColourEras[indexOfCurrent + 1];
+  }
+};
+
+let changeToNextEra = function(){
+  let indexOfCurrent = DataProcessor.movieEras.indexOf(currentEra[0]);
+  currentEra = [DataProcessor.movieEras[indexOfCurrent + 1]];
+  updateNodeGraphByEraLabel(currentEra[0]);
+}
+
+let changeToPreviousEra = function(){
+  let indexOfCurrent = DataProcessor.movieEras.indexOf(currentEra[0]);
+  currentEra = [DataProcessor.movieEras[indexOfCurrent - 1]];
+  updateNodeGraphByEraLabel(currentEra[0]);
+}
+
+previousBtn.addEventListener('click', changeToPreviousEra);
+nextBtn.addEventListener('click', changeToNextEra);
+
+let changeToFunFact = function(){
+  updateBlurbToFunFact();
+  updateEraBlurbButton();
+}

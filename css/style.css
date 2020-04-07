@@ -165,10 +165,19 @@ line.link:hover {
 }
 
 .character-image {
-    height: 75%;
-    width: 75%;
+    height: 150px;
+    width: 150px;
     background-color: white;
     border-radius: 10%
+}
+
+.blurb-details h3 {
+    margin: 0;
+    margin-bottom: 5px
+}
+
+#previous-era, #next-era {
+    margin-top: 15px
 }
 
 .selection {
