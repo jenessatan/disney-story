@@ -14,11 +14,11 @@ class NodeLink {
     this.config.width = this.config.containerWidth - this.config.margin.left - this.config.margin.right;
     this.config.height = this.config.containerHeight - this.config.margin.top - this.config.margin.bottom;
     this.svg = d3.select(this.config.parentElement)
-        .attr('width', this.config.containerWidth)
-        .attr('height', this.config.containerHeight);
+      .attr('width', this.config.containerWidth)
+      .attr('height', this.config.containerHeight);
     this.tooltip = document.getElementById('node-link-tooltip');
     this.tooltipSelection = d3.select('#node-link-tooltip')
-        .style('opacity', 0);
+      .style('opacity', 0);
 
     this.dateFormatter = d3.timeFormat('%B %d, %Y');
     this.amountFormatter = d3.format(',.2f');
@@ -28,10 +28,10 @@ class NodeLink {
     let vis = this;
 
     vis.chart = vis.svg.append('g')
-        .attr('transform', `translate(${vis.config.margin.left}, ${vis.config.margin.top})`);
+      .attr('transform', `translate(${vis.config.margin.left}, ${vis.config.margin.top})`);
 
-    vis.dataByEra =props.dataByEra;
-    vis.nodeData =  props.dataByEra[props.initialEra[0]].nodes;
+    vis.dataByEra = props.dataByEra;
+    vis.nodeData = props.dataByEra[props.initialEra[0]].nodes;
     vis.linkData = props.dataByEra[props.initialEra[0]].links;
     vis.neighbours = props.dataByEra[props.initialEra[0]].neighbours;
 
@@ -41,8 +41,8 @@ class NodeLink {
 
     vis.hovered = {};
 
-   vis.chart.append('g').attr('class', 'link-group');
-   vis.chart.append('g').attr('class', 'node-group');
+    vis.chart.append('g').attr('class', 'link-group');
+    vis.chart.append('g').attr('class', 'node-group');
 
     vis.render();
   }
@@ -60,61 +60,80 @@ class NodeLink {
     let vis = this;
 
     vis.simulation = d3.forceSimulation(vis.nodeData)
-        .force('charge', d3.forceManyBody().strength(-1))
-        .force('center', d3.forceCenter(vis.config.width/2, vis.config.height/2))
-        .force('collide', d3.forceCollide().radius((d) => vis.getNodeRadius(d)).iterations(2))
-        .force('x', d3.forceX(vis.config.width/2).strength(0.015))
-        .force('y', d3.forceY(vis.config.height/2).strength(0.03))
-        .force('link', d3.forceLink().id(d => d.id))
-        .on('tick', () => {
-          vis.nodeEnter
-              .attr('x', node => vis.getNodeXPosition(node))
-              .attr('y', node => vis.getNodeYPosition(node))
-              .attr('transform', node => vis.adjustNodePosition(node));
+      .force('charge', d3.forceManyBody().strength(-1))
+      .force('center', d3.forceCenter(vis.config.width / 2, vis.config.height / 2))
+      .force('collide', d3.forceCollide().radius((d) => vis.getNodeRadius(d)).iterations(2))
+      .force('x', d3.forceX(vis.config.width / 2).strength(0.015))
+      .force('y', d3.forceY(vis.config.height / 2).strength(0.03))
+      .force('link', d3.forceLink().id(d => d.id))
+      .on('tick', () => {
+        vis.nodeEnter
+          .attr('x', node => vis.getNodeXPosition(node))
+          .attr('y', node => vis.getNodeYPosition(node))
+          .attr('transform', node => vis.adjustNodePosition(node));
 
-          vis.linkEnter
-              .attr('x1', link => link.source.x)
-              .attr('y1', link => link.source.y)
-              .attr('x2', link => link.target.x)
-              .attr('y2', link => link.target.y);
-        });
+        vis.linkEnter
+          .attr('x1', link => link.source.x)
+          .attr('y1', link => link.source.y)
+          .attr('x2', link => link.target.x)
+          .attr('y2', link => link.target.y);
+      });
+
+    vis.dragDrop = d3.drag()
+      .on('start', node => {
+        node.fx = node.x
+        node.fy = node.y
+      })
+      .on('drag', node => {
+        vis.simulation.alphaTarget(0.7).restart()
+        node.fx = d3.event.x
+        node.fy = d3.event.y
+      })
+      .on('end', node => {
+        if (!d3.event.active) {
+          vis.simulation.alphaTarget(0)
+        }
+        node.fx = null
+        node.fy = null
+      });
 
     vis.links = vis.chart.select('.link-group').selectAll('.link')
-        .data(vis.linkData, d => d.source.id + " - " + d.target.id);
+      .data(vis.linkData, d => d.source.id + " - " + d.target.id);
 
     vis.links.exit()
-        .transition()
-        .attr('stroke-opacity', 0)
-        .remove();
+      .transition()
+      .attr('stroke-opacity', 0)
+      .remove();
 
     vis.linkEnter = vis.links.enter().append('line')
-        .attr('class', 'link')
-        .attr('stroke-width', 3)
-        .attr('stroke', '#e5e5e5')
-        .on('mouseover.tooltip', d => vis.updateLinkTooltip(d))
-        .on('mouseout.tooltip', () => vis.updateLinkTooltip(null))
-        .merge(vis.links);
+      .attr('class', 'link')
+      .attr('stroke-width', 3)
+      .attr('stroke', '#e5e5e5')
+      .on('mouseover.tooltip', d => vis.updateLinkTooltip(d))
+      .on('mouseout.tooltip', () => vis.updateLinkTooltip(null))
+      .merge(vis.links);
 
     vis.nodes = vis.chart.select('.node-group').selectAll('path')
-        .data(vis.nodeData, d => d.id);
+      .data(vis.nodeData, d => d.id);
 
     vis.nodes.exit().remove();
     vis.nodeEnter = vis.nodes.enter().append('path')
-        .attr('class', 'node')
-        .attr('d', d => vis.getPath(d.type))
-        .attr('fill', d => vis.getNodeColor(d))
-        .attr('stroke-width', d => vis.getNodeStrokeWidth(d.award))
-        .attr('stroke', 'black')
-        .on('mouseover.tooltip', d => {
-          setHoveredNode(d.id, d.type);
-          vis.updateNodeTooltip(d);
-        })
-        .on('mouseout.tooltip', () => {
-          resetHoveredNode();
-          vis.updateNodeTooltip(null);
-        })
-        // .on('click', d => nodeSelectionHandler(d.id))
-        .merge(vis.nodes);
+      .attr('class', 'node')
+      .attr('d', d => vis.getPath(d.type))
+      .attr('fill', d => vis.getNodeColor(d))
+      .attr('stroke-width', d => vis.getNodeStrokeWidth(d.award))
+      .attr('stroke', 'black')
+      .call(vis.dragDrop)
+      .on('mouseover.tooltip', d => {
+        setHoveredNode(d.id, d.type);
+        vis.updateNodeTooltip(d);
+      })
+      .on('mouseout.tooltip', () => {
+        resetHoveredNode();
+        vis.updateNodeTooltip(null);
+      })
+      // .on('click', d => nodeSelectionHandler(d.id))
+      .merge(vis.nodes);
 
     vis.simulation.force('link').links(vis.linkData);
     vis.simulation.nodes(vis.nodeData);
@@ -153,7 +172,7 @@ class NodeLink {
       movieNameElem.appendChild(movieName);
 
       let imgElem = document.createElement('img');
-      let source = data.role == 'Penny'? `/images/characters/${data.role} ${data.target.id}.png` : `/images/characters/${data.role}.png`;
+      let source = data.role == 'Penny' ? `/images/characters/${data.role} ${data.target.id}.png` : `/images/characters/${data.role}.png`;
       imgElem.classList = 'character-image';
       imgElem.src = source;
       imgElem.setAttribute('onerror', "this.src='/images/characters/default.png';");
@@ -173,12 +192,12 @@ class NodeLink {
         vis.tooltip.appendChild(newData);
       }
       vis.tooltipSelection
-          .style('top', () => `${d3.event.pageY}px`)
-          .style('left', () => `${d3.event.pageX + 20}px`)
-          .style('opacity', '1');
+        .style('top', () => `${d3.event.pageY}px`)
+        .style('left', () => `${d3.event.pageX + 20}px`)
+        .style('opacity', '1');
     } else {
       vis.tooltipSelection
-          .style('opacity', '0');
+        .style('opacity', '0');
     }
   }
 
@@ -210,7 +229,7 @@ class NodeLink {
     if (node.type === 'actor') {
       nodeRadius = 5;
     } else {
-      nodeRadius = vis.getNodeRadius(node)/2;
+      nodeRadius = vis.getNodeRadius(node) / 2;
     }
     return Math.max(nodeRadius * 4, Math.min((vis.config.width - (nodeRadius * 4)), node.x));
   }
@@ -221,7 +240,7 @@ class NodeLink {
     if (node.type === 'actor') {
       nodeRadius = 5;
     } else {
-      nodeRadius = vis.getNodeRadius(node)/2;
+      nodeRadius = vis.getNodeRadius(node) / 2;
     }
     return Math.max(nodeRadius * 4, Math.min((vis.config.height - (nodeRadius * 4)), node.y));
   }
@@ -234,7 +253,7 @@ class NodeLink {
     let clipY = Math.max(nodeRadius * 4, Math.min((vis.config.height - (nodeRadius * 4)), node.y));
     node.x = clipX;
     node.y = clipY;
-    return `translate(${clipX-nodeRadius}, ${clipY-nodeRadius}), scale(${scale})`;
+    return `translate(${clipX - nodeRadius}, ${clipY - nodeRadius}), scale(${scale})`;
   }
 
   getNodeRadius(node) {
@@ -267,12 +286,12 @@ class NodeLink {
         vis.tooltip.appendChild(newData);
       }
       vis.tooltipSelection
-          .style('top', () => `${d3.event.pageY}px`)
-          .style('left', () => `${d3.event.pageX + 20}px`)
-          .style('opacity', '1');
+        .style('top', () => `${d3.event.pageY}px`)
+        .style('left', () => `${d3.event.pageX + 20}px`)
+        .style('opacity', '1');
     } else {
       vis.tooltipSelection
-          .style('opacity', '0');
+        .style('opacity', '0');
     }
   }
 
@@ -350,7 +369,7 @@ class NodeLink {
     });
 
     d3.selectAll('.node').transition().style('opacity', n => {
-      if(n.id == node) return 1;
+      if (n.id == node) return 1;
       return vis.neighbours[node + ' , ' + n.id] ? 1 : 0.1;
     })
   }
