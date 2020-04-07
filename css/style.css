@@ -36,7 +36,6 @@ p {
 }
 
 .commentary {
-    width: 900px;
     margin: 0 auto;
 }
 
@@ -146,7 +145,7 @@ line.link:hover {
 }
 
 #node-link {
-    margin-left: 20px;
+    margin-left: 8px;
 }
 
 #landing {
@@ -178,4 +177,5 @@ line.link:hover {
 
 #walt-disney-company {
     margin-bottom: 16px;
+    width: 900px;
 }

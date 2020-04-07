@@ -2,8 +2,8 @@ class Legend {
     constructor(_config) {
         this.config = {
             parentElement: _config.parentElement,
-            containerWidth: _config.containerWidth || 900,
-            containerHeight: _config.containerHeight || 150,
+            containerWidth: _config.containerWidth || 300,
+            containerHeight: _config.containerHeight || 120,
         };
         this.config.margin = _config.margin || { top: 0, right: 0, bottom: 0, left: 0 };
     }
@@ -86,25 +86,10 @@ class Legend {
         return (type.includes("award")) ? 10 : 0;
     }
 
-    setScaleRocket() {
-        const vis = this;
-        const domain_rocket = ["R-1", "R-2", "R-5", "R-7", "Other"];
-        const range_rocket = ["./data/svg/R1.svg", "./data/svg/R2.svg", "./data/svg/R5.svg", "./data/svg/R7.svg", "./data/svg/Other.svg"];
-        vis.scale_rocket = vis.getScaleOrdinal(domain_rocket, range_rocket);
-    }
-
     getScaleSqrt(domain, range) {
         return d3.scaleSqrt()
             .domain(domain)
             .range(range);
-    }
-
-    getScaleBand(domain, range, paddingInner = 0, paddingOuter = 0) {
-        return d3.scaleBand()
-            .domain(domain)
-            .range(range)
-            .paddingInner(paddingInner)
-            .paddingOuter(paddingOuter);
     }
 
     getScaleOrdinal(domain, range) {

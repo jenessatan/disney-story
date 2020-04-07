@@ -3,7 +3,7 @@ class Dotplot {
         this.config = {
             parentElement: _config.parentElement,
             containerWidth: _config.containerWidth || 900,
-            containerHeight: _config.containerHeight || 200,
+            containerHeight: _config.containerHeight || 175,
         };
         this.config.margin = _config.margin || { top: 0, right: 10, bottom: 100, left: 10 };
     }

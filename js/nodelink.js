@@ -2,7 +2,7 @@ class NodeLink {
   constructor(_config) {
     this.config = {
       parentElement: _config.parentElement,
-      containerWidth: _config.containerWidth || 600,
+      containerWidth: _config.containerWidth || 500,
       containerHeight: _config.containerHeight || 350
     };
     this.config.margin = _config.margin || {
