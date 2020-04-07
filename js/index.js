@@ -1,6 +1,7 @@
-let area = new Area({ parentElement: '#revenue-overall' });
-let nodeLink = new NodeLink({ parentElement: '#movie-actors' });
-let dotplot = new Dotplot({ parentElement: '#movie-era' });
+const area = new Area({ parentElement: '#revenue-overall' });
+const nodeLink = new NodeLink({ parentElement: '#movie-actors' });
+const dotplot = new Dotplot({ parentElement: '#movie-era' });
+const legend = new Legend({ parentElement: "#legend-plot" });
 
 let nodes = [];
 let links = [];
@@ -53,6 +54,13 @@ Promise.all([
     "#movie-era-tooltip"
   );
   dotplot.render();
+
+  legend.initVis(
+    JSON.parse(JSON.stringify(moviesRaw)),
+    { size: "box_office" },
+    { size: "Gross Revenue" },    
+  )
+  legend.render();
 });
 
 // -------- INTERACTIVE CHECKS --------

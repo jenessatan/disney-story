@@ -1,67 +1,82 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>The Disney Story</title>
     <link rel="stylesheet" type="text/css" href="css/style.css">
     <link href="https://fonts.googleapis.com/css?family=Raleway|Rock+Salt&display=swap" rel="stylesheet">
 </head>
-<body>
-<div id="landing">
-    <img src="./images/disney_castle.PNG"/>
-<div class="title">
-    <h1>The Disney Story</h1>
-    <p>in data</p>
-    <button onclick="document.location = '#walt-disney-company'">next ></button>
-</div>
-</div>
-<div class="section-bottom-spacing">
-    <div id="walt-disney-company" class="commentary">
-        <h1>The Animation Studio in the Walt Disney Company</h1>
-        <p>The Walt Disney Company is an entertainment goliath. From their infamous parks and resorts to their vast array of TV networks, the company brings in billions of dollars of revenue annually.
-            The company continues to see massive growth and expansion across all of its sectors year after year. And, while the company is constantly changing, one thing will always remain true: none of this would have been possible
-            without Walt Disney Animation. It is the core of the Studio Entertainment division and the foundation on which the entire company was built. Disney Animation has a long and storied history. Let's dive in!</p>
-        <button onclick="document.location = '#node-link-graph'">next ></button>
-    </div>
-    <div id="area" class="wrapper">
-        <svg id="revenue-overall"></svg>
-        <div id='area-tooltip'></div>
-    </div>
-</div>
-<a id="node-link-graph">
-    <div id="era-navigation" class="section-top-spacing">
-        <button type="button" id="pre-golden-age-btn" value="Pre-Golden Age">Pre-Golden Age</button>
-        <button type="button" id="golden-age-btn" value="Golden Age">Golden Age</button>
-        <button type="button" id="wartime-era-btn" value="Wartime Era">Wartime Era</button>
-        <button type="button" id="silver-age-btn" value="Silver Age">Silver Age</button>
-        <button type="button" id="dark-age-btn" value="Dark Age">Dark Age</button>
-        <button type="button" id="renaissance-btn" value="Disney Renaissance">Disney Renaissance</button>
-        <button type="button" id="post-renaissance-btn" value="Post-Renaissance">Post-Ranaissance</button>
-        <button type="button" id="second-renaissance-btn" value="Second Disney Renaissance">Second Disney
-            Renaissance</button>
-    </div>
-</a>
-<div class="wrapper">
-    <div class = "commentary disney-era" id="disney-era-blurb">
-        <h1>Disney Eras</h1>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-        <button onclick="">next era ></button>
-    </div>
-    <div id="node-link">
-        <svg id="movie-actors"></svg>
-        <div id="node-link-tooltip"></div>
-    </div>
-</div>
-<div id="dot-histogram">
-    <svg id="movie-era"></svg>
-    <div id="movie-era-tooltip"></div>
-</div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-<script src="https://d3js.org/d3.v5.min.js"></script>
-<script src="js/area.js"></script>
-<script src="js/dotplot.js"></script>
-<script src="js/dataProcessor.js"></script>
-<script src="js/nodelink.js"></script>
-<script src="js/index.js"></script>
+<body>
+    <div id="landing">
+        <img src="./images/disney_castle.PNG" />
+        <div class="title">
+            <h1>The Disney Story</h1>
+            <p>in data</p>
+            <button onclick="document.location = '#walt-disney-company'">next ></button>
+        </div>
+    </div>
+    <div class="section-bottom-spacing">
+        <div id="walt-disney-company" class="commentary">
+            <h1>The Animation Studio in the Walt Disney Company</h1>
+            <p>The Walt Disney Company is an entertainment goliath. From their infamous parks and resorts to their vast
+                array of TV networks, the company brings in billions of dollars of revenue annually.
+                The company continues to see massive growth and expansion across all of its sectors year after year.
+                And, while the company is constantly changing, one thing will always remain true: none of this would
+                have been possible
+                without Walt Disney Animation. It is the core of the Studio Entertainment division and the foundation on
+                which the entire company was built. Disney Animation has a long and storied history. Let's dive in!</p>
+            <button onclick="document.location = '#node-link-graph'">next ></button>
+        </div>
+        <div id="area" class="wrapper">
+            <svg id="revenue-overall"></svg>
+            <div id='area-tooltip'></div>
+        </div>
+    </div>
+    <a id="node-link-graph">
+        <div id="era-navigation" class="section-top-spacing">
+            <button type="button" id="pre-golden-age-btn" value="Pre-Golden Age">Pre-Golden Age</button>
+            <button type="button" id="golden-age-btn" value="Golden Age">Golden Age</button>
+            <button type="button" id="wartime-era-btn" value="Wartime Era">Wartime Era</button>
+            <button type="button" id="silver-age-btn" value="Silver Age">Silver Age</button>
+            <button type="button" id="dark-age-btn" value="Dark Age">Dark Age</button>
+            <button type="button" id="renaissance-btn" value="Disney Renaissance">Disney Renaissance</button>
+            <button type="button" id="post-renaissance-btn" value="Post-Renaissance">Post-Ranaissance</button>
+            <button type="button" id="second-renaissance-btn" value="Second Disney Renaissance">Second Disney
+                Renaissance</button>
+        </div>
+    </a>
+    <div class="wrapper">
+        <div class="commentary disney-era" id="disney-era-blurb">
+            <h1>Disney Eras</h1>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
+                dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
+                ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
+                fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
+                deserunt mollit anim id est laborum.</p>
+            <button onclick="">next era ></button>
+        </div>
+        <div id="node-link">
+            <svg id="movie-actors"></svg>
+            <div id="node-link-tooltip"></div>
+        </div>
+    </div>
+    <div id="legend">
+        <svg id="legend-plot"></svg>
+    </div>
+    <div id="dot-histogram">
+        <svg id="movie-era"></svg>
+        <div id="movie-era-tooltip"></div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="js/area.js"></script>
+    <script src="js/legend.js"></script>
+    <script src="js/dotplot.js"></script>
+    <script src="js/dataProcessor.js"></script>
+    <script src="js/nodelink.js"></script>
+    <script src="js/index.js"></script>
 </body>
+
 </html>

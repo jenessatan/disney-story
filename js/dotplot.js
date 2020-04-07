@@ -16,7 +16,7 @@ class Dotplot {
         this.labels = labels;
         this.tooltip_div_id = tooltipDivId;
         this.setColours();
-        // this.setDataByYear(year);
+        this.setMarksClassname();
         this.setValues();
         this.setScales();
         this.setAxes();
@@ -29,12 +29,16 @@ class Dotplot {
         this.initBrushSelection();
     }
 
+    setMarksClassname() {
+        this.markClassName = "movie";
+    }
+
     initBrushSelection() {
-       this.brush = this.chart.append('g')
-           .attr('class', 'brush')
-           .call(d3.brushX()
-                .extent([[0,0], [this.width, this.height]])
-                .on('end', () => {this.brushEnd()}));
+        this.brush = this.chart.append('g')
+            .attr('class', 'brush')
+            .call(d3.brushX()
+                .extent([[0, 0], [this.width, this.height]])
+                .on('end', () => { this.brushEnd() }));
     }
 
     brushEnd() {
@@ -51,7 +55,7 @@ class Dotplot {
         let lowerBoundIndex = domain.findIndex(val => val === this.scale_x.invert(lowerBound));
         let lowerYear = domain[lowerBoundIndex - 1] ? domain[lowerBoundIndex - 1] : 2016;
 
-        setYearSelection({start: upperYear, end: lowerYear});
+        setYearSelection({ start: upperYear, end: lowerYear });
 
         d3.select('.brush').transition().call(d3.event.target.move, [upperBound, lowerBound]);
     }
@@ -65,8 +69,8 @@ class Dotplot {
             .data([1929, 1937, 1943, 1951, 1953, 1955, 1959, 1961, 1963, 1967, 1970, 1973, 1977, 1981, 1986, 1992])
             .enter().append('line')
             .attr('class', 'gap-years')
-            .attr('x1', d => this.scale_x(d) + (this.scale_x.step()/2))
-            .attr('x2', d => this.scale_x(d) + (this.scale_x.step()/2))
+            .attr('x1', d => this.scale_x(d) + (this.scale_x.step() / 2))
+            .attr('x2', d => this.scale_x(d) + (this.scale_x.step() / 2))
             .attr('y1', this.height)
             .attr('y2', 0)
             .attr('stroke', '#786d4c')
@@ -136,7 +140,7 @@ class Dotplot {
             .range(range);
     }
 
-    getScaleBand(domain, range, paddingInner=0, paddingOuter=0) {
+    getScaleBand(domain, range, paddingInner = 0, paddingOuter = 0) {
         return d3.scaleBand()
             .domain(domain)
             .range(range)
@@ -158,7 +162,7 @@ class Dotplot {
     setAxisX() {
         this.axis_x = this.getAxisBottom(this.scale_x);
     }
-    
+
     setAxisY() {
         this.axis_y = this.getAxisLeft(this.scale_y);
     }
@@ -166,7 +170,7 @@ class Dotplot {
     getAxisBottom(scale) {
         return d3.axisBottom(scale)
             .tickSizeOuter(0)
-            // .tickSize(-this.height)
+        // .tickSize(-this.height)
     }
 
     getAxisLeft(scale) {
@@ -177,20 +181,7 @@ class Dotplot {
     }
 
     renderData() {
-        this.renderCircles("movie");
-    }
-
-    update(year) {
-        this.setDataByYear(year);
-        this.setScaleX();
-        this.setAxisX();
-        this.updateAxisX(this.axis_x);
-        this.renderData();
-    }
-
-    updateAxisX(x_axis) {
-        this.axis_x_g.call(x_axis);
-        this.tiltTickAxisX();
+        this.renderCircles(this.markClassName);
     }
 
     render() {
@@ -199,38 +190,38 @@ class Dotplot {
         this.renderAxisEra(90);
         this.tiltTickAxisX(-45, "-0.8em", "-0.15em");
         this.renderData();
-        // this.renderLegends();
     }
 
     renderCircles(className) {
         const circles = this.chart.selectAll(`.${className}`).data(this.movies);
         circles
             .enter().append("circle")
-                .attr("class", className)
-                .attr("opacity", 0.7)
-                .attr("r", d => this.scale_size(this.value_size(d)))
-                .attr("cx", d => this.scale_x(this.value_x(d)))
-                .attr("cy", d => this.scale_y(this.value_y(d)))
+            .attr("class", className)
+            .attr("opacity", 0.7)
+            .attr("r", d => this.scale_size(this.value_size(d)))
+            .attr("cx", d => this.scale_x(this.value_x(d)))
+            .attr("cy", d => this.scale_y(this.value_y(d)))
             .merge(circles)
-                .attr("fill", d => this.scale_colour_era(this.value_colour_era(d)))
-                .on("mouseover", d => {
-                    setHoveredNode(d.movie_title, "movie", d.disney_era);
-                    this.showTooltip(d)
-                })
-                .on("mouseout", () => {
-                    resetHoveredNode();
-                    this.hideTooltip()
-                })
-                .on("click", d => {
-                    nodeSelectionHandler(d.movie_title, d.disney_era)})
+            .attr("fill", d => this.scale_colour_era(this.value_colour_era(d)))
+            .on("mouseover", d => {
+                setHoveredNode(d.movie_title, "movie", d.disney_era);
+                this.showTooltip(d)
+            })
+            .on("mouseout", () => {
+                resetHoveredNode();
+                this.hideTooltip()
+            })
+            .on("click", d => {
+                nodeSelectionHandler(d.movie_title, d.disney_era)
+            })
             .transition().duration(1000)
-                .attr("r", d => this.scale_size(this.value_size(d)))
-                .attr("cy", d => this.scale_y(this.value_y(d)))
-                .attr("cx", d => this.scale_x(this.value_x(d)));
+            .attr("r", d => this.scale_size(this.value_size(d)))
+            .attr("cy", d => this.scale_y(this.value_y(d)))
+            .attr("cx", d => this.scale_x(this.value_x(d)));
         circles.exit().remove();
     }
 
-    tiltTickAxisX(rotation=-45, dx="-0.8em", dy="-0.15em") {
+    tiltTickAxisX(rotation = -45, dx = "-0.8em", dy = "-0.15em") {
         this.axis_x_g.selectAll("text:not(.x-axis-label)")
             .attr("fill", d => this.scale_colour_era(DataProcessor.getDisneyEra(d)))
             .style("font-size", 10)
@@ -254,11 +245,11 @@ class Dotplot {
             .style("font-weight", "bold");
     }
 
-    renderAxisEra(rotation=90) {
+    renderAxisEra(rotation = 90) {
         this.axis_era_g = this.chart.append("g")
             .attr("class", "era-axis-group")
-            .attr("transform", `translate(0,${this.height+30})`); // adjust y so that the group-labels are below labels
-        
+            .attr("transform", `translate(0,${this.height + 30})`); // adjust y so that the group-labels are below labels
+
         const era = this.axis_era_g.selectAll(".era-axis-group").data(this.moviesCount);
         era.enter().append("text")
             .attr("fill", d => this.scale_colour_era(this.value_colour_era(d)))
@@ -281,7 +272,7 @@ class Dotplot {
             .text(this.labels.era)
             .style("font-size", 13)
             .style("font-weight", "bold")
-            .attr("transform", `translate(${this.width -15}, -25), rotate(${rotation})`);
+            .attr("transform", `translate(${this.width - 15}, -25), rotate(${rotation})`);
     }
 
     // Tool tip
@@ -296,7 +287,7 @@ class Dotplot {
             .style("top", () => this.getYposition());
         this.createTooltipData(row);
     }
-    
+
     hideTooltip() {
         this.tooltip.style("visibility", "hidden");
         this.removeTooltipData();
@@ -332,64 +323,6 @@ class Dotplot {
         }
     }
 
-    // Legends
-    renderLegends() {
-        // Legends
-        const x_dots_pos = 0;
-        const x_labels_pos = x_dots_pos + 10;
-        const y_first_dot_pos = this.height + 110;
-        const y_offset_dots_pos = 25;
-        const x_offset_dots_pos = 100;
-        const feature_title_font_size = "0.8em";
-        const feature_item_font_size = "0.8em";
-
-        // Legend: Colour feature
-        this.chart.selectAll("legend-colour-dots").data(this.scale_colour.domain())
-            .enter().append("circle")
-            .attr("cx", x_dots_pos)
-            .attr("cy", (d, i) => { return y_first_dot_pos + i * (y_offset_dots_pos) })
-            .attr("r", 7)
-            .style("fill", (d) => this.scale_colour(d));
-        this.chart.selectAll("legend-colour-labels").data(this.scale_colour.domain())
-            .enter().append("text")
-            .attr("x", x_labels_pos)
-            .attr("y", (d, i) => { return y_first_dot_pos + i * (y_offset_dots_pos) + 2 })
-            .text((d) => { return d })
-            .attr("text-anchor", "left")
-            .style("alignment-baseline", "middle")
-            .style("font-size", feature_item_font_size);
-        this.chart.append("text")
-            .attr("x", x_labels_pos)
-            .attr("y", y_first_dot_pos - 20)
-            .text(this.labels["status"])
-            .attr("text-anchor", "middle")
-            .style("font-weight", "bold")
-            .style("font-size", feature_title_font_size);
-
-
-        // Legend: Mark feature
-        this.chart.selectAll("legend-mark-dots").data(this.scale_size.domain())
-            .enter().append("image")
-            .attr("href", d => this.scale_size(d))
-            .attr("width", "2.7em")
-            .attr("transform", (d, i) => `translate(${(x_dots_pos + x_offset_dots_pos * 2.5) + i * (x_offset_dots_pos)}, ${y_first_dot_pos})`)
-        this.chart.selectAll("legend-mark-labels").data(this.scale_size.domain())
-            .enter().append("text")
-            .attr("x", (d, i) => (x_labels_pos + x_offset_dots_pos * 2.5) + i * (x_offset_dots_pos))
-            .attr("y", y_first_dot_pos - 10)
-            .text(d => (d === "Other") ? d : `${d} Series`)
-            .attr("text-anchor", "left")
-            .style("alignment-baseline", "middle")
-            .style("font-size", feature_item_font_size);
-        this.chart.append("text")
-            .attr("x", x_labels_pos + x_offset_dots_pos * 2)
-            .attr("y", y_first_dot_pos - 20)
-            .text(this.labels["rocket"])
-            .attr("text-anchor", "middle")
-            .style("font-weight", "bold")
-            .style("font-size", feature_title_font_size);
-    }
-
     // Helper to wrap long Axis Label texts
     wrap(text, width) {
         text.each(function () {
@@ -403,10 +336,10 @@ class Dotplot {
                 y = text.attr("y"),
                 dy = 0,
                 tspan = text.text(null)
-                            .append("tspan")
-                            .attr("x", x)
-                            .attr("y", y)
-                            .attr("dy", dy + "em");
+                    .append("tspan")
+                    .attr("x", x)
+                    .attr("y", y)
+                    .attr("dy", dy + "em");
 
             while (word = words.pop()) {
                 line.push(word);
@@ -416,10 +349,10 @@ class Dotplot {
                     tspan.text(line.join(" "));
                     line = [word];
                     tspan = text.append("tspan")
-                                .attr("x", x)
-                                .attr("y", y)
-                                .attr("dy", ++lineNumber * lineHeight + dy + "em")
-                                .text(word);
+                        .attr("x", x)
+                        .attr("y", y)
+                        .attr("dy", ++lineNumber * lineHeight + dy + "em")
+                        .text(word);
                 }
             }
         });
@@ -430,9 +363,10 @@ class Dotplot {
     }
 
     selectMovie(name) {
-        d3.selectAll('circle').transition().attr('opacity', 0.3);
-        d3.selectAll('circle').filter(d => {
-            return d.movie_title == name}).transition()
+        d3.selectAll(`circle.${this.markClassName}`).transition().attr('opacity', 0.3);
+        d3.selectAll(`circle.${this.markClassName}`).filter(d => {
+            return d.movie_title == name
+        }).transition()
             .attr('opacity', 0.9)
             .attr('stroke-opacity', 1)
             .attr('stroke', 'black')
@@ -440,7 +374,7 @@ class Dotplot {
     }
 
     deselectMovie() {
-        d3.selectAll('circle').transition()
+        d3.selectAll(`circle.${this.markClassName}`).transition()
             .attr('opacity', 0.7)
             .attr('stroke-opacity', 0)
     }
