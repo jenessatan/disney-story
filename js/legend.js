@@ -3,7 +3,7 @@ class Legend {
         this.config = {
             parentElement: _config.parentElement,
             containerWidth: _config.containerWidth || 900,
-            containerHeight: _config.containerHeight || 200,
+            containerHeight: _config.containerHeight || 150,
         };
         this.config.margin = _config.margin || { top: 0, right: 0, bottom: 0, left: 0 };
     }
@@ -124,7 +124,7 @@ class Legend {
     }
 
     renderLegendSize() {
-        const x_mark_pos = 20;
+        const x_mark_pos = 50;
         const x_mark_label_pos = x_mark_pos + 20;
         const x_feat_label_pos = x_mark_pos + 35;
         const y_first_mark_pos = 50;
@@ -162,12 +162,12 @@ class Legend {
     }
 
     renderLegendNode() {
-        const x_mark_pos = 20;
+        const x_mark_pos = 50;
         const x_mark_label_pos = x_mark_pos;
         const x_feat_label_pos = x_mark_pos + 35;
         const y_first_mark_pos = 50;
         const y_offset_mark_pos = 25;
-        const x_offset_mark_pos = 100;
+        const x_offset_mark_pos = 120;
         const feature_title_font_size = "0.8em";
         const feature_item_font_size = "0.8em";
 
@@ -188,7 +188,7 @@ class Legend {
                 return (d.length > 5) ? (pos - 20) : pos;
             })
             .attr("y", y_first_mark_pos + 50)
-            .text(d => d)
+            .text(d => (d.includes("award")) ? "oscar winner" : d)
             .attr("text-anchor", "left")
             .style("alignment-baseline", "middle")
             .style("font-size", feature_item_font_size);
