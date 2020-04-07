@@ -3,7 +3,7 @@ class NodeLink {
     this.config = {
       parentElement: _config.parentElement,
       containerWidth: _config.containerWidth || 500,
-      containerHeight: _config.containerHeight || 350
+      containerHeight: _config.containerHeight || 375
     };
     this.config.margin = _config.margin || {
       top: 0,
@@ -36,8 +36,8 @@ class NodeLink {
     vis.neighbours = props.dataByEra[props.initialEra[0]].neighbours;
 
     vis.nodeScale = d3.scaleSqrt()
-        .domain([5, 10])
-        .range([0.07, 0.2]);
+        .domain([5, 9])
+        .range([0.08, 0.2]);
 
     vis.hovered = {};
 
@@ -229,7 +229,7 @@ class NodeLink {
   adjustNodePosition(node) {
     let vis = this;
     let nodeRadius = vis.getNodeRadius(node)/2;
-    let scale = node.type === 'actor'? 0.07 : vis.nodeScale(node.rating);
+    let scale = node.type === 'actor'? 0.08 : vis.nodeScale(node.rating);
     let clipX = Math.max(nodeRadius * 2, Math.min((vis.config.width - (nodeRadius * 2)), node.x));
     let clipY = Math.max(nodeRadius * 4, Math.min((vis.config.height - (nodeRadius * 4)), node.y));
     node.x = clipX;
@@ -243,7 +243,7 @@ class NodeLink {
       let scale = vis.nodeScale(node.rating);
       return 215 * scale;
     } else {
-      return 10;
+      return 12;
     }
   }
 

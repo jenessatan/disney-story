@@ -109,7 +109,7 @@ class Legend {
     }
 
     renderLegendSize() {
-        const x_mark_pos = 50;
+        const x_mark_pos = 10;
         const x_mark_label_pos = x_mark_pos + 20;
         const x_feat_label_pos = x_mark_pos + 35;
         const y_first_mark_pos = 50;
@@ -147,14 +147,14 @@ class Legend {
     }
 
     renderLegendNode() {
-        const x_mark_pos = 50;
+        const x_mark_pos = 0;
         const x_mark_label_pos = x_mark_pos;
         const x_feat_label_pos = x_mark_pos + 35;
         const y_first_mark_pos = 50;
         const y_offset_mark_pos = 25;
-        const x_offset_mark_pos = 120;
+        const x_offset_mark_pos = 45;
         const feature_title_font_size = "0.8em";
-        const feature_item_font_size = "0.8em";
+        const feature_item_font_size = "0.6em";
 
         // Legend: Mark feature
         this.chart.selectAll(`.${this.classname_mark_node}`).data(this.scale_node.domain())
@@ -164,15 +164,15 @@ class Legend {
             .attr("fill", "grey")
             .attr("stroke-width", d => this.getNodeStrokeWidth(d))
             .attr("stroke", "black")
-            .attr("transform", (d, i) => `translate(${(x_mark_pos + x_offset_mark_pos * 2.5) + i * (x_offset_mark_pos)}, ${y_first_mark_pos}), scale(0.15,0.15)`);
+            .attr("transform", (d, i) => `translate(${(x_mark_pos + x_offset_mark_pos * 2.5) + i * (x_offset_mark_pos)}, ${y_first_mark_pos}), scale(0.08,0.08)`);
         this.chart.selectAll(this.classname_mark_label_node).data(this.scale_node.domain())
             .enter().append("text")
             .attr("class", this.classname_mark_label_node)
             .attr("x", (d, i) => {
                 let pos = (x_mark_pos + x_offset_mark_pos * 2.5) + i * (x_offset_mark_pos);
-                return (d.length > 5) ? (pos - 20) : pos;
+                return (d.length > 5) ? (pos - 20) : pos - 4;
             })
-            .attr("y", y_first_mark_pos + 50)
+            .attr("y", y_first_mark_pos + 30)
             .text(d => (d.includes("award")) ? "oscar winner" : d)
             .attr("text-anchor", "left")
             .style("alignment-baseline", "middle")

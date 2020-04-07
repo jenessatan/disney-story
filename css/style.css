@@ -86,8 +86,13 @@ p {
 }
 
 #disney-era-blurb {
-    margin-top: 15px;
     margin-bottom: 10px;
+    height: 250px;
+}
+
+#disney-era-blurb button {
+    font-size: 10px;
+    padding: 0px 8px;
 }
 
 #node-link-tooltip, #area-tooltip {
@@ -171,9 +176,18 @@ line.link:hover {
     border-radius: 10%
 }
 
+.blurb-details h1 {
+    font-size: 18px;
+}
+
+.blurb-details p {
+    font-size: 11px;
+}
+
 .blurb-details h3 {
     margin: 0;
-    margin-bottom: 5px
+    margin-bottom: 5px;
+    font-size: 16px;
 }
 
 #previous-era, #next-era {
