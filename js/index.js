@@ -90,6 +90,7 @@ let nodeSelectionHandler = function(title, era){
     nodeNeighbors = JSON.parse(JSON.stringify(nodeLinkDataByEra[currentEra].neighbours))
   }
   nodeLink.updateEra(nodeData, nodeLinks, nodeNeighbors);
+  dotplot.clearBrush();
 } 
 
 let setHoveredNode = function(node, type, era) {

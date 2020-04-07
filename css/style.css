@@ -36,7 +36,7 @@ p {
 }
 
 .commentary {
-    width: 80%;
+    width: 900px;
     margin: 0 auto;
 }
 
@@ -174,4 +174,8 @@ line.link:hover {
 
 .selection {
     fill: #d9c48d;
+}
+
+#walt-disney-company {
+    margin-bottom: 16px;
 }

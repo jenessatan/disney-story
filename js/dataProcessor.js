@@ -133,7 +133,14 @@ class DataProcessor {
             let endIndex = this.movieEras.findIndex(era => era === endEra);
             for(let i = startIndex; i <= endIndex; i++) {
                 let data = this.getMoviesWithinRange(nodeLinkDataByEra, this.movieEras[i], start, end);
-                nodes = nodes.concat(data.nodes);
+                let currNodeIds = nodes.map(node => node.id);
+                // there may be actors that are common in different eras.
+                // we need to only push actor nodes that do not yet exist in the node array
+                data.nodes.forEach(dataNode => {
+                    if (!currNodeIds.includes(dataNode.id)) {
+                        nodes.push(dataNode);
+                    }
+                });
                 links = links.concat(data.links);
                 let neighborKeys = Object.keys(data.neighbours);
                 neighborKeys.forEach(key => {
