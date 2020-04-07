@@ -267,7 +267,7 @@ class Dotplot {
             .style('pointer-events', 'auto')
             .on('click', d => updateNodeGraphByEraLabel(d.disney_era))
             .text(d => this.value_colour_era(d).includes("Pre-Golden") ? "Pre- Golden Age" : this.value_colour_era(d))
-            .call(this.wrap, 5);
+            .call(DataProcessor.wrapText, 5);
         era.exit().remove();
 
         this.axis_era_g.append("text")
@@ -325,41 +325,6 @@ class Dotplot {
         } else {
             return (d3.event.pageY + 50) + "px";
         }
-    }
-
-    // Helper to wrap long Axis Label texts
-    wrap(text, width) {
-        text.each(function () {
-            var text = d3.select(this),
-                words = text.text().split(/\s+/).reverse(),
-                word,
-                line = [],
-                lineNumber = 0,
-                lineHeight = 1.1, // ems
-                x = text.attr("x"),
-                y = text.attr("y"),
-                dy = 0,
-                tspan = text.text(null)
-                    .append("tspan")
-                    .attr("x", x)
-                    .attr("y", y)
-                    .attr("dy", dy + "em");
-
-            while (word = words.pop()) {
-                line.push(word);
-                tspan.text(line.join(" "));
-                if (tspan.node().getComputedTextLength() > width) {
-                    line.pop();
-                    tspan.text(line.join(" "));
-                    line = [word];
-                    tspan = text.append("tspan")
-                        .attr("x", x)
-                        .attr("y", y)
-                        .attr("dy", ++lineNumber * lineHeight + dy + "em")
-                        .text(word);
-                }
-            }
-        });
     }
 
     formatThousandCommas(number) {

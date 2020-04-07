@@ -152,11 +152,11 @@ class Legend {
         const x_feat_label_pos = x_mark_pos + 35;
         const y_first_mark_pos = 50;
         const y_offset_mark_pos = 25;
-        const x_offset_mark_pos = 45;
+        const x_offset_mark_pos = 50;
         const feature_title_font_size = "0.8em";
         const feature_item_font_size = "0.6em";
 
-        // Legend: Mark feature
+        // Legend: Node feature
         this.chart.selectAll(`.${this.classname_mark_node}`).data(this.scale_node.domain())
             .enter().append("path")
             .attr("class", this.classname_mark_node)
@@ -168,13 +168,10 @@ class Legend {
         this.chart.selectAll(this.classname_mark_label_node).data(this.scale_node.domain())
             .enter().append("text")
             .attr("class", this.classname_mark_label_node)
-            .attr("x", (d, i) => {
-                let pos = (x_mark_pos + x_offset_mark_pos * 2.5) + i * (x_offset_mark_pos);
-                return (d.length > 5) ? (pos - 20) : pos - 4;
-            })
-            .attr("y", y_first_mark_pos + 30)
-            .text(d => (d.includes("award")) ? "oscar winner" : d)
-            .attr("text-anchor", "left")
+            .attr("x", (d, i) => (x_mark_pos + x_offset_mark_pos * 2.5) + i * (x_offset_mark_pos) + 9)
+            .attr("y", y_first_mark_pos + 20)
+            .text(d => (d.includes("award")) ? "oscar winner" : d).call(DataProcessor.wrapText, 3)
+            .attr("text-anchor", "middle")
             .style("alignment-baseline", "middle")
             .style("font-size", feature_item_font_size);
         this.chart.append("text")
