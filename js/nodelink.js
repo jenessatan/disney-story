@@ -16,16 +16,15 @@ class NodeLink {
     this.svg = d3.select(this.config.parentElement)
       .attr('width', this.config.containerWidth)
       .attr('height', this.config.containerHeight);
-    this.tooltip = document.getElementById('node-link-tooltip');
-    this.tooltipSelection = d3.select('#node-link-tooltip')
-      .style('opacity', 0);
+
+    this.tooltip = d3.select("#node-link-tooltip").style("visibility", "hidden");
 
     this.dateFormatter = d3.timeFormat('%B %d, %Y');
     this.amountFormatter = d3.format(',.2f');
   }
 
   initVis(props) {
-    let vis = this;
+    const vis = this;
 
     vis.chart = vis.svg.append('g')
       .attr('transform', `translate(${vis.config.margin.left}, ${vis.config.margin.top})`);
@@ -36,8 +35,8 @@ class NodeLink {
     vis.neighbours = props.dataByEra[props.initialEra[0]].neighbours;
 
     vis.nodeScale = d3.scaleSqrt()
-        .domain([5, 9])
-        .range([0.08, 0.2]);
+      .domain([5, 9])
+      .range([0.08, 0.2]);
 
     vis.hovered = {};
 
@@ -48,7 +47,7 @@ class NodeLink {
   }
 
   updateEra(node, link, neighbors) {
-    let vis = this;
+    const vis = this;
     vis.nodeData = node;
     vis.linkData = link;
     vis.neighbours = neighbors;
@@ -57,7 +56,7 @@ class NodeLink {
   }
 
   render() {
-    let vis = this;
+    const vis = this;
 
     vis.simulation = d3.forceSimulation(vis.nodeData)
       .force('charge', d3.forceManyBody().strength(-1))
@@ -141,64 +140,36 @@ class NodeLink {
   }
 
   updateLinkTooltip(data) {
-    let vis = this;
+    const vis = this;
     if (data) {
-      vis.tooltip.className = "role-tooltip";
-
-      let newData = document.createElement('div');
-      newData.className = "tooltip-data";
-
-      let roleData = document.createElement('div');
-      roleData.className = "role-data";
-
-      let actorNameElem = document.createElement('h4');
-      let actorName = document.createTextNode(data.source.id);
-      actorNameElem.appendChild(actorName);
-
-      let asElem = document.createElement('p');
-      let as = document.createTextNode('as');
-      asElem.appendChild(as);
-
-      let characterNameElem = document.createElement('h4');
-      let charName = document.createTextNode(data.role);
-      characterNameElem.appendChild(charName);
-
-      let inElem = document.createElement('p');
-      let inTxt = document.createTextNode('in');
-      inElem.appendChild(inTxt);
-
-      let movieNameElem = document.createElement('h4');
-      let movieName = document.createTextNode(data.target.id);
-      movieNameElem.appendChild(movieName);
-
-      let imgElem = document.createElement('img');
-      let source = data.role == 'Penny' ? `/images/characters/${data.role} ${data.target.id}.png` : `/images/characters/${data.role}.png`;
-      imgElem.classList = 'character-image';
-      imgElem.src = source;
-      imgElem.setAttribute('onerror', "this.src='/images/characters/default.png';");
-
-      roleData.appendChild(imgElem);
-      roleData.appendChild(actorNameElem);
-      roleData.appendChild(asElem);
-      roleData.appendChild(characterNameElem);
-      roleData.appendChild(inElem);
-      roleData.appendChild(movieNameElem);
-      newData.appendChild(roleData);
-
-      if (vis.tooltip.children.length !== 0) {
-        // we want to delete the old data inside the tooltip
-        vis.tooltip.replaceChild(newData, vis.tooltip.childNodes[0]);
-      } else {
-        vis.tooltip.appendChild(newData);
-      }
-      vis.tooltipSelection
-        .style('top', () => `${d3.event.pageY}px`)
-        .style('left', () => `${d3.event.pageX + 20}px`)
-        .style('opacity', '1');
+      vis.createTooltipData_Link(data);
+      vis.tooltip.attr("class", "role-tooltip")
+        .style("visibility", "visible")
+        .style("left", () => vis.getXposition())
+        .style("top", () => vis.getYposition());
     } else {
-      vis.tooltipSelection
-        .style('opacity', '0');
+      vis.tooltip.style("visibility", "hidden");
+      vis.tooltip_data.remove();
     }
+  }
+
+  createTooltipData_Link(data) {
+    const vis = this;
+
+    vis.tooltip_data = vis.tooltip.append("div").attr("class", "tooltip-data");
+
+    const actor = data.source.id;
+    const role = data.role;
+    const movie = data.target.id;
+    const img = data.role == 'Penny' ? `/images/characters/${data.role} ${data.target.id}.png` : `/images/characters/${data.role}.png`;
+    const img_on_error = "this.src='/images/characters/default.png';";
+
+    vis.tooltip_data.append("img").attr("class", "character-image").attr("src", img).attr("onerror", img_on_error);
+    vis.tooltip_data.append("h4").text(actor);
+    vis.tooltip_data.append("p").text("as");
+    vis.tooltip_data.append("h4").text(role);
+    vis.tooltip_data.append("p").text("in");
+    vis.tooltip_data.append("h4").text(movie);
   }
 
   getNodeColor(node) {
@@ -224,7 +195,7 @@ class NodeLink {
   }
 
   getNodeXPosition(node) {
-    let vis = this;
+    const vis = this;
     let nodeRadius;
     if (node.type === 'actor') {
       nodeRadius = 5;
@@ -235,7 +206,7 @@ class NodeLink {
   }
 
   getNodeYPosition(node) {
-    let vis = this;
+    const vis = this;
     let nodeRadius;
     if (node.type === 'actor') {
       nodeRadius = 5;
@@ -246,9 +217,9 @@ class NodeLink {
   }
 
   adjustNodePosition(node) {
-    let vis = this;
-    let nodeRadius = vis.getNodeRadius(node)/2;
-    let scale = node.type === 'actor'? 0.08 : vis.nodeScale(node.rating);
+    const vis = this;
+    let nodeRadius = vis.getNodeRadius(node) / 2;
+    let scale = node.type === 'actor' ? 0.08 : vis.nodeScale(node.rating);
     let clipX = Math.max(nodeRadius * 2, Math.min((vis.config.width - (nodeRadius * 2)), node.x));
     let clipY = Math.max(nodeRadius * 4, Math.min((vis.config.height - (nodeRadius * 4)), node.y));
     node.x = clipX;
@@ -257,7 +228,7 @@ class NodeLink {
   }
 
   getNodeRadius(node) {
-    let vis = this;
+    const vis = this;
     if (node.type === 'movie') {
       let scale = vis.nodeScale(node.rating);
       return 215 * scale;
@@ -267,103 +238,65 @@ class NodeLink {
   }
 
   updateNodeTooltip(data) {
-    let vis = this;
+    const vis = this;
     if (data) {
-      let newData = document.createElement('div');
-      if (data.type === "movie") {
-        vis.tooltip.className = "movie-tooltip";
-        vis.formatMovieData(data, newData);
-      } else {
-        vis.tooltip.className = "actor-tooltip";
-        vis.formatActorData(data, newData)
-      }
-
-      newData.className = "tooltip-data";
-      if (vis.tooltip.children.length !== 0) {
-        // we want to delete the old data inside the tooltip
-        vis.tooltip.replaceChild(newData, vis.tooltip.childNodes[0]);
-      } else {
-        vis.tooltip.appendChild(newData);
-      }
-      vis.tooltipSelection
+      vis.tooltip
+        .style("visibility", "visible")
         .style('top', () => `${d3.event.pageY}px`)
-        .style('left', () => `${d3.event.pageX + 20}px`)
-        .style('opacity', '1');
+        .style('left', () => `${d3.event.pageX + 20}px`);
+
+      if (data.type === "movie") {
+        vis.tooltip.attr("class", "movie-tooltip");
+        vis.createTooltipDate_Movie(data);
+      } else {
+        vis.tooltip.attr("class", "actor-tooltip");
+        vis.createTooltipData_Actor(data);
+      }
     } else {
-      vis.tooltipSelection
-        .style('opacity', '0');
+      vis.tooltip.style("visibility", "hidden");
+      vis.tooltip_data.remove();
     }
   }
 
-  formatMovieData(data, div) {
-    let vis = this;
-    let movieContainer = div;
-    movieContainer.className = "movie-data";
+  createTooltipDate_Movie(data) {
+    const vis = this;
 
-    // Movie Title
-    let titleElem = document.createElement('h4');
-    titleElem.className = "movie-title";
-    let title = document.createTextNode(data.id);
-    titleElem.appendChild(title);
+    vis.tooltip_data = vis.tooltip.append("div").attr("class", "tooltip-data");
 
-    // Rating
-    let ratingElem = document.createElement('p');
-    let rating = document.createTextNode("Rating: " + data.rating);
-    ratingElem.appendChild(rating);
+    const movie_title = data.id;
+    const movie_rating = `Rating: ${data.rating}`;
+    const movie_release_date = `Release Date: ${vis.dateFormatter(new Date(data.release_date))}`;
+    const movie_directors = `Director(s): ${data.director}`;
+    const movie_gross_revenue = `Box Office: USD ${vis.amountFormatter(data.box_office)}`;
 
-    // Release Date
-    let releaseElem = document.createElement('p');
-    let release = document.createTextNode("Release Date: " + vis.dateFormatter(new Date(data.release_date)));
-    releaseElem.appendChild(release);
+    this.tooltip_data.append("h4").attr("class", "movie-title").text(movie_title);
+    this.tooltip_data.append("p").text(movie_rating);
+    this.tooltip_data.append("p").text(movie_release_date);
+    this.tooltip_data.append("p").text(movie_directors);
+    this.tooltip_data.append("p").text(movie_gross_revenue);
 
-    // Directors
-    let directorElem = document.createElement('p');
-    let directors = document.createTextNode("Director(s): " + data.director);
-    directorElem.appendChild(directors);
-
-    // Box-Office
-    let boxOfficeElem = document.createElement('p');
-    let boxOffice = document.createTextNode("Box Office: USD " + vis.amountFormatter(data.box_office));
-    boxOfficeElem.appendChild(boxOffice);
-
-    movieContainer.appendChild(titleElem);
-    movieContainer.appendChild(ratingElem);
-    movieContainer.appendChild(releaseElem);
-    movieContainer.appendChild(directorElem);
-    movieContainer.appendChild(boxOfficeElem);
-
-    // Awards
     if (data.award !== "") {
-      let awardsElem = document.createElement('p');
-      let awards = document.createTextNode('Awards: ' + data.award);
-      awardsElem.appendChild(awards);
-      movieContainer.appendChild(awardsElem);
+      const movie_award = `Awards: ${data.award}`;
+      this.tooltip_data.append("p").text(movie_award);
     }
-
   }
 
-  formatActorData(data, div) {
-    let actorContainer = div;
-    actorContainer.className = "actor-data";
+  createTooltipData_Actor(data) {
+    const vis = this;
 
-    // Actor Name
-    let actorElem = document.createElement('h4');
-    let actor = document.createTextNode(data.id);
-    actorElem.appendChild(actor);
+    vis.tooltip_data = vis.tooltip.append("div").attr("class", "tooltip-data");
 
-    actorContainer.appendChild(actorElem);
+    const actor_title = data.id;
+    this.tooltip_data.append("h4").attr("class", "movie-title").text(actor_title);
 
-    // Awards
     if (data.award !== "") {
-      let awardsElem = document.createElement('p');
-      let award = document.createTextNode('Awards: ' + data.award);
-      awardsElem.appendChild(award);
-      actorContainer.appendChild(awardsElem);
+      const actor_award = `Awards: ${data.award}`;
+      this.tooltip_data.append("p").text(actor_award);
     }
   }
 
   showOneHopNodeLink(node) {
-    let vis = this;
+    const vis = this;
     d3.selectAll('.link').transition().style('stroke-opacity', l => {
       return l.target.id == node || l.source.id == node ? 1 : 0.1
     });
@@ -379,4 +312,19 @@ class NodeLink {
     d3.selectAll('.node').transition().style('opacity', 1);
   }
 
+  getXposition() {
+    if (d3.event.pageX < 1300) {
+      return (d3.event.pageX - 50) + "px";
+    } else {
+      return (d3.event.pageX - 200) + "px";
+    }
+  }
+
+  getYposition() {
+    if (d3.event.pageY > 300) {
+      return (d3.event.pageY - 280) + "px";
+    } else {
+      return (d3.event.pageY + 50) + "px";
+    }
+  }
 }
