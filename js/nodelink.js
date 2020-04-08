@@ -145,8 +145,8 @@ class NodeLink {
       vis.createTooltipData_Link(data);
       vis.tooltip.attr("class", "role-tooltip")
         .style("visibility", "visible")
-        .style("left", () => vis.getXposition())
-        .style("top", () => vis.getYposition());
+        .style("left", () => vis.getTooltipPositionX_Link())
+        .style("top", () => vis.getTooltipPositionY_Link());
     } else {
       vis.tooltip.style("visibility", "hidden");
       vis.tooltip_data.remove();
@@ -161,7 +161,7 @@ class NodeLink {
     const actor = data.source.id;
     const role = data.role;
     const movie = data.target.id;
-    const img = data.role == 'Penny' ? `/images/characters/${data.role} ${data.target.id}.png` : `/images/characters/${data.role}.png`;
+    const img = data.role == 'Penny' ? `../images/characters/${data.role} ${data.target.id}.png` : `../images/characters/${data.role}.png`;
     const img_on_error = "this.src='/images/characters/default.png';";
 
     vis.tooltip_data.append("img").attr("class", "character-image").attr("src", img).attr("onerror", img_on_error);
@@ -242,8 +242,8 @@ class NodeLink {
     if (data) {
       vis.tooltip
         .style("visibility", "visible")
-        .style('top', () => `${d3.event.pageY}px`)
-        .style('left', () => `${d3.event.pageX + 20}px`);
+        .style("left", () => vis.getTooltipPositionX_Node(data.type))
+        .style("top", () => vis.getTooltipPositionY_Node(data.type));
 
       if (data.type === "movie") {
         vis.tooltip.attr("class", "movie-tooltip");
@@ -296,11 +296,11 @@ class NodeLink {
         const elems = award.split(":");
         const year = elems[0];
         const name = elems[1];
-        vis.tooltip_data.append("pre").text(`Year ${year}:`);
-        vis.tooltip_data.append("pre").text(`   Achieved: ${name}`);
-        if (elems[2] !== "nan") {
+        vis.tooltip_data.append("p").text(`Year ${year}:`);
+        vis.tooltip_data.append("pre").text(`Achieved: ${name}`);
+        if (elems[2] !== "nan" && typeof elems[2] !== "undefined") {
           const movie = elems[2];
-          vis.tooltip_data.append("pre").text(`   Movie: ${movie}`);
+          vis.tooltip_data.append("pre").text(`Movie: ${movie}`);
         }
       }
     }
@@ -323,19 +323,35 @@ class NodeLink {
     d3.selectAll('.node').transition().style('opacity', 1);
   }
 
-  getXposition() {
-    if (d3.event.pageX < 1300) {
-      return (d3.event.pageX - 50) + "px";
+  getTooltipPositionX_Link() {
+    if (d3.event.pageX < 800) {
+      return (d3.event.pageX + 10) + "px";
     } else {
       return (d3.event.pageX - 200) + "px";
     }
   }
 
-  getYposition() {
-    if (d3.event.pageY > 300) {
-      return (d3.event.pageY - 280) + "px";
+  getTooltipPositionY_Link() {
+    if (d3.event.pageY > 1600) {
+      return (d3.event.pageY - 300) + "px";
+    } else if (d3.event.pageY) {
+      return (d3.event.pageY + 20) + "px";
+    }
+  }
+
+  getTooltipPositionX_Node(type) {
+    if (d3.event.pageX < 800) {
+      return (type === "movie") ? (d3.event.pageX + 10) + "px" : (d3.event.pageX + 10) + "px";
     } else {
-      return (d3.event.pageY + 50) + "px";
+      return (type === "movie") ? (d3.event.pageX - 230) + "px" : (d3.event.pageX - 280) + "px";
+    }
+  }
+
+  getTooltipPositionY_Node(type) {
+    if (d3.event.pageY > 1600) {
+      return (type === "movie") ? (d3.event.pageY - 150) + "px" : (d3.event.pageY - 50) + "px";
+    } else if (d3.event.pageY) {
+      return (type === "movie") ? (d3.event.pageY + 20) + "px" : (d3.event.pageY + 0) + "px";
     }
   }
 }
