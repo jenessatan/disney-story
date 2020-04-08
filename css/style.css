@@ -23,9 +23,19 @@ p {
 }
 
 pre {
+    margin-left: 8px;
+    margin-top: 0px;
+    margin-bottom: 0px;
+
     font-family: 'Raleway', Helvetica, Arial, sans-serif;
-    line-height: 0.5em;
+    line-height: 1.5em;
     font-size: 12px;
+
+    white-space: pre-wrap;
+    white-space: -moz-pre-wrap;
+    white-space: -pre-wrap; 
+    white-space: -o-pre-wrap;
+    word-wrap: break-word;
 }
 
 .wrapper {
@@ -40,7 +50,7 @@ pre {
 }
 
 .section-bottom-spacing {
-    margin-bottom: 150px;
+    margin-bottom: 450px;
 }
 
 .commentary {
@@ -123,13 +133,8 @@ pre {
 .actor-tooltip {
     background-color: #fab507;
     color: #333;
-    max-width: 200px;
-}
-
-.actor-tooltip pre {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
+    max-width: 250px;
+    min-width: 225px;
 }
 
 #area-tooltip {
@@ -169,10 +174,6 @@ line.link:hover {
 
 #node-link {
     margin-left: 8px;
-}
-
-#landing {
-    margin-bottom: 200px;
 }
 
 #landing button {

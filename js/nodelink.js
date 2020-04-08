@@ -161,7 +161,7 @@ class NodeLink {
     const actor = data.source.id;
     const role = data.role;
     const movie = data.target.id;
-    const img = data.role == 'Penny' ? `/images/characters/${data.role} ${data.target.id}.png` : `/images/characters/${data.role}.png`;
+    const img = data.role == 'Penny' ? `../images/characters/${data.role} ${data.target.id}.png` : `../images/characters/${data.role}.png`;
     const img_on_error = "this.src='/images/characters/default.png';";
 
     vis.tooltip_data.append("img").attr("class", "character-image").attr("src", img).attr("onerror", img_on_error);
@@ -253,8 +253,8 @@ class NodeLink {
         vis.createTooltipData_Actor(data);
       }
     } else {
-      // vis.tooltip.style("visibility", "hidden");
-      // vis.tooltip_data.remove();
+      vis.tooltip.style("visibility", "hidden");
+      vis.tooltip_data.remove();
     }
   }
 
@@ -296,11 +296,11 @@ class NodeLink {
         const elems = award.split(":");
         const year = elems[0];
         const name = elems[1];
-        vis.tooltip_data.append("pre").text(`Year ${year}:`);
-        vis.tooltip_data.append("pre").text(`   Achieved: ${name}`);
-        if (elems[2] !== "nan") {
+        vis.tooltip_data.append("p").text(`Year ${year}:`);
+        vis.tooltip_data.append("pre").text(`Achieved: ${name}`);
+        if (elems[2] !== "nan" && typeof elems[2] !== "undefined") {
           const movie = elems[2];
-          vis.tooltip_data.append("pre").text(`   Movie: ${movie}`);
+          vis.tooltip_data.append("pre").text(`Movie: ${movie}`);
         }
       }
     }
@@ -343,15 +343,15 @@ class NodeLink {
     if (d3.event.pageX < 800) {
       return (type === "movie") ? (d3.event.pageX + 10) + "px" : (d3.event.pageX + 10) + "px";
     } else {
-      return (type === "movie") ? (d3.event.pageX - 230) + "px" : (d3.event.pageX - 500) + "px";
+      return (type === "movie") ? (d3.event.pageX - 230) + "px" : (d3.event.pageX - 280) + "px";
     }
   }
 
   getTooltipPositionY_Node(type) {
     if (d3.event.pageY > 1600) {
-      return (d3.event.pageY - 150) + "px";
+      return (type === "movie") ? (d3.event.pageY - 150) + "px" : (d3.event.pageY - 50) + "px";
     } else if (d3.event.pageY) {
-      return (d3.event.pageY + 20) + "px";
+      return (type === "movie") ? (d3.event.pageY + 20) + "px" : (d3.event.pageY + 0) + "px";
     }
   }
 }
