@@ -269,15 +269,16 @@ class NodeLink {
     const movie_directors = `Director(s): ${data.director}`;
     const movie_gross_revenue = `Box Office: USD ${vis.amountFormatter(data.box_office)}`;
 
-    this.tooltip_data.append("h4").attr("class", "movie-title").text(movie_title);
-    this.tooltip_data.append("p").text(movie_rating);
-    this.tooltip_data.append("p").text(movie_release_date);
-    this.tooltip_data.append("p").text(movie_directors);
-    this.tooltip_data.append("p").text(movie_gross_revenue);
+    vis.tooltip_data.append("h4").attr("class", "movie-title").text(movie_title);
+    vis.tooltip_data.append("p").text(movie_rating);
+    vis.tooltip_data.append("p").text(movie_release_date);
+    vis.tooltip_data.append("p").text(movie_directors);
+    vis.tooltip_data.append("p").text(movie_gross_revenue);
 
     if (data.award !== "") {
-      const movie_award = `Awards: ${data.award}`;
-      this.tooltip_data.append("p").text(movie_award);
+      const awards = data.award.split(";").map(str => str.split(":")[1]).join(", ");
+      const movie_award = `Awards: ${awards}`;
+      vis.tooltip_data.append("p").text(movie_award);
     }
   }
 
@@ -287,11 +288,21 @@ class NodeLink {
     vis.tooltip_data = vis.tooltip.append("div").attr("class", "tooltip-data");
 
     const actor_title = data.id;
-    this.tooltip_data.append("h4").attr("class", "movie-title").text(actor_title);
+    vis.tooltip_data.append("h4").attr("class", "movie-title").text(actor_title);
 
     if (data.award !== "") {
-      const actor_award = `Awards: ${data.award}`;
-      this.tooltip_data.append("p").text(actor_award);
+      const awards = data.award.split(";");
+      for (let award of awards) {
+        const elems = award.split(":");
+        const year = elems[0];
+        const name = elems[1];
+        vis.tooltip_data.append("pre").text(`Year ${year}:`);
+        vis.tooltip_data.append("pre").text(`   Achieved: ${name}`);
+        if (elems[2] !== "nan") {
+          const movie = elems[2];
+          vis.tooltip_data.append("pre").text(`   Movie: ${movie}`);
+        }
+      }
     }
   }
 
