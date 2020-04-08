@@ -79,6 +79,7 @@ let updateNodeGraphByEraLabel = function(era) {
       JSON.parse(JSON.stringify(nodeLinkDataByEra[currentEra].nodes)),
       JSON.parse(JSON.stringify(nodeLinkDataByEra[currentEra].links)),
       JSON.parse(JSON.stringify(nodeLinkDataByEra[currentEra].neighbours)));
+  dotplot.clearBrush();
   updateEraBlurb();
   updateEraBlurbButton();
 };
@@ -143,18 +144,9 @@ let resetHoveredNode = function() {
   nodeLink.showAllNodeLink();
 }
 
-// -------- INTERACTIVE CHECKS --------
 let updateNodeLinkGraph = function() {
-  userSelected = false;
   let era =$(this).val();
-  currentEra = [era];
-  nodeLink.updateEra(
-      JSON.parse(JSON.stringify(nodeLinkDataByEra[era].nodes)),
-      JSON.parse(JSON.stringify(nodeLinkDataByEra[era].links)),
-      JSON.parse(JSON.stringify(nodeLinkDataByEra[era].neighbours)));
-  dotplot.clearBrush();
-  updateEraBlurb();
-  updateEraBlurbButton();
+  updateNodeGraphByEraLabel(era);
 };
 
 let preGoldenBtn = document.getElementById('pre-golden-age-btn');
@@ -292,18 +284,7 @@ $('a[href*="#"]')
           event.preventDefault();
           $('html, body').animate({
             scrollTop: target.offset().top
-          }, 1000, function() {
-            // Callback after animation
-            // Must change focus!
-            var $target = $(target);
-            $target.focus();
-            if ($target.is(":focus")) { // Checking if the target was focused
-              return false;
-            } else {
-              $target.attr('tabindex','-1'); // Adding tabindex for elements not focusable
-              $target.focus(); // Set focus again
-            };
-          });
+          }, 1000);
         }
       }
     });
