@@ -332,7 +332,7 @@ class NodeLink {
   }
 
   getTooltipPositionY_Link() {
-    if (d3.event.pageY > 1600) {
+    if (d3.event.pageY > 2200) {
       return (d3.event.pageY - 300) + "px";
     } else if (d3.event.pageY) {
       return (d3.event.pageY + 20) + "px";
@@ -343,12 +343,12 @@ class NodeLink {
     if (d3.event.pageX < 800) {
       return (type === "movie") ? (d3.event.pageX + 10) + "px" : (d3.event.pageX + 10) + "px";
     } else {
-      return (type === "movie") ? (d3.event.pageX - 230) + "px" : (d3.event.pageX - 280) + "px";
+      return (type === "movie") ? (d3.event.pageX - 230) + "px" : (d3.event.pageX - 300) + "px";
     }
   }
 
   getTooltipPositionY_Node(type) {
-    if (d3.event.pageY > 1600) {
+    if (d3.event.pageY > 2200) {
       return (type === "movie") ? (d3.event.pageY - 150) + "px" : (d3.event.pageY - 50) + "px";
     } else if (d3.event.pageY) {
       return (type === "movie") ? (d3.event.pageY + 20) + "px" : (d3.event.pageY + 0) + "px";
