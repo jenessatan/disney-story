@@ -1,3 +1,6 @@
+html {
+    overflow-y: hidden;
+}
 body {
     margin: 25px 0 0 0;
     display: flex;
