@@ -54,12 +54,6 @@ class Legend {
         this.scale_size = this.getScaleSqrt(domain, range);
     }
 
-    setScaleColourEra() {
-        const domain = DataProcessor.movieEras;
-        const range = DataProcessor.movieColourEras;
-        this.scale_colour_era = this.getScaleOrdinal(domain, range);
-    }
-
     setScaleNode() {
         const domain = ["movie", "actor", "movie-award", "actor-award"];
         const range = [this.getPath("movie"), this.getPath("actor"), this.getPath("movie"), this.getPath("actor")];
@@ -105,15 +99,40 @@ class Legend {
     // Legends
     renderLegends() {
         this.renderLegendSize();
+        this.renderLegendBar();
         this.renderLegendNode();
         this.renderLegendNodeSize();
+    }
+
+    renderLegendBar() {
+        const xpos = 10;
+        const start_y_pos = 100;
+        const y_line_height = 15;
+        this.chart.append('line')
+            .attr('class', 'gap-year-legend')
+            .attr('x1', xpos)
+            .attr('x2', xpos)
+            .attr('y1', start_y_pos)
+            .attr('y2', start_y_pos + y_line_height)
+            .attr('stroke', '#786d4c')
+            .attr('stroke-width', 0.5)
+            .attr('opacity', 1);
+
+        this.chart.append('text')
+            .attr("class", this.classname_mark_label_size)
+            .attr("text-anchor", "left")
+            .style("alignment-baseline", "middle")
+            .style("font-size", '0.6em')
+            .text('Gap year marker')
+            .attr('x', xpos + 20)
+            .attr('y', start_y_pos + y_line_height/2);
     }
 
     renderLegendSize() {
         const x_mark_pos = 10;
         const x_mark_label_pos = x_mark_pos + 20;
         const x_feat_label_pos = x_mark_pos + 35;
-        const y_first_mark_pos = 50;
+        const y_first_mark_pos = 30;
         const y_offset_mark_pos = 25;
         const feature_title_font_size = "0.8em";
         const feature_item_font_size = "0.8em";
@@ -208,7 +227,7 @@ class Legend {
             .enter().append("text")
             .attr("class", this.classname_mark_label_node_size)
             .attr("x", d => (d === min) ? 133.5 : (d === mid) ? 190 : 246.5)
-            .attr("y", d => (d === min) ? (y_first_mark_pos + 33) : (y_first_mark_pos + 24))
+            .attr("y", d => (d === min) ? (y_first_mark_pos + 35) : (y_first_mark_pos + 24))
             .text(d => d)
             .attr("text-anchor", "middle")
             .style("alignment-baseline", "middle")
