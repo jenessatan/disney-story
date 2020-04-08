@@ -17,7 +17,6 @@ let userSelected = false;
 Promise.all([
   d3.csv('data/disney_revenue.csv'),
   d3.csv('data/disney-movies-awards.csv'),
-  // d3.csv('data/disney-actors-awards.csv')
   d3.csv('data/disney-voice-actors-2.csv'),
   d3.json('data/era-blurbs.json')
 ]).then(files => {
@@ -43,8 +42,8 @@ Promise.all([
   });
 
   area.initVis({data: revenueRaw});
-  currentEra = [DataProcessor.movieEras[0]];/* [DataProcessor.movieEras[DataProcessor.movieEras.length - 1]]; */
-
+  currentEra = [DataProcessor.movieEras[0]];
+  nodeIds = nodeLinkDataByEra[currentEra].nodes.map(node => node.id);
 
   /**
    * Because the nodeLink graph mutates the data that is passed to it, we have to provide it a deep copy rather than
@@ -122,6 +121,7 @@ let nodeSelectionHandler = function(title, era){
 
 let setHoveredNode = function(node, type, era) {
   hoveredNode = node;
+
   if(type === "actor" && selectedNode === null) {
     // if we hover over an actor and there's no selected node,
     // then we can show the one hop
