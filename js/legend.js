@@ -13,7 +13,6 @@ class Legend {
         this.movies = movies;
         this.columns = columns;
         this.labels = labels;
-        this.setColours();
         this.setMarksClassname();
         this.setValues();
         this.setScales();
@@ -26,16 +25,11 @@ class Legend {
     setMarksClassname() {
         this.classname_mark_size = "legend-mark-size";
         this.classname_mark_node = "legend-mark-node";
+        this.classname_mark_node_size = "legend-mark-node-size";
 
         this.classname_mark_label_size = "legend-mark-label-size";
-        this.classname_mark_label_node = "legend-mark-label-size";
-
-    }
-
-    setColours() {
-        this.colour_normal = "#000000";
-        this.colour_hover = "#f2bf33";
-        this.colour_select = "#dea814";
+        this.classname_mark_label_node = "legend-mark-label-node";
+        this.classname_mark_label_node_size = "legend-mark-label-node-size";
     }
 
     setWidthHeight() {
@@ -46,30 +40,36 @@ class Legend {
     setValues() {
         // Methods to set values 
         this.value_size = d => d[`${this.columns.size}`];
-        // this.value_colour_era = d => d[`${this.columns.era}`];
     }
 
     setScales() {
         this.setScaleSize();
         this.setScaleNode();
+        this.setScaleNodeSize();
     }
 
     setScaleSize() {
-        const domain_size = d3.extent(this.movies, this.value_size);
-        const range_size = [1, 8];
-        this.scale_size = this.getScaleSqrt(domain_size, range_size);
+        const domain = d3.extent(this.movies, this.value_size);
+        const range = [1, 8];
+        this.scale_size = this.getScaleSqrt(domain, range);
     }
 
     setScaleColourEra() {
-        const domain_colour = DataProcessor.movieEras;
-        const range_colour = DataProcessor.movieColourEras;
-        this.scale_colour_era = this.getScaleOrdinal(domain_colour, range_colour);
+        const domain = DataProcessor.movieEras;
+        const range = DataProcessor.movieColourEras;
+        this.scale_colour_era = this.getScaleOrdinal(domain, range);
     }
 
     setScaleNode() {
-        const domain_node = ["movie", "actor", "movie-award", "actor-award"];
-        const range_node = [this.getPath("movie"), this.getPath("actor"), this.getPath("movie"), this.getPath("actor")];
-        this.scale_node = this.getScaleOrdinal(domain_node, range_node);
+        const domain = ["movie", "actor", "movie-award", "actor-award"];
+        const range = [this.getPath("movie"), this.getPath("actor"), this.getPath("movie"), this.getPath("actor")];
+        this.scale_node = this.getScaleOrdinal(domain, range);
+    }
+
+    setScaleNodeSize() {
+        const domain = [5, 9];
+        const range = [0.08, 0.2];
+        this.scale_node_size = this.getScaleSqrt(domain, range);
     }
 
     getPath(type) {
@@ -106,6 +106,7 @@ class Legend {
     renderLegends() {
         this.renderLegendSize();
         this.renderLegendNode();
+        this.renderLegendNodeSize();
     }
 
     renderLegendSize() {
@@ -119,7 +120,7 @@ class Legend {
 
         // Legend: Size feature
         const size_domain = this.scale_size.domain();
-        const show_sizes = [size_domain[0], (size_domain[0] + size_domain[1]) / 2, size_domain[1]]
+        const show_sizes = [size_domain[0], (size_domain[0] + size_domain[1]) / 2, size_domain[1]];
         this.chart.selectAll(`.${this.classname_mark_size}`).data(show_sizes)
             .enter().append("circle")
             .attr("class", this.classname_mark_size)
@@ -148,10 +149,8 @@ class Legend {
 
     renderLegendNode() {
         const x_mark_pos = 0;
-        const x_mark_label_pos = x_mark_pos;
         const x_feat_label_pos = x_mark_pos + 35;
-        const y_first_mark_pos = 50;
-        const y_offset_mark_pos = 25;
+        const y_first_mark_pos = 20;
         const x_offset_mark_pos = 50;
         const feature_title_font_size = "0.8em";
         const feature_item_font_size = "0.6em";
@@ -176,9 +175,50 @@ class Legend {
             .style("font-size", feature_item_font_size);
         this.chart.append("text")
             .attr("x", x_feat_label_pos + x_offset_mark_pos * 2)
-            .attr("y", y_first_mark_pos - 20)
+            .attr("y", y_first_mark_pos - 10)
             .text("Node")
             .attr("text-anchor", "middle")
+            .style("font-weight", "bold")
+            .style("font-size", feature_title_font_size);
+    }
+
+    renderLegendNodeSize() {
+        const x_mark_pos = 0;
+        const x_feat_label_pos = 20;
+        const y_first_mark_pos = 80;
+        const x_offset_mark_pos = 50;
+        const feature_title_font_size = "0.8em";
+        const feature_item_font_size = "0.6em";
+
+        // Legend: Node-size feature
+        const size_domain = this.scale_node_size.domain();
+        const min = size_domain[0];
+        const max = size_domain[1];
+        const mid = (size_domain[0] + size_domain[1]) / 2;
+        const show_sizes = [min, mid, max];
+        this.chart.selectAll(`.${this.classname_mark_node_size}`).data(show_sizes)
+            .enter().append("path")
+            .attr("class", this.classname_mark_node_size)
+            .attr("d", _ => this.getPath("movie"))
+            .attr("fill", "none")
+            .attr("stroke", "black")
+            .attr("stroke-width", d => (d === min) ? 7 : (d === mid) ? 4 : 3)
+            .attr("transform", (d, i) => `translate(${(x_mark_pos + x_offset_mark_pos * 2.5) + i * (x_offset_mark_pos)}, ${y_first_mark_pos+14 - i * 5}), scale(${this.scale_node_size(d)},${this.scale_node_size(d)})`);
+        this.chart.selectAll(this.classname_mark_label_node).data(show_sizes)
+            .enter().append("text")
+            .attr("class", this.classname_mark_label_node_size)
+            .attr("x", d => (d === min) ? 133.5 : (d === mid) ? 190 : 246.5)
+            .attr("y", d => (d === min) ? (y_first_mark_pos + 33) : (y_first_mark_pos + 24))
+            .text(d => d)
+            .attr("text-anchor", "middle")
+            .style("alignment-baseline", "middle")
+            .style("font-weight", "bold")
+            .style("font-size", feature_item_font_size);
+        this.chart.append("text")
+            .attr("x", x_feat_label_pos + x_offset_mark_pos * 2)
+            .attr("y", y_first_mark_pos)
+            .text("Movie Rating")
+            .attr("text-anchor", "left")
             .style("font-weight", "bold")
             .style("font-size", feature_title_font_size);
     }
