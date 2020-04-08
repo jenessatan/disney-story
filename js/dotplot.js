@@ -206,6 +206,8 @@ class Dotplot {
             .attr("cx", d => this.scale_x(this.value_x(d)))
             .attr("cy", d => this.scale_y(this.value_y(d)))
             .merge(circles)
+            .attr('stroke', 'black')
+            .attr('stroke-width', 0.5)
             .attr("fill", d => this.scale_colour_era(this.value_colour_era(d)))
             .on("mouseover", d => {
                 setHoveredNode(d.movie_title, "movie", d.disney_era);
@@ -345,6 +347,7 @@ class Dotplot {
     deselectMovie() {
         d3.selectAll(`circle.${this.markClassName}`).transition()
             .attr('opacity', 0.7)
-            .attr('stroke-opacity', 0)
+            .attr('stroke-width', 0.5)
+            .attr('stroke-opacity', 1)
     }
 }

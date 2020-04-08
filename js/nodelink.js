@@ -107,7 +107,7 @@ class NodeLink {
     vis.linkEnter = vis.links.enter().append('line')
       .attr('class', 'link')
       .attr('stroke-width', 3)
-      .attr('stroke', '#e5e5e5')
+      .attr('stroke', '#B5B5B5')
       .on('mouseover.tooltip', d => vis.updateLinkTooltip(d))
       .on('mouseout.tooltip', () => vis.updateLinkTooltip(null))
       .merge(vis.links);
@@ -191,7 +191,7 @@ class NodeLink {
   }
 
   getNodeStrokeWidth(award) {
-    return (award === "") ? 0 : 10;
+    return (award === "") ? 2 : 10;
   }
 
   getNodeXPosition(node) {

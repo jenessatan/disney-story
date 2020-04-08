@@ -187,7 +187,7 @@ let updateEraBlurb = function() {
 
   let headerElem = document.createElement('h1');
   let header = document.createTextNode(currentEra);
-  headerElem.style.color = DataProcessor.getMovieColor(currentEra[0]);
+  //headerElem.style.color = DataProcessor.getMovieColor(currentEra[0]);
   headerElem.appendChild(header);
 
   let yearElem = document.createElement('h3');

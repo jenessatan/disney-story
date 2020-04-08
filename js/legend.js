@@ -179,8 +179,8 @@ class Legend {
             .enter().append("path")
             .attr("class", this.classname_mark_node)
             .attr("d", d => this.scale_node(d))
-            .attr("fill", "grey")
-            .attr("stroke-width", d => this.getNodeStrokeWidth(d))
+            .attr("fill", "#D0C7AC")
+            .attr("stroke-width", d => this.getNodeStrokeWidth(d) + 6)
             .attr("stroke", "black")
             .attr("transform", (d, i) => `translate(${(x_mark_pos + x_offset_mark_pos * 2.5) + i * (x_offset_mark_pos)}, ${y_first_mark_pos}), scale(0.08,0.08)`);
         this.chart.selectAll(this.classname_mark_label_node).data(this.scale_node.domain())

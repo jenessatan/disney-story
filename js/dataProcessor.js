@@ -6,8 +6,8 @@ class DataProcessor {
     ];
 
     static movieColourEras = [
-        'gray', 'red', 'orange', '#b59009', 'green',
-        'blue', 'indigo', 'violet'
+        '#FFAABB', '#BA971A', '#77AADD', '#EE8866', '#66CCEE',
+        '#AA4499', '#7270CB', '#44BB99'
     ];
 
     static processMovieData(moviesRaw, nodes) {

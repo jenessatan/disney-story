@@ -49,7 +49,7 @@ class Area {
     
     vis.colour = d3.scaleOrdinal()
       .domain(vis.categories)
-      .range(d3.schemeSet2)
+      .range(['#0077BB', '#EE3377', '#009988', '#EE7733', '#CC3311'])
     
     const xAxis = d3.axisBottom(vis.xScale).tickFormat(d3.format("d")).tickValues(yearLabels);
 
