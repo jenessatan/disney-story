@@ -162,7 +162,7 @@ class NodeLink {
     const role = data.role;
     const movie = data.target.id;
     const img = data.role == 'Penny' ? `./images/characters/${data.role} ${data.target.id}.png` : `./images/characters/${data.role}.png`;
-    const img_on_error = "this.src='/images/characters/default.png';";
+    const img_on_error = "this.src='./images/characters/default.png';";
 
     vis.tooltip_data.append("img").attr("class", "character-image").attr("src", img).attr("onerror", img_on_error);
     vis.tooltip_data.append("h4").text(actor);
