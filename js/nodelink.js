@@ -145,8 +145,8 @@ class NodeLink {
       vis.createTooltipData_Link(data);
       vis.tooltip.attr("class", "role-tooltip")
         .style("visibility", "visible")
-        .style("left", () => vis.getXposition())
-        .style("top", () => vis.getYposition());
+        .style("left", () => vis.getTooltipPositionX_Link())
+        .style("top", () => vis.getTooltipPositionY_Link());
     } else {
       vis.tooltip.style("visibility", "hidden");
       vis.tooltip_data.remove();
@@ -242,8 +242,8 @@ class NodeLink {
     if (data) {
       vis.tooltip
         .style("visibility", "visible")
-        .style('top', () => `${d3.event.pageY}px`)
-        .style('left', () => `${d3.event.pageX + 20}px`);
+        .style("left", () => vis.getTooltipPositionX_Node(data.type))
+        .style("top", () => vis.getTooltipPositionY_Node(data.type));
 
       if (data.type === "movie") {
         vis.tooltip.attr("class", "movie-tooltip");
@@ -253,8 +253,8 @@ class NodeLink {
         vis.createTooltipData_Actor(data);
       }
     } else {
-      vis.tooltip.style("visibility", "hidden");
-      vis.tooltip_data.remove();
+      // vis.tooltip.style("visibility", "hidden");
+      // vis.tooltip_data.remove();
     }
   }
 
@@ -323,19 +323,35 @@ class NodeLink {
     d3.selectAll('.node').transition().style('opacity', 1);
   }
 
-  getXposition() {
-    if (d3.event.pageX < 1300) {
-      return (d3.event.pageX - 50) + "px";
+  getTooltipPositionX_Link() {
+    if (d3.event.pageX < 800) {
+      return (d3.event.pageX + 10) + "px";
     } else {
       return (d3.event.pageX - 200) + "px";
     }
   }
 
-  getYposition() {
-    if (d3.event.pageY > 300) {
-      return (d3.event.pageY - 280) + "px";
+  getTooltipPositionY_Link() {
+    if (d3.event.pageY > 1600) {
+      return (d3.event.pageY - 300) + "px";
+    } else if (d3.event.pageY) {
+      return (d3.event.pageY + 20) + "px";
+    }
+  }
+
+  getTooltipPositionX_Node(type) {
+    if (d3.event.pageX < 800) {
+      return (type === "movie") ? (d3.event.pageX + 10) + "px" : (d3.event.pageX + 10) + "px";
     } else {
-      return (d3.event.pageY + 50) + "px";
+      return (type === "movie") ? (d3.event.pageX - 230) + "px" : (d3.event.pageX - 500) + "px";
+    }
+  }
+
+  getTooltipPositionY_Node(type) {
+    if (d3.event.pageY > 1600) {
+      return (d3.event.pageY - 150) + "px";
+    } else if (d3.event.pageY) {
+      return (d3.event.pageY + 20) + "px";
     }
   }
 }

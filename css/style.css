@@ -123,6 +123,13 @@ pre {
 .actor-tooltip {
     background-color: #fab507;
     color: #333;
+    max-width: 200px;
+}
+
+.actor-tooltip pre {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
 }
 
 #area-tooltip {
