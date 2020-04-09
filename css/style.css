@@ -223,3 +223,20 @@ line.link:hover {
     margin-bottom: 16px;
     width: 900px;
 }
+
+#back-to-top {
+    position: fixed;
+    bottom: 30px;
+    right: 100px;
+}
+
+#back-to-top button {
+    height: 35px;
+    width: 35px;
+    border-radius: 25px;
+    background-color: #e733ff;
+    border: none;
+    font-weight: bold;
+    color: white;
+    font-family: 'Rock Salt', cursive;
+}
