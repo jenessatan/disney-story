@@ -8,32 +8,33 @@
 </head>
 
 <body>
-<div id="landing" class="section-bottom-spacing">
-    <img src="./images/disney_castle.PNG"/>
-<div class="title">
-    <h1>The Disney Story</h1>
-    <p>in data</p>
-    <a href="#walt-disney-company"><button>start</button></a>
-</div>
-</div>
-<div class="section-bottom-spacing">
-        <div id="walt-disney-company" class="commentary">
-            <h1>The Animation Studio in the Walt Disney Company</h1>
-            <p>The Walt Disney Company is an entertainment goliath. From their infamous parks and resorts to their vast
-                array of TV networks, the company brings in billions of dollars of revenue annually.
-                The company continues to see massive growth and expansion across all of its sectors year after year.
-                And, while the company is constantly changing, one thing will always remain true: none of this would
-                have been possible
-                without Walt Disney Animation. It is the core of the Studio Entertainment division and the foundation on
-                which the entire company was built. Disney Animation has a long and storied history. Let's dive in!</p>
-            <a href="#node-link-graph"><button>next  ></button></a>
+<div id="landing" class="page">
+    <div >
+        <img src="./images/disney_castle.PNG"/>
+        <div class="title">
+            <h1>The Disney Story</h1>
+            <p>in data</p>
+            <a href="#walt-disney-company"><button>start</button></a>
         </div>
-        <div id="area" class="wrapper">
-            <svg id="revenue-overall"></svg>
-            <div id='area-tooltip'></div>
-        </div>
+    </div>
 </div>
-<a id="node-link-graph">
+<div id="walt-disney-company" class="page">
+    <div class="commentary">
+        <h1>The Animation Studio in the Walt Disney Company</h1>
+        <p>The Walt Disney Company is an entertainment goliath. From their infamous parks and resorts to their vast
+            array of TV networks, the company brings in billions of dollars of revenue annually.
+            The company continues to see massive growth and expansion across all of its sectors year after year.
+            And, while the company is constantly changing, one thing will always remain true: none of this would
+            have been possible
+            without Walt Disney Animation. It is the core of the Studio Entertainment division and the foundation on
+            which the entire company was built. Disney Animation has a long and storied history. Let's dive in!</p>
+        <a href="#node-link-graph"><button>next  ></button></a>
+    </div>
+    <div id="area" class="wrapper">
+        <svg id="revenue-overall"></svg>
+    </div>
+</div>
+<div id="node-link-graph" class="page">
     <div id="era-navigation">
         <button type="button" id="pre-golden-age-btn" value="Pre-Golden Age">Pre-Golden Age</button>
         <button type="button" id="golden-age-btn" value="Golden Age">Golden Age</button>
@@ -44,7 +45,7 @@
         <button type="button" id="post-renaissance-btn" value="Post-Renaissance">Post-Renaissance</button>
         <button type="button" id="second-renaissance-btn" value="Second Disney Renaissance">Second Disney
             Renaissance</button>
-    </div></a>
+    </div>
     <div class="wrapper">
         <div class="aside">
             <div class = "commentary disney-era" id="disney-era-blurb">
@@ -66,26 +67,30 @@
         </div>
         <div id="node-link">
             <svg id="movie-actors"></svg>
-            <div id="node-link-tooltip"></div>
         </div>
     </div>
+    <div class="wrapper">
     <div id="dot-histogram">
         <svg id="movie-era"></svg>
-        <div id="movie-era-tooltip"></div>
     </div>
-
+    </div>
+<!--    </div>-->
+</div>
+<div id='area-tooltip'></div>
+<div id="node-link-tooltip"></div>
+<div id="movie-era-tooltip"></div>
 <div id="back-to-top">
     <a href="#landing"><button>^</button></a>
 </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <script src="https://d3js.org/d3.v5.min.js"></script>
-    <script src="js/area.js"></script>
-    <script src="js/legend.js"></script>
-    <script src="js/dotplot.js"></script>
-    <script src="js/dataProcessor.js"></script>
-    <script src="js/nodelink.js"></script>
-    <script src="js/index.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://d3js.org/d3.v5.min.js"></script>
+<script src="js/area.js"></script>
+<script src="js/legend.js"></script>
+<script src="js/dotplot.js"></script>
+<script src="js/dataProcessor.js"></script>
+<script src="js/nodelink.js"></script>
+<script src="js/index.js"></script>
 </body>
 
 </html>
