@@ -179,7 +179,6 @@ let updateEraBlurb = function() {
 
   let headerElem = document.createElement('h1');
   let header = document.createTextNode(currentEra);
-  //headerElem.style.color = DataProcessor.getMovieColor(currentEra[0]);
   headerElem.appendChild(header);
 
   let yearElem = document.createElement('h3');
@@ -203,7 +202,7 @@ let updateBlurbToFunFact = function() {
   let fact = blurbs['Fun Fact'][factNumber];
 
   let blurbDetailsContainer = document.createElement('div');
-  blurbDetailsContainer.className = 'blurb-details';
+  blurbDetailsContainer.className = 'blurb-details fun-fact';
 
   let headerElem = document.createElement('h1');
   let header = document.createTextNode('Fun Fact');
@@ -259,7 +258,7 @@ nextBtn.addEventListener('click', changeToNextEra);
 let changeToFunFact = function(){
   updateBlurbToFunFact();
   updateEraBlurbButton();
-}
+};
 
 // -------- SCROLL ANIMATION --------
 

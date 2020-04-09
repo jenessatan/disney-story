@@ -107,6 +107,7 @@ pre {
 #disney-era-blurb {
     margin-bottom: 10px;
     height: 250px;
+    position:relative;
 }
 
 #disney-era-blurb button {
@@ -239,4 +240,20 @@ line.link:hover {
     font-weight: bold;
     color: white;
     font-family: 'Rock Salt', cursive;
+}
+
+#blurb-navigation-wrapper {
+    position: absolute;
+    bottom: 0px;
+    width: 100%;
+}
+
+#blurb-navigation {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.fun-fact {
+    padding: 30px;
 }
