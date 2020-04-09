@@ -323,7 +323,7 @@ class Dotplot {
 
     getYposition() {
         if (d3.event.pageY > 300) {
-            return (d3.event.pageY - 120) + "px";
+            return (d3.event.pageY - 130) + "px";
         } else {
             return (d3.event.pageY + 50) + "px";
         }

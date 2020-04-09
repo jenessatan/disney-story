@@ -349,7 +349,7 @@ class NodeLink {
 
   getTooltipPositionY_Node(type) {
     if (d3.event.pageY > 2200) {
-      return (type === "movie") ? (d3.event.pageY - 150) + "px" : (d3.event.pageY - 50) + "px";
+      return (type === "movie") ? (d3.event.pageY - 210) + "px" : (d3.event.pageY - 50) + "px";
     } else if (d3.event.pageY) {
       return (type === "movie") ? (d3.event.pageY + 20) + "px" : (d3.event.pageY + 0) + "px";
     }
