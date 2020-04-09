@@ -314,7 +314,7 @@ class Dotplot {
     }
 
     getXposition() {
-        if (d3.event.pageX < 1300) {
+        if (d3.event.pageX < 850) {
             return (d3.event.pageX - 50) + "px";
         } else {
             return (d3.event.pageX - 200) + "px";
