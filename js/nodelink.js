@@ -324,8 +324,8 @@ class NodeLink {
   }
 
   getTooltipPositionX_Link() {
-    if (d3.event.pageX < 800) {
-      return (d3.event.pageX + 10) + "px";
+    if (d3.event.pageX < 750) {
+      return (d3.event.pageX + 30) + "px";
     } else {
       return (d3.event.pageX - 200) + "px";
     }
@@ -340,8 +340,8 @@ class NodeLink {
   }
 
   getTooltipPositionX_Node(type) {
-    if (d3.event.pageX < 800) {
-      return (type === "movie") ? (d3.event.pageX + 10) + "px" : (d3.event.pageX + 10) + "px";
+    if (d3.event.pageX < 750) {
+      return (type === "movie") ? (d3.event.pageX + 30) + "px" : (d3.event.pageX + 30) + "px";
     } else {
       return (type === "movie") ? (d3.event.pageX - 230) + "px" : (d3.event.pageX - 300) + "px";
     }
