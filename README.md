@@ -2,6 +2,9 @@
 
 [Click here to explore the app](https://jenessatan.github.io/disney-story/)
 
+Built using D3.
+Data from the [Disney dataset from DataWorld](https://data.world/dot2/disney-character-data-set-project/workspace/project-summary?agentid=kgarrett&datasetid=disney-character-success-00-16) and the [Academy Award dataset from Kaggle](https://www.kaggle.com/theacademy/academy-awards).
+
 We wanted to do a scrolly-telling version of Disney’s animation studios through the data that they had publicly available.
 
 We started off with an overview of the animation studio as part of the corporate Walt Disney Company. To do this, we showed the contribution of the animation studios to the company revenue over time. We utilized an area chart to show the part-to-whole relationship of the animation studio to the overall company revenue. The revenue is a quantitative value that ranges from USD0-60Billion. We considered using either a clustered bar or stacked bar chart but the years range from 1992 - 2016 (i.e. a period of 24 years) and we felt that there were too many years to opt to use the clustered bar chart. In addition, we felt that area charts were great since it expresses the continuous flow of time so we opted for that rather than the stacked bar chart. The revenue is broken down into 5 categories so we used a categorical color scheme. Our main focus is the animation studio, so we aligned it on the bottom axis so that viewers are still able to easily read the values it contributed on its own using the y-axis.
